@@ -234,33 +234,33 @@ def deckcreate(username, password, deck):
             {
                 "name": "Comprehensive Card",
                 "qfmt": """
-                
-                
-                <div class="bar">
-                   <div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
-                   <div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
-                </div>
-                <div class="background">
+<div class="bar">
+    <div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
+    <div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
+</div>
+<div class="background">
     <div class="chart">
-    <br><div class="images">
-                   {{Image}}
-                   </div>
-    <div class="row">
-    <div class="column">
-                   <br>{{Stats}}</div>
-    <div class="column background" style="margin: 8px 8px;">
-                   <br><div class="desc">{{Description}}</div>
-    </div>
-    </div>
+        <br>
+        <div class="images">
+            {{Image}}
+        </div>
+        <div class="row">
+            <div class="column">
+                <br>{{Stats}}</div>
+            <div class="column background desc" style="margin: 8px 8px;">
+                <br>{{Description}}
+            </div>
+        </div>
     </div>
     <br>{{Question}}<br>
-                   <br>{{Multiple Choice}}
-                   <br><div class="Options">{{Options}}
+    <br>{{Multiple Choice}}
+    <br>
+    <div class="Options">{{Options}}
     </div>
-    </div>
-    
-                <script>
-      function shuffleList() {
+</div>
+
+<script>
+    function shuffleList() {
         const listContainer = document.querySelector('.choices');
         const items = Array.from(listContainer.querySelectorAll('li'));
     
@@ -277,46 +277,60 @@ def deckcreate(username, password, deck):
     
       // Call the function to shuffle the list
       shuffleList();
-    </script>
-                
-                
+</script>
+
+<script>
+    setTimeout(function() {
+        console.log("Applying white text color to all elements...");
+    
+        // Select all elements in the card
+        var allElements = document.querySelectorAll('*');
+    
+        // Loop through each element and set the text color to white
+        allElements.forEach(function(element) {
+          element.style.color = 'white';
+        });
+      }, 1);
+</script>
                 
                 """,
                 "afmt": """
-                       
-                
-                <div class="bar">
-                   <div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
-                   <div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
-                </div>
-                <div class="background">
+ <div class="bar">
+    <div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
+    <div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
+</div>
+<div class="background">
     <div class="chart">
-    <br><div class="images">
-                   {{Image}}
-                   </div>
-    <div class="row">
-    <div class="column">
-                   <br>{{Stats}}</div>
-    <div class="column background" style="margin: 8px 8px;">
-                   <br><div class="desc">{{Description}}</div>
-    </div>
-    </div>
+        <br>
+        <div class="images">
+            {{Image}}
+        </div>
+        <div class="row">
+            <div class="column">
+                <br>{{Stats}}</div>
+            <div class="column background desc" style="margin: 8px 8px;">
+                <br>{{Description}}
+            </div>
+        </div>
     </div>
     <br>{{Question}}<br>
-                   <br>{{Multiple Choice}}
-                   <br><div class="Options">{{Options}}
+    <br>{{Multiple Choice}}
+    <br>
+    <div class="Options">{{Options}}
     </div>
-                
-                   <hr id="answer">
-                   <br><div class="Options">{{Answers}}
+
+    <hr id="answer">
+    <br>
+    <div class="Options">{{Answers}}
     </div>
-                            <br>{{Feedback}}
-    <br><div class="images">
-                   {{Back Image}}
-                   </div>
-                </div>
-                <script>
-      setTimeout(function() {
+    <br>{{Feedback}}
+    <br>
+    <div class="images">
+        {{Back Image}}
+    </div>
+</div>
+<script>
+    setTimeout(function() {
         console.log("Checking DOM elements...");
     
         var questionElement = document.querySelector(".choices");
@@ -345,159 +359,167 @@ def deckcreate(username, password, deck):
         // Join the modified list back into HTML and set it
         questionElement.innerHTML = modifiedQuestionList.join('');
       }, 100);
-    </script>
-                
-                
-                
-                
-                
+</script>
+
+<script>
+    setTimeout(function() {
+        console.log("Applying white text color to all elements...");
+    
+        // Select all elements in the card
+        var allElements = document.querySelectorAll('*');
+    
+        // Loop through each element and set the text color to white
+        allElements.forEach(function(element) {
+          element.style.color = 'white';
+        });
+      }, 100);
+</script>
                 """,
             },
         ],
         css="""
-     
-        
-        .card {
-           padding: 15px 20px;
-           font: 20px Arial, sans-serif;
-           color: white;
-           text-align: center;
-        }
-    
-        .background {
-           border-radius: 9px;
-           padding: 20px;
-           background: #1e1e1e;
-        }
-    
-        .background img {
-           width: auto;
-           height: auto;
-           display: block;
-           margin-left: auto;
-           margin-right: auto;
-        }
-    
-        .background.night_mode {
-           border-radius: 9px;
-           padding: 20px;
-           background: #1e1e1e;
-        }
-    
-        .cloze {
-           font-weight: bold;
-           color: orange;
-        }
-    
-        .bar {
-           margin-bottom: -25px;
-           background: #121212;
-           border-top-right-radius: 9px;
-           border-top-left-radius: 9px;
-           padding-top: 10px;
-           padding-bottom: 30px;
-           z-index: -1;
-        }
-    
-        .subdeck {
-           color: rgba(255, 255, 255, 0.60);
-           font-size: 14px;
-        }
-    
-        .tag {
-           color: rgba(255, 255, 255, 0.87);
-           font-size: 13px;
-           font-style: italic;
-        }
-    
-        label {
-           border-radius: 4px;
-           padding: 8px;
-           font: bold 12px Arial, sans-serif;
-           color: white;
-           background: #363636;
-           cursor: pointer;
-        }
-    
-        .images {
-           max-width: 800px;
-           display: flex;
-           flex-flow: row wrap;
-           margin: auto;
-           justify-content: center;
-        }
-    
-        .images > div {
-           width: 50%;
-        }
-    
-        img {
-           display: block;
-           width: 100%;
-           height: 100%;
-           object-fit: cover;
-           max-width: 100%;
-        }
-    
-    /* Options */
-    
-    .Options li {
-           margin: 5px 0;
-           display: flex;
-           align-items: center;
-           border: 1px solid #ddd;
-           padding: 10px;
-           border-radius: 5px;
-           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-           min-width: 10em;
-        }
-    
-        .green-highlight {
-           background-color: green !important;
-           color: white !important;
-        }
-        
-    /* Desc */
-    .desc br {
-      display: none;
-    }
-    
-    /* Stats */
-    .stats {
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        margin: 8px 8px;
-        padding: 10px;
-        font-size: 14px;
-    
-    }
-    
-    .stats br:nth-of-type(3n) {
-        display: none; /* Remove every third <br> (adjust as needed) */
-    }
-    
-    .stats br:nth-of-type(6n) {
-        display: none; /* Remove every sixth <br> to balance spacing */
-    }
-    
-    /* Pt Chart */
-    .chart {
-        background-color: #444;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        margin: 8px 0;
-        padding: 10px;
-        margin: 8px 8px;
-        flex-direction: column;
-    
-    }
-    
-    /* Columns */
-    .row {
-      display: flex;
-             text-align:  left;
-    
-    }
+div:empty {
+  display: none;
+}
+
+.card {
+  padding: 15px 20px;
+  font: 20px Arial, sans-serif;
+  color: white;
+  text-align: center;
+}
+
+.background {
+  border-radius: 9px;
+  padding: 20px;
+  background: #1e1e1e;
+}
+
+.background img {
+  width: auto;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.background.night_mode {
+  border-radius: 9px;
+  padding: 20px;
+  background: #1e1e1e;
+}
+
+.cloze {
+  font-weight: bold;
+  color: orange;
+}
+
+.bar {
+  margin-bottom: -25px;
+  background: #121212;
+  border-top-right-radius: 9px;
+  border-top-left-radius: 9px;
+  padding-top: 10px;
+  padding-bottom: 30px;
+  z-index: -1;
+}
+
+.subdeck {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+}
+
+.tag {
+  color: rgba(255, 255, 255, 0.87);
+  font-size: 13px;
+  font-style: italic;
+}
+
+label {
+  border-radius: 4px;
+  padding: 8px;
+  font: bold 12px Arial, sans-serif;
+  color: white;
+  background: #363636;
+  cursor: pointer;
+}
+
+.images {
+  max-width: 800px;
+  display: flex;
+  flex-flow: row wrap;
+  margin: auto;
+  justify-content: center;
+}
+
+.images > div {
+  width: 50%;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  max-width: 100%;
+}
+
+/* Options */
+
+.Options li {
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 10em;
+}
+
+.green-highlight {
+  background-color: green !important;
+  color: white !important;
+}
+
+/* Desc */
+.desc br {
+  display: none;
+}
+
+/* Stats */
+.stats {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  margin: 8px 8px;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.stats br:nth-of-type(3n) {
+  display: none; /* Remove every third <br> (adjust as needed) */
+}
+
+.stats br:nth-of-type(6n) {
+  display: none; /* Remove every sixth <br> to balance spacing */
+}
+
+/* Pt Chart */
+.chart {
+  background-color: #444;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  margin: 8px 0;
+  padding: 10px;
+  margin: 8px 8px;
+  flex-direction: column;
+}
+
+/* Columns */
+.row {
+  display: flex;
+  text-align: left;
+}
         
         """,
     )

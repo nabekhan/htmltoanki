@@ -235,145 +235,171 @@ def deckcreate(username, password, deck):
                 "name": "Comprehensive Card",
                 "qfmt": """
 <div class="bar">
-    <div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
-    <div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
+  <div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
+  <div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
 </div>
 <div class="background">
-    <div class="chart">
-        <br>
-        <div class="images">
-            {{Image}}
-        </div>
-        <div class="row">
-            <div class="column">
-                <br>{{Stats}}</div>
-            <div class="column background desc" style="margin: 8px 8px;">
-                <br>{{Description}}
-            </div>
-        </div>
+  <div class="chart">
+    <br />
+    <div class="images">{{Image}}</div>
+    <div class="row">
+      <div class="column"><br />{{Stats}}</div>
+      <div class="column background desc" style="margin: 8px 8px;">
+        <br />{{Description}}
+      </div>
     </div>
-    <br>{{Question}}<br>
-    <br>{{Multiple Choice}}
-    <br>
-    <div class="Options">{{Options}}
-    </div>
+  </div>
+  <br />{{Question}}<br />
+  <br />{{Multiple Choice}}
+  <br />
+  <div class="Options">{{Options}}</div>
 </div>
 
 <script>
-    function shuffleList() {
-        const listContainer = document.querySelector('.choices');
-        const items = Array.from(listContainer.querySelectorAll('li'));
-    
-        // Fisher-Yates shuffle algorithm
-        for (let i = items.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [items[i], items[j]] = [items[j], items[i]];
-        }
-    
-        // Clear the original container and append shuffled items
-        listContainer.innerHTML = '';
-        items.forEach(item => listContainer.appendChild(item));
+  function shuffleList() {
+      const listContainer = document.querySelector('.choices');
+      const items = Array.from(listContainer.querySelectorAll('li'));
+
+      // Fisher-Yates shuffle algorithm
+      for (let i = items.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [items[i], items[j]] = [items[j], items[i]];
       }
-    
-      // Call the function to shuffle the list
-      shuffleList();
+
+      // Clear the original container and append shuffled items
+      listContainer.innerHTML = '';
+      items.forEach(item => listContainer.appendChild(item));
+    }
+
+    // Call the function to shuffle the list
+    shuffleList();
 </script>
 
 <script>
-    setTimeout(function() {
-        console.log("Applying white text color to all elements...");
-    
-        // Select all elements in the card
-        var allElements = document.querySelectorAll('*');
-    
-        // Loop through each element and set the text color to white
-        allElements.forEach(function(element) {
-          element.style.color = 'white';
-        });
-      }, 1);
+  setTimeout(function() {
+      console.log("Applying white text color to all elements...");
+
+      // Select all elements in the card
+      var allElements = document.querySelectorAll('*');
+
+      // Loop through each element and set the text color to white
+      allElements.forEach(function(element) {
+        element.style.color = 'white';
+      });
+    }, 10);
 </script>
-                
+
                 """,
                 "afmt": """
- <div class="bar">
-    <div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
-    <div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
+<div class="bar">
+  <div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
+  <div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
 </div>
 <div class="background">
-    <div class="chart">
-        <br>
-        <div class="images">
-            {{Image}}
-        </div>
-        <div class="row">
-            <div class="column">
-                <br>{{Stats}}</div>
-            <div class="column background desc" style="margin: 8px 8px;">
-                <br>{{Description}}
-            </div>
-        </div>
+  <div class="chart">
+    <br />
+    <div class="frontimg images">{{Image}}</div>
+    <div class="row">
+      <div class="column"><br />{{Stats}}</div>
+      <div class="column background desc" style="margin: 8px 8px;">
+        <br />{{Description}}
+      </div>
     </div>
-    <br>{{Question}}<br>
-    <br>{{Multiple Choice}}
-    <br>
-    <div class="Options">{{Options}}
-    </div>
+  </div>
+  <br />{{Question}}<br />
+  <br />{{Multiple Choice}}
+  <br />
+  <div class="Options">{{Options}}</div>
 
-    <hr id="answer">
-    <br>
-    <div class="Options">{{Answers}}
-    </div>
-    <br>{{Feedback}}
-    <br>
-    <div class="images">
-        {{Back Image}}
-    </div>
+  <hr id="answer" />
+  <br />
+  <div class="Options">{{Answers}}</div>
+  <br />{{Feedback}}
+  <br />
+  <div class="chart">
+    <div class="backimg images">{{Back Image}}</div>
+  </div>
 </div>
 <script>
-    setTimeout(function() {
-        console.log("Checking DOM elements...");
-    
-        var questionElement = document.querySelector(".choices");
-        var answerElement = document.querySelector(".answers");
-    
-        if (!questionElement) {
-          console.error("Question element not found.");
-          return;
-        }
-        if (!answerElement) {
-          console.error("Answer element not found.");
-          return;
-        }
-    
-        // Split the contents into lists by <li> tags
-        var questionList = Array.from(questionElement.querySelectorAll('li')).map(el => el.innerHTML.trim());
-        var answerList = Array.from(answerElement.querySelectorAll('li')).map(el => el.innerHTML.trim());
-    
-        // Iterate over the question list and compare with the answer list
-        var modifiedQuestionList = questionList.map(function(item) {
-          return answerList.includes(item) ? 
-            `<div class="green-highlight"><li>${item}</li></div>` : 
-            `<li>${item}</li>`;
-        });
-    
-        // Join the modified list back into HTML and set it
-        questionElement.innerHTML = modifiedQuestionList.join('');
-      }, 100);
+  setTimeout(function() {
+      console.log("Checking DOM elements...");
+
+      var questionElement = document.querySelector(".choices");
+      var answerElement = document.querySelector(".answers");
+
+      if (!questionElement) {
+        console.error("Question element not found.");
+        return;
+      }
+      if (!answerElement) {
+        console.error("Answer element not found.");
+        return;
+      }
+
+      // Split the contents into lists by <li> tags
+      var questionList = Array.from(questionElement.querySelectorAll('li')).map(el => el.innerHTML.trim());
+      var answerList = Array.from(answerElement.querySelectorAll('li')).map(el => el.innerHTML.trim());
+
+      // Iterate over the question list and compare with the answer list
+      var modifiedQuestionList = questionList.map(function(item) {
+        return answerList.includes(item) ?
+          `<div class="green-highlight"><li>${item}</li></div>` :
+          `<li>${item}</li>`;
+      });
+
+      // Join the modified list back into HTML and set it
+      questionElement.innerHTML = modifiedQuestionList.join('');
+    }, 100);
 </script>
 
 <script>
-    setTimeout(function() {
-        console.log("Applying white text color to all elements...");
-    
-        // Select all elements in the card
-        var allElements = document.querySelectorAll('*');
-    
-        // Loop through each element and set the text color to white
-        allElements.forEach(function(element) {
-          element.style.color = 'white';
-        });
-      }, 100);
+  setTimeout(function() {
+      console.log("Applying white text color to all elements...");
+
+      // Select all elements in the card
+      var allElements = document.querySelectorAll('*');
+
+      // Loop through each element and set the text color to white
+      allElements.forEach(function(element) {
+        element.style.color = 'white';
+      });
+    }, 10);
 </script>
+
+<script>
+  setTimeout(function() {
+      console.log("Checking image elements...");
+
+      // Get the elements containing the front and back images
+      var frontImgElement = document.querySelector(".frontimg");
+      var backImgElement = document.querySelector(".backimg");
+
+      // Validate that both elements exist
+      if (!frontImgElement) {
+          console.error("Front image element (.frontimg) not found.");
+          return;
+      }
+      if (!backImgElement) {
+          console.error("Back image element (.backimg) not found.");
+          return;
+      }
+
+      // Extract URLs from the images inside frontimg and backimg
+      var frontImgUrls = Array.from(frontImgElement.querySelectorAll('img')).map(el => el.src);
+      var backImgUrls = Array.from(backImgElement.querySelectorAll('img'));
+
+      // Iterate through back images and hide matching ones
+      backImgUrls.forEach(function(img) {
+          if (frontImgUrls.includes(img.src)) {
+              console.log(`Hiding matching image: ${img.src}`);
+              img.style.display = "none"; // Hide the matching image
+          }
+      });
+
+      console.log("Image comparison and hiding completed.");
+  }, 10);
+</script>
+
                 """,
             },
         ],
@@ -381,20 +407,16 @@ def deckcreate(username, password, deck):
 div:empty {
   display: none;
 }
-
 .card {
   padding: 15px 20px;
   font: 20px Arial, sans-serif;
   color: white;
-  text-align: center;
 }
-
 .background {
   border-radius: 9px;
   padding: 20px;
   background: #1e1e1e;
 }
-
 .background img {
   width: auto;
   height: auto;
@@ -402,18 +424,15 @@ div:empty {
   margin-left: auto;
   margin-right: auto;
 }
-
 .background.night_mode {
   border-radius: 9px;
   padding: 20px;
   background: #1e1e1e;
 }
-
 .cloze {
   font-weight: bold;
   color: orange;
 }
-
 .bar {
   margin-bottom: -25px;
   background: #121212;
@@ -422,19 +441,17 @@ div:empty {
   padding-top: 10px;
   padding-bottom: 30px;
   z-index: -1;
+  text-align: center;
 }
-
 .subdeck {
   color: rgba(255, 255, 255, 0.6);
   font-size: 14px;
 }
-
 .tag {
   color: rgba(255, 255, 255, 0.87);
   font-size: 13px;
   font-style: italic;
 }
-
 label {
   border-radius: 4px;
   padding: 8px;
@@ -443,7 +460,6 @@ label {
   background: #363636;
   cursor: pointer;
 }
-
 .images {
   max-width: 800px;
   display: flex;
@@ -451,21 +467,16 @@ label {
   margin: auto;
   justify-content: center;
 }
-
 .images > div {
   width: 50%;
 }
-
 img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   max-width: 100%;
-}
-
-/* Options */
-
+} /* Options */
 .Options li {
   margin: 5px 0;
   display: flex;
@@ -476,18 +487,13 @@ img {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   min-width: 10em;
 }
-
 .green-highlight {
   background-color: green !important;
   color: white !important;
-}
-
-/* Desc */
+} /* Desc */
 .desc br {
   display: none;
-}
-
-/* Stats */
+} /* Stats */
 .stats {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -495,16 +501,16 @@ img {
   padding: 10px;
   font-size: 14px;
 }
-
 .stats br:nth-of-type(3n) {
-  display: none; /* Remove every third <br> (adjust as needed) */
+  display: none; /* Remove every
+third <br />
+(adjust as needed) */
 }
-
 .stats br:nth-of-type(6n) {
-  display: none; /* Remove every sixth <br> to balance spacing */
-}
-
-/* Pt Chart */
+  display: none; /* Remove
+every sixth <br />
+to balance spacing */
+} /* Pt Chart */
 .chart {
   background-color: #444;
   border-radius: 8px;
@@ -513,14 +519,13 @@ img {
   padding: 10px;
   margin: 8px 8px;
   flex-direction: column;
-}
-
-/* Columns */
+} /* Columns */
 .row {
   display: flex;
+  justify-content: center;
   text-align: left;
 }
-        
+
         """,
     )
 

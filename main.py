@@ -528,10 +528,10 @@ def deckcreate(username, password, deck):
             multi = "(Select All That Apply)"
         else:
             multi = ""
-        print(f'Output: {question+answers+feedback+desc, stats, desc, question, multi, options, images, answers, feedback, backimage, filename}')
+        print(f'Output: {question+desc+answers+feedback, stats, desc, question, multi, options, images, answers, feedback, backimage, filename}')
         note = genanki.Note(
             model=anki_model,
-            fields=[desc+answers+feedback, stats, desc, question, multi, options, images, answers, feedback, backimage, filename],
+            fields=[question+desc+answers+feedback, stats, desc, question, multi, options, images, answers, feedback, backimage, filename],
         )
         anki_deck.add_note(note)
 

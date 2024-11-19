@@ -536,9 +536,9 @@ def deckcreate(username, password, deck):
         anki_deck.add_note(note)
 
     # Save the deck as an Anki package
-    output_file = filename + ".apkg"
-    genanki.Package(anki_deck).write_to_file(f"gitignore/{output_file}")
-
+    output_file = (filename + ".apkg").replace("::", "__")
+    #genanki.Package(anki_deck).write_to_file(f"gitignore/{output_file}")
+    genanki.Package(anki_deck).write_to_file(output_file)
     print(f"Anki deck created: {output_file}")
 
 

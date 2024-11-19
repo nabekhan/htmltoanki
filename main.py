@@ -399,11 +399,11 @@ def deckcreate(username, password, deck):
       console.log("Image comparison and hiding completed.");
   }, 10);
 </script>
-
                 """,
             },
         ],
         css="""
+
 div:empty {
   display: none;
 }
@@ -496,6 +496,7 @@ img {
 } /* Stats */
 .stats {
   border-radius: 8px;
+  font-weight: bold;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   margin: 8px 8px;
   padding: 10px;
@@ -525,7 +526,6 @@ to balance spacing */
   justify-content: center;
   text-align: left;
 }
-
         """,
     )
 

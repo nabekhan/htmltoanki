@@ -234,6 +234,7 @@ def deckcreate(username, password, deck):
             {
                 "name": "Comprehensive Card",
                 "qfmt": """
+
 <div class="bar">
   <div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
   <div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
@@ -255,42 +256,62 @@ def deckcreate(username, password, deck):
   <div class="Options">{{Options}}</div>
 </div>
 
+
+<script>
+// v1.1.8 - https://github.com/SimonLammer/anki-persistence/blob/584396fea9dea0921011671a47a0fdda19265e62/script.js
+if(void 0===window.Persistence){var e="github.com/SimonLammer/anki-persistence/",t="_default";if(window.Persistence_sessionStorage=function(){var i=!1;try{"object"==typeof window.sessionStorage&&(i=!0,this.clear=function(){for(var t=0;t<sessionStorage.length;t++){var i=sessionStorage.key(t);0==i.indexOf(e)&&(sessionStorage.removeItem(i),t--)}},this.setItem=function(i,n){void 0==n&&(n=i,i=t),sessionStorage.setItem(e+i,JSON.stringify(n))},this.getItem=function(i){return void 0==i&&(i=t),JSON.parse(sessionStorage.getItem(e+i))},this.removeItem=function(i){void 0==i&&(i=t),sessionStorage.removeItem(e+i)},this.getAllKeys=function(){for(var t=[],i=Object.keys(sessionStorage),n=0;n<i.length;n++){var s=i[n];0==s.indexOf(e)&&t.push(s.substring(e.length,s.length))}return t.sort()})}catch(n){}this.isAvailable=function(){return i}},window.Persistence_windowKey=function(i){var n=window[i],s=!1;"object"==typeof n&&(s=!0,this.clear=function(){n[e]={}},this.setItem=function(i,s){void 0==s&&(s=i,i=t),n[e][i]=s},this.getItem=function(i){return void 0==i&&(i=t),void 0==n[e][i]?null:n[e][i]},this.removeItem=function(i){void 0==i&&(i=t),delete n[e][i]},this.getAllKeys=function(){return Object.keys(n[e])},void 0==n[e]&&this.clear()),this.isAvailable=function(){return s}},window.Persistence=new Persistence_sessionStorage,Persistence.isAvailable()||(window.Persistence=new Persistence_windowKey("py")),!Persistence.isAvailable()){var i=window.location.toString().indexOf("title"),n=window.location.toString().indexOf("main",i);i>0&&n>0&&n-i<10&&(window.Persistence=new Persistence_windowKey("qt"))}}
+</script>
+
 <script>
   function shuffleList() {
-      const listContainer = document.querySelector('.choices');
-      const items = Array.from(listContainer.querySelectorAll('li'));
+    const listContainer = document.querySelector('.choices');
+    if (!listContainer) return;
 
-      // Fisher-Yates shuffle algorithm
-      for (let i = items.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [items[i], items[j]] = [items[j], items[i]];
+    const items = Array.from(listContainer.querySelectorAll('li'));
+
+    if (Persistence.isAvailable()) {
+      let shuffleOrder = Persistence.getItem('shuffleOrder'); // Retrieve existing shuffle order
+
+      if (!shuffleOrder) {
+        // Generate a new shuffle order using Fisher-Yates algorithm
+        shuffleOrder = items.map((_, i) => i);
+        for (let i = shuffleOrder.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffleOrder[i], shuffleOrder[j]] = [shuffleOrder[j], shuffleOrder[i]];
+        }
+
+        Persistence.setItem('shuffleOrder', shuffleOrder); // Save the shuffle order
       }
 
-      // Clear the original container and append shuffled items
-      listContainer.innerHTML = '';
-      items.forEach(item => listContainer.appendChild(item));
+      // Apply the shuffle order
+      const shuffledItems = shuffleOrder.map(i => items[i]);
+      listContainer.innerHTML = ''; // Clear original container
+      shuffledItems.forEach(item => listContainer.appendChild(item)); // Append shuffled items
     }
+  }
 
-    // Call the function to shuffle the list
-    shuffleList();
+  shuffleList(); // Call the function
 </script>
 
 <script>
-  setTimeout(function() {
-      console.log("Applying white text color to all elements...");
+  setTimeout(function () {
+    console.log("Applying white text color to all elements...");
 
-      // Select all elements in the card
-      var allElements = document.querySelectorAll('*');
+    // Select all elements in the card
+    const allElements = document.querySelectorAll('*');
 
-      // Loop through each element and set the text color to white
-      allElements.forEach(function(element) {
-        element.style.color = 'white';
-      });
-    }, 10);
+    // Loop through each element and set the text color to white
+    allElements.forEach(function (element) {
+      element.style.color = 'white';
+    });
+  }, 10);
 </script>
+
+                
 
                 """,
                 "afmt": """
+
 <div class="bar">
   <div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
   <div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
@@ -399,6 +420,48 @@ def deckcreate(username, password, deck):
       console.log("Image comparison and hiding completed.");
   }, 10);
 </script>
+
+
+
+
+<script>
+// v1.1.8 - https://github.com/SimonLammer/anki-persistence/blob/584396fea9dea0921011671a47a0fdda19265e62/script.js
+if(void 0===window.Persistence){var e="github.com/SimonLammer/anki-persistence/",t="_default";if(window.Persistence_sessionStorage=function(){var i=!1;try{"object"==typeof window.sessionStorage&&(i=!0,this.clear=function(){for(var t=0;t<sessionStorage.length;t++){var i=sessionStorage.key(t);0==i.indexOf(e)&&(sessionStorage.removeItem(i),t--)}},this.setItem=function(i,n){void 0==n&&(n=i,i=t),sessionStorage.setItem(e+i,JSON.stringify(n))},this.getItem=function(i){return void 0==i&&(i=t),JSON.parse(sessionStorage.getItem(e+i))},this.removeItem=function(i){void 0==i&&(i=t),sessionStorage.removeItem(e+i)},this.getAllKeys=function(){for(var t=[],i=Object.keys(sessionStorage),n=0;n<i.length;n++){var s=i[n];0==s.indexOf(e)&&t.push(s.substring(e.length,s.length))}return t.sort()})}catch(n){}this.isAvailable=function(){return i}},window.Persistence_windowKey=function(i){var n=window[i],s=!1;"object"==typeof n&&(s=!0,this.clear=function(){n[e]={}},this.setItem=function(i,s){void 0==s&&(s=i,i=t),n[e][i]=s},this.getItem=function(i){return void 0==i&&(i=t),void 0==n[e][i]?null:n[e][i]},this.removeItem=function(i){void 0==i&&(i=t),delete n[e][i]},this.getAllKeys=function(){return Object.keys(n[e])},void 0==n[e]&&this.clear()),this.isAvailable=function(){return s}},window.Persistence=new Persistence_sessionStorage,Persistence.isAvailable()||(window.Persistence=new Persistence_windowKey("py")),!Persistence.isAvailable()){var i=window.location.toString().indexOf("title"),n=window.location.toString().indexOf("main",i);i>0&&n>0&&n-i<10&&(window.Persistence=new Persistence_windowKey("qt"))}}
+</script>
+<script>
+  function applyShuffleFromPersistence() {
+    const listContainer = document.querySelector('.choices');
+    if (!listContainer || !Persistence.isAvailable()) return;
+
+    const items = Array.from(listContainer.querySelectorAll('li'));
+    const shuffleOrder = Persistence.getItem('shuffleOrder'); // Retrieve saved shuffle order
+
+    if (shuffleOrder) {
+      const shuffledItems = shuffleOrder.map(i => items[i]);
+      listContainer.innerHTML = ''; // Clear original container
+      shuffledItems.forEach(item => listContainer.appendChild(item)); // Append shuffled items
+
+      Persistence.removeItem('shuffleOrder'); // Clear the shuffle order for the next card
+    }
+  }
+
+  applyShuffleFromPersistence(); // Call the function
+</script>
+
+<script>
+  setTimeout(function () {
+    console.log("Applying white text color to all elements...");
+
+    // Select all elements in the card
+    const allElements = document.querySelectorAll('*');
+
+    // Loop through each element and set the text color to white
+    allElements.forEach(function (element) {
+      element.style.color = 'white';
+    });
+  }, 10);
+</script>
+                
                 """,
             },
         ],
@@ -451,14 +514,6 @@ div:empty {
   color: rgba(255, 255, 255, 0.87);
   font-size: 13px;
   font-style: italic;
-}
-label {
-  border-radius: 4px;
-  padding: 8px;
-  font: bold 12px Arial, sans-serif;
-  color: white;
-  background: #363636;
-  cursor: pointer;
 }
 .images {
   max-width: 800px;

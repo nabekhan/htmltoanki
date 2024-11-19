@@ -241,7 +241,7 @@ def deckcreate(username, password, deck):
 </div>
 <div class="background">
     <div class="chart">
-        <div class="images">{{Image}}</div>{{Stats}}
+        <div class="frontimg images">{{Image}}</div>{{Stats}}
         <div class="background desc" style="margin: 8px 8px;">
             <br />{{Description}}
         </div>
@@ -326,7 +326,7 @@ def deckcreate(username, password, deck):
 </div>
 <div class="background">
     <div class="chart">
-        <div class="images">{{Image}}</div>{{Stats}}
+        <div class="frontimg images">{{Image}}</div>{{Stats}}
         <div class="background desc" style="margin: 8px 8px;">
             <br />{{Description}}
         </div>

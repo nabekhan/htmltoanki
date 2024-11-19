@@ -246,12 +246,9 @@ def deckcreate(username, password, deck):
             <br />{{Description}}
         </div>
     </div>
-    <br />{{Question}}<br />
+    <br />{{Question}}
     <br />{{Multiple Choice}}
-    <br />
     <div class="Options">{{Options}}</div>
-</div>
-
 <script>
     document.querySelectorAll('div.stats').forEach(div => {
         // Get the inner HTML of the target div
@@ -267,6 +264,10 @@ def deckcreate(username, password, deck):
         div.innerHTML = content;
       });
 </script>
+</div>
+
+
+
 
 <script>
     // v1.1.8 - https://github.com/SimonLammer/anki-persistence/blob/584396fea9dea0921011671a47a0fdda19265e62/script.js
@@ -330,9 +331,8 @@ def deckcreate(username, password, deck):
             <br />{{Description}}
         </div>
     </div>
-    <br />{{Question}}<br />
+    <br />{{Question}}
     <br />{{Multiple Choice}}
-    <br />
     <div class="Options">{{Options}}</div>
 <script>
     document.querySelectorAll('div.stats').forEach(div => {
@@ -350,9 +350,11 @@ def deckcreate(username, password, deck):
       });
 </script>
 
-    <hr id="answer" />
-    <br />
-    <div class="Options">{{Answers}}</div>
+
+
+
+
+    <div class="Options answers">{{Answers}}</div>
     <br />{{Feedback}}
     <br />
     <div class="chart">
@@ -587,6 +589,10 @@ div:empty {
      padding: 10px;
      margin: 8px 8px;
      flex-direction: column;
+}
+/* Answers */
+ .answers {
+     display: none;
 }
         """,
     )

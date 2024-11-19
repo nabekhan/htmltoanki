@@ -491,6 +491,9 @@ img {
   background-color: green !important;
   color: white !important;
 } /* Desc */
+.desc {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
 .desc br {
   display: none;
 } /* Stats */
@@ -526,6 +529,8 @@ to balance spacing */
   justify-content: center;
   text-align: left;
 }
+
+        
         """,
     )
 

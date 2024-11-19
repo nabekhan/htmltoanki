@@ -1,5 +1,4 @@
 import streamlit as st
-import os
 from main import deckcreate
 
 st.title("Anki Deck Generator")
@@ -25,7 +24,7 @@ if submitted:
                 st.download_button(
                     label="Download Anki Deck",
                     data=f,
-                    file_name=os.path.basename(output_file),
+                    file_name=output_file,
                     mime="application/octet-stream",
                 )
         except Exception as e:

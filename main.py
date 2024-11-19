@@ -559,6 +559,7 @@ img {
   margin: 8px 8px;
   padding: 10px;
   font-size: 14px;
+  background: #1e1e1e;
 }
 .stats br:nth-of-type(3n) {
   display: none; /* Remove every

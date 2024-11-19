@@ -1,2 +1,9 @@
 # Project exclude paths
 /gitignore/
+/.idea/.gitignore
+/.idea/htmltoanki.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/RIME 1.3.5__Rheumatology quick cards updated.apkg
+/.idea/vcs.xml

@@ -125,7 +125,7 @@ def deckcreate(username, password, deck):
                 for header in headers:
                     header = header.text.strip()
                     print(header)
-                    listofdesc.append(header)
+                    listofheaders.append(header)
                 front["Question"] = listofheaders
 
                 # print options
@@ -531,7 +531,7 @@ def deckcreate(username, password, deck):
         print(f'Output: {question+answers+feedback+desc, stats, desc, question, multi, options, images, answers, feedback, backimage, filename}')
         note = genanki.Note(
             model=anki_model,
-            fields=[question+answers+feedback+desc, stats, desc, question, multi, options, images, answers, feedback, backimage, filename],
+            fields=[desc+answers+feedback, stats, desc, question, multi, options, images, answers, feedback, backimage, filename],
         )
         anki_deck.add_note(note)
 

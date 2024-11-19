@@ -258,10 +258,10 @@ def deckcreate(username, password, deck):
         let content = div.innerHTML;
     
         // Replace three consecutive <br> tags with three tabs
-        content = content.replace(/(<br\s*\/?>\s*){3}/g, '&nbsp;&nbsp;&nbsp;&nbsp');
+        content = content.replace(/(<br\s*\/?>\s*){3}/g, ' &nbsp;&nbsp; ');
     
         // Replace single or remaining <br> tags with one tab
-        content = content.replace(/<br\s*\/?>/g, ' ');
+        content = content.replace(/<br\s*\/?>/g, '&nbsp;');
     
         // Update the div content
         div.innerHTML = content;
@@ -334,22 +334,21 @@ def deckcreate(username, password, deck):
     <br />{{Multiple Choice}}
     <br />
     <div class="Options">{{Options}}</div>
-
-    <script>
-        document.querySelectorAll('div.stats').forEach(div => {
-            // Get the inner HTML of the target div
-            let content = div.innerHTML;
-        
-            // Replace three consecutive <br> tags with three tabs
-            content = content.replace(/(<br\s*\/?>\s*){3}/g, '&nbsp;&nbsp;&nbsp;&nbsp');
-        
-            // Replace single or remaining <br> tags with one tab
-            content = content.replace(/<br\s*\/?>/g, ' ');
-        
-            // Update the div content
-            div.innerHTML = content;
-          });
-    </script>
+<script>
+    document.querySelectorAll('div.stats').forEach(div => {
+        // Get the inner HTML of the target div
+        let content = div.innerHTML;
+    
+        // Replace three consecutive <br> tags with three tabs
+        content = content.replace(/(<br\s*\/?>\s*){3}/g, ' &nbsp;&nbsp; ');
+    
+        // Replace single or remaining <br> tags with one tab
+        content = content.replace(/<br\s*\/?>/g, '&nbsp;');
+    
+        // Update the div content
+        div.innerHTML = content;
+      });
+</script>
 
     <hr id="answer" />
     <br />

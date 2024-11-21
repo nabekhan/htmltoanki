@@ -321,6 +321,7 @@ def deckcreate(username, password, deck):
 </script>
                 """,
                 "afmt": """
+
 <div class="bar">
     <div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
     <div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
@@ -359,9 +360,11 @@ def deckcreate(username, password, deck):
     <br />{{Feedback}}
     <br />
     <div class="chart">
-        <div class="backimg images">{{Back Image}}</div>
+        <div class="images"><div class="backimg">{{Back Image}}</div><a href="{{URL}}"><u>Link To Card</u></a></div>
     </div>
 </div>
+
+
 <script>
     setTimeout(function() {
           console.log("Checking DOM elements...");
@@ -479,6 +482,7 @@ def deckcreate(username, password, deck):
         });
       }, 10);
 </script>
+                
                 """,
             },
         ],

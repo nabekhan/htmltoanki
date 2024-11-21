@@ -228,6 +228,7 @@ def deckcreate(username, password, deck):
             {"name": "Answers"},
             {"name": "Feedback"},
             {"name": "Back Image"},
+            {"name": "URL"},
             {"name": "Tags"},
         ],
         templates=[
@@ -617,16 +618,17 @@ div:empty {
         answers = process_choices(back_data.get("Answers", []), "answers")
         feedback = process_field(back_data.get("Feedback", []))
         backimage = process_images(back_data.get("BackImages", []))
+        url = deck
 
         # Create a card (note)
         if len(back_data.get("Answers", [])) > 1:
             multi = "(Select All That Apply)"
         else:
             multi = ""
-        print(f'Output: {question+desc+answers+feedback, stats, desc, question, multi, options, images, answers, feedback, backimage, filename}')
+        print(f'Output: {question+desc+answers+feedback, stats, desc, question, multi, options, images, answers, feedback, backimage, url, filename}')
         note = genanki.Note(
             model=anki_model,
-            fields=[question+desc+answers+feedback, stats, desc, question, multi, options, images, answers, feedback, backimage, filename],
+            fields=[question+desc+answers+feedback, stats, desc, question, multi, options, images, answers, feedback, backimage, url, filename],
         )
         anki_deck.add_note(note)
 

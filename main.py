@@ -9,8 +9,10 @@ logging.basicConfig(level=logging.DEBUG)
 
 def deckcreate(username, password, deck):
 
+    if "printdeck" not in deck:
+        raise ValueError("The URL is not valid. Did you provide the print url as instructed? Ex: https://cards.ucalgary.ca/printdeck/882?bag_id=77")
 
-    # Define URLs
+        # Define URLs
     login_url = "https://cards.ucalgary.ca/login"
     collection_url = "https://cards.ucalgary.ca/collection"
 

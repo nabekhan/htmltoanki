@@ -248,7 +248,7 @@ def deckcreate(username, password, deck):
 			<br />{{Description}}
 		</div>
 	</div>
-	<br />{{Question}}
+	<br /><div id="question">{{Question}}</div>
 	<br />{{Multiple Choice}}
 	<div class="Options">{{Options}}</div>
 </div>
@@ -383,7 +383,7 @@ shuffleList(); // Call the function
 			<br />{{Description}}
 		</div>
 	</div>
-	<br />{{Question}}
+	<br /><div id="question">{{Question}}</div>
 	<br />{{Multiple Choice}}
 	<div class="Options">{{Options}}</div>
 	<div class="Options answers">{{Answers}}</div>
@@ -541,6 +541,15 @@ setTimeout(function() {
 	// Join the modified list back into HTML and set it
 	questionElement.innerHTML = modifiedQuestionList.join('');
 }, 100);
+</script>
+<!-- Scroll to the question -->
+<script>
+  (function () {
+    const questionElement = document.getElementById('question');
+    if (questionElement) {
+      questionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  })();
 </script>
                 """,
             },

@@ -237,254 +237,311 @@ def deckcreate(username, password, deck):
             {
                 "name": "Comprehensive Card",
                 "qfmt": """
-
 <div class="bar">
-    <div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
-    <div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
+	<div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
+	<div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
 </div>
 <div class="background">
-    <div class="chart">
-        <div class="frontimg images">{{Image}}</div>{{Stats}}
-        <div class="background desc" style="margin: 8px 8px;">
-            <br />{{Description}}
-        </div>
-    </div>
-    <br />{{Question}}
-    <br />{{Multiple Choice}}
-    <div class="Options">{{Options}}</div>
-<script>
-    document.querySelectorAll('div.stats').forEach(div => {
-        // Get the inner HTML of the target div
-        let content = div.innerHTML;
-    
-        // Replace three consecutive <br> tags with three tabs
-        content = content.replace(/(<br\s*\/?>\s*){3}/g, ' &nbsp;&nbsp; ');
-    
-        // Replace single or remaining <br> tags with one tab
-        content = content.replace(/<br\s*\/?>/g, '&nbsp;');
-    
-        // Update the div content
-        div.innerHTML = content;
-      });
-</script>
+	<div class="chart">
+		<div class="frontimg images">{{Image}}</div>{{Stats}}
+		<div class="background desc" style="margin: 8px 8px;">
+			<br />{{Description}}
+		</div>
+	</div>
+	<br />{{Question}}
+	<br />{{Multiple Choice}}
+	<div class="Options">{{Options}}</div>
 </div>
-
-
-
-
+<!-- Stats Fix -->
 <script>
-    // v1.1.8 - https://github.com/SimonLammer/anki-persistence/blob/584396fea9dea0921011671a47a0fdda19265e62/script.js
-    if(void 0===window.Persistence){var e="github.com/SimonLammer/anki-persistence/",t="_default";if(window.Persistence_sessionStorage=function(){var i=!1;try{"object"==typeof window.sessionStorage&&(i=!0,this.clear=function(){for(var t=0;t<sessionStorage.length;t++){var i=sessionStorage.key(t);0==i.indexOf(e)&&(sessionStorage.removeItem(i),t--)}},this.setItem=function(i,n){void 0==n&&(n=i,i=t),sessionStorage.setItem(e+i,JSON.stringify(n))},this.getItem=function(i){return void 0==i&&(i=t),JSON.parse(sessionStorage.getItem(e+i))},this.removeItem=function(i){void 0==i&&(i=t),sessionStorage.removeItem(e+i)},this.getAllKeys=function(){for(var t=[],i=Object.keys(sessionStorage),n=0;n<i.length;n++){var s=i[n];0==s.indexOf(e)&&t.push(s.substring(e.length,s.length))}return t.sort()})}catch(n){}this.isAvailable=function(){return i}},window.Persistence_windowKey=function(i){var n=window[i],s=!1;"object"==typeof n&&(s=!0,this.clear=function(){n[e]={}},this.setItem=function(i,s){void 0==s&&(s=i,i=t),n[e][i]=s},this.getItem=function(i){return void 0==i&&(i=t),void 0==n[e][i]?null:n[e][i]},this.removeItem=function(i){void 0==i&&(i=t),delete n[e][i]},this.getAllKeys=function(){return Object.keys(n[e])},void 0==n[e]&&this.clear()),this.isAvailable=function(){return s}},window.Persistence=new Persistence_sessionStorage,Persistence.isAvailable()||(window.Persistence=new Persistence_windowKey("py")),!Persistence.isAvailable()){var i=window.location.toString().indexOf("title"),n=window.location.toString().indexOf("main",i);i>0&&n>0&&n-i<10&&(window.Persistence=new Persistence_windowKey("qt"))}}
+document.querySelectorAll('div.stats').forEach(div => {
+	// Get the inner HTML of the target div
+	let content = div.innerHTML;
+	// Replace three consecutive <br> tags with three tabs
+	content = content.replace(/(<br\s*\/?>\s*){3}/g, ' &nbsp;&nbsp; ');
+	// Replace single or remaining <br> tags with one tab
+	content = content.replace(/<br\s*\/?>/g, '&nbsp;');
+	// Update the div content
+	div.innerHTML = content;
+});
 </script>
-
+<!-- Text Colour Script -->
 <script>
-    function shuffleList() {
-        const listContainer = document.querySelector('.choices');
-        if (!listContainer) return;
-    
-        const items = Array.from(listContainer.querySelectorAll('li'));
-    
-        if (Persistence.isAvailable()) {
-          let shuffleOrder = Persistence.getItem('shuffleOrder'); // Retrieve existing shuffle order
-    
-          if (!shuffleOrder) {
-            // Generate a new shuffle order using Fisher-Yates algorithm
-            shuffleOrder = items.map((_, i) => i);
-            for (let i = shuffleOrder.length - 1; i > 0; i--) {
-              const j = Math.floor(Math.random() * (i + 1));
-              [shuffleOrder[i], shuffleOrder[j]] = [shuffleOrder[j], shuffleOrder[i]];
-            }
-    
-            Persistence.setItem('shuffleOrder', shuffleOrder); // Save the shuffle order
-          }
-    
-          // Apply the shuffle order
-          const shuffledItems = shuffleOrder.map(i => items[i]);
-          listContainer.innerHTML = ''; // Clear original container
-          shuffledItems.forEach(item => listContainer.appendChild(item)); // Append shuffled items
-        }
-      }
-    
-      shuffleList(); // Call the function
+setTimeout(function() {
+	console.log("Applying white text color to all elements...");
+	// Select all elements in the card
+	const allElements = document.querySelectorAll('*');
+	// Loop through each element and set the text color to white
+	allElements.forEach(function(element) {
+		element.style.color = 'white';
+	});
+}, 10);
 </script>
-
+<!-- Shuffle Script -->
 <script>
-    setTimeout(function () {
-        console.log("Applying white text color to all elements...");
-    
-        // Select all elements in the card
-        const allElements = document.querySelectorAll('*');
-    
-        // Loop through each element and set the text color to white
-        allElements.forEach(function (element) {
-          element.style.color = 'white';
-        });
-      }, 10);
+// v1.1.8 - https://github.com/SimonLammer/anki-persistence/blob/584396fea9dea0921011671a47a0fdda19265e62/script.js
+if(void 0 === window.Persistence) {
+	var e = "github.com/SimonLammer/anki-persistence/",
+		t = "_default";
+	if(window.Persistence_sessionStorage = function() {
+			var i = !1;
+			try {
+				"object" == typeof window.sessionStorage && (i = !0, this.clear = function() {
+					for(var t = 0; t < sessionStorage.length; t++) {
+						var i = sessionStorage.key(t);
+						0 == i.indexOf(e) && (sessionStorage.removeItem(i), t--);
+					}
+				}, this.setItem = function(i, n) {
+					void 0 == n && (n = i, i = t),
+						sessionStorage.setItem(e + i, JSON.stringify(n));
+				}, this.getItem = function(i) {
+					return void 0 == i && (i = t),
+						JSON.parse(sessionStorage.getItem(e + i));
+				}, this.removeItem = function(i) {
+					void 0 == i && (i = t),
+						sessionStorage.removeItem(e + i);
+				}, this.getAllKeys = function() {
+					for(var t = [], i = Object.keys(sessionStorage), n = 0; n < i.length; n++) {
+						var s = i[n];
+						0 == s.indexOf(e) && t.push(s.substring(e.length, s.length));
+					}
+					return t.sort();
+				});
+			} catch (n) {}
+			this.isAvailable = function() {
+				return i;
+			}
+		}, window.Persistence_windowKey = function(i) {
+			var n = window[i],
+				s = !1;
+			"object" == typeof n && (s = !0, this.clear = function() {
+					n[e] = {};
+				}, this.setItem = function(i, s) {
+					void 0 == s && (s = i, i = t),
+						n[e][i] = s;
+				}, this.getItem = function(i) {
+					return void 0 == i && (i = t),
+						void 0 == n[e][i] ? null : n[e][i];
+				}, this.removeItem = function(i) {
+					void 0 == i && (i = t),
+						delete n[e][i];
+				}, this.getAllKeys = function() {
+					return Object.keys(n[e]);
+				}, void 0 == n[e] && this.clear()),
+				this.isAvailable = function() {
+					return s;
+				}
+		}, window.Persistence = new Persistence_sessionStorage, Persistence.isAvailable() || (window.Persistence = new Persistence_windowKey("py")), !Persistence.isAvailable()) {
+		var i = window.location.toString().indexOf("title"),
+			n = window.location.toString().indexOf("main", i);
+		i > 0 && n > 0 && n - i < 10 && (window.Persistence = new Persistence_windowKey("qt"));
+	}
+}
+// Clear persistence when the front side loads
+(function clearPersistenceOnLoad() {
+	if(typeof Persistence !== "undefined" && Persistence.isAvailable()) {
+		console.log("Clearing persistence data on front side...");
+		Persistence.clear();
+	} else {
+		console.warn("Persistence is not available.");
+	}
+})();
+
+function shuffleList() {
+	const listContainer = document.querySelector('.choices');
+	if(!listContainer) return;
+	const items = Array.from(listContainer.querySelectorAll('li'));
+	if(Persistence.isAvailable()) {
+		let shuffleOrder = Persistence.getItem('shuffleOrder'); // Retrieve existing shuffle order
+		if(!shuffleOrder) {
+			// Generate a new shuffle order using Fisher-Yates algorithm
+			shuffleOrder = items.map((_, i) => i);
+			for(let i = shuffleOrder.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[shuffleOrder[i], shuffleOrder[j]] = [shuffleOrder[j], shuffleOrder[i]];
+			}
+			Persistence.setItem('shuffleOrder', shuffleOrder); // Save the shuffle order
+		}
+		// Apply the shuffle order
+		const shuffledItems = shuffleOrder.map(i => items[i]);
+		listContainer.innerHTML = ''; // Clear original container
+		shuffledItems.forEach(item => listContainer.appendChild(item)); // Append shuffled items
+	}
+}
+shuffleList(); // Call the function
 </script>
                 """,
                 "afmt": """
-
 <div class="bar">
-    <div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
-    <div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
+	<div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
+	<div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
 </div>
 <div class="background">
-    <div class="chart">
-        <div class="frontimg images">{{Image}}</div>{{Stats}}
-        <div class="background desc" style="margin: 8px 8px;">
-            <br />{{Description}}
-        </div>
-    </div>
-    <br />{{Question}}
-    <br />{{Multiple Choice}}
-    <div class="Options">{{Options}}</div>
-<script>
-    document.querySelectorAll('div.stats').forEach(div => {
-        // Get the inner HTML of the target div
-        let content = div.innerHTML;
-    
-        // Replace three consecutive <br> tags with three tabs
-        content = content.replace(/(<br\s*\/?>\s*){3}/g, ' &nbsp;&nbsp; ');
-    
-        // Replace single or remaining <br> tags with one tab
-        content = content.replace(/<br\s*\/?>/g, '&nbsp;');
-    
-        // Update the div content
-        div.innerHTML = content;
-      });
-</script>
-
-
-
-
-
-    <div class="Options answers">{{Answers}}</div>
-    <br />{{Feedback}}
-    <br />
-    <div class="chart">
-        <div class="images"><div class="backimg">{{Back Image}}</div><a href="{{URL}}"><u>Link To Card</u></a></div>
-    </div>
+	<div class="chart">
+		<div class="frontimg images">{{Image}}</div>{{Stats}}
+		<div class="background desc" style="margin: 8px 8px;">
+			<br />{{Description}}
+		</div>
+	</div>
+	<br />{{Question}}
+	<br />{{Multiple Choice}}
+	<div class="Options">{{Options}}</div>
+	<div class="Options answers">{{Answers}}</div>
+	<br />{{Feedback}}
+	<br />
+	<div class="chart">
+		<div class="backimg images">{{Back Image}}</div>
+		<div style="text-align: center;"><a href="{{URL}}"><u>Link To Card</u></a></div>
+	</div>
 </div>
-
-
+</div>
+<!-- Stats Fix -->
 <script>
-    setTimeout(function() {
-          console.log("Checking DOM elements...");
-    
-          var questionElement = document.querySelector(".choices");
-          var answerElement = document.querySelector(".answers");
-    
-          if (!questionElement) {
-            console.error("Question element not found.");
-            return;
-          }
-          if (!answerElement) {
-            console.error("Answer element not found.");
-            return;
-          }
-    
-          // Split the contents into lists by <li> tags
-          var questionList = Array.from(questionElement.querySelectorAll('li')).map(el => el.innerHTML.trim());
-          var answerList = Array.from(answerElement.querySelectorAll('li')).map(el => el.innerHTML.trim());
-    
-          // Iterate over the question list and compare with the answer list
-          var modifiedQuestionList = questionList.map(function(item) {
-            return answerList.includes(item) ?
-              `<div class="green-highlight"><li>${item}</li></div>` :
-              `<li>${item}</li>`;
-          });
-    
-          // Join the modified list back into HTML and set it
-          questionElement.innerHTML = modifiedQuestionList.join('');
-        }, 100);
+document.querySelectorAll('div.stats').forEach(div => {
+	// Get the inner HTML of the target div
+	let content = div.innerHTML;
+	// Replace three consecutive <br> tags with three tabs
+	content = content.replace(/(<br\s*\/?>\s*){3}/g, ' &nbsp;&nbsp; ');
+	// Replace single or remaining <br> tags with one tab
+	content = content.replace(/<br\s*\/?>/g, '&nbsp;');
+	// Update the div content
+	div.innerHTML = content;
+});
 </script>
+<!-- Text Colour Script -->
+<script>
+setTimeout(function() {
+	console.log("Applying white text color to all elements...");
+	// Select all elements in the card
+	const allElements = document.querySelectorAll('*');
+	// Loop through each element and set the text color to white
+	allElements.forEach(function(element) {
+		element.style.color = 'white';
+	});
+}, 10);
+</script>
+<!-- Shuffle Script -->
+<script>
+// v1.1.8 - https://github.com/SimonLammer/anki-persistence/blob/584396fea9dea0921011671a47a0fdda19265e62/script.js
+if(void 0 === window.Persistence) {
+	var e = "github.com/SimonLammer/anki-persistence/",
+		t = "_default";
+	if(window.Persistence_sessionStorage = function() {
+			var i = !1;
+			try {
+				"object" == typeof window.sessionStorage && (i = !0, this.clear = function() {
+					for(var t = 0; t < sessionStorage.length; t++) {
+						var i = sessionStorage.key(t);
+						0 == i.indexOf(e) && (sessionStorage.removeItem(i), t--)
+					}
+				}, this.setItem = function(i, n) {
+					void 0 == n && (n = i, i = t), sessionStorage.setItem(e + i, JSON.stringify(n))
+				}, this.getItem = function(i) {
+					return void 0 == i && (i = t), JSON.parse(sessionStorage.getItem(e + i))
+				}, this.removeItem = function(i) {
+					void 0 == i && (i = t), sessionStorage.removeItem(e + i)
+				}, this.getAllKeys = function() {
+					for(var t = [], i = Object.keys(sessionStorage), n = 0; n < i.length; n++) {
+						var s = i[n];
+						0 == s.indexOf(e) && t.push(s.substring(e.length, s.length))
+					}
+					return t.sort()
+				})
+			} catch (n) {}
+			this.isAvailable = function() {
+				return i
+			}
+		}, window.Persistence_windowKey = function(i) {
+			var n = window[i],
+				s = !1;
+			"object" == typeof n && (s = !0, this.clear = function() {
+				n[e] = {}
+			}, this.setItem = function(i, s) {
+				void 0 == s && (s = i, i = t), n[e][i] = s
+			}, this.getItem = function(i) {
+				return void 0 == i && (i = t), void 0 == n[e][i] ? null : n[e][i]
+			}, this.removeItem = function(i) {
+				void 0 == i && (i = t), delete n[e][i]
+			}, this.getAllKeys = function() {
+				return Object.keys(n[e])
+			}, void 0 == n[e] && this.clear()), this.isAvailable = function() {
+				return s
+			}
+		}, window.Persistence = new Persistence_sessionStorage, Persistence.isAvailable() || (window.Persistence = new Persistence_windowKey("py")), !Persistence.isAvailable()) {
+		var i = window.location.toString().indexOf("title"),
+			n = window.location.toString().indexOf("main", i);
+		i > 0 && n > 0 && n - i < 10 && (window.Persistence = new Persistence_windowKey("qt"))
+	}
+}
 
-<script>
-    setTimeout(function() {
-          console.log("Applying white text color to all elements...");
-    
-          // Select all elements in the card
-          var allElements = document.querySelectorAll('*');
-    
-          // Loop through each element and set the text color to white
-          allElements.forEach(function(element) {
-            element.style.color = 'white';
-          });
-        }, 10);
+function applyShuffleFromPersistence() {
+	const listContainer = document.querySelector('.choices');
+	if(!listContainer || !Persistence.isAvailable()) return;
+	const items = Array.from(listContainer.querySelectorAll('li'));
+	const shuffleOrder = Persistence.getItem('shuffleOrder'); // Retrieve saved shuffle order
+	if(shuffleOrder) {
+		const shuffledItems = shuffleOrder.map(i => items[i]);
+		listContainer.innerHTML = ''; // Clear original container
+		shuffledItems.forEach(item => listContainer.appendChild(item)); // Append shuffled items
+		Persistence.removeItem('shuffleOrder'); // Clear the shuffle order for the next card
+	}
+}
+applyShuffleFromPersistence(); // Call the function
 </script>
-
+<!-- Clean Duplicate Images -->
 <script>
-    setTimeout(function() {
-          console.log("Checking image elements...");
-    
-          // Get the elements containing the front and back images
-          var frontImgElement = document.querySelector(".frontimg");
-          var backImgElement = document.querySelector(".backimg");
-    
-          // Validate that both elements exist
-          if (!frontImgElement) {
-              console.error("Front image element (.frontimg) not found.");
-              return;
-          }
-          if (!backImgElement) {
-              console.error("Back image element (.backimg) not found.");
-              return;
-          }
-    
-          // Extract URLs from the images inside frontimg and backimg
-          var frontImgUrls = Array.from(frontImgElement.querySelectorAll('img')).map(el => el.src);
-          var backImgUrls = Array.from(backImgElement.querySelectorAll('img'));
-    
-          // Iterate through back images and hide matching ones
-          backImgUrls.forEach(function(img) {
-              if (frontImgUrls.includes(img.src)) {
-                  console.log(`Hiding matching image: ${img.src}`);
-                  img.style.display = "none"; // Hide the matching image
-              }
-          });
-    
-          console.log("Image comparison and hiding completed.");
-      }, 10);
+setTimeout(function() {
+	console.log("Checking image elements...");
+	// Get the elements containing the front and back images
+	var frontImgElement = document.querySelector(".frontimg");
+	var backImgElement = document.querySelector(".backimg");
+	// Validate that both elements exist
+	if(!frontImgElement) {
+		console.error("Front image element (.frontimg) not found.");
+		return;
+	}
+	if(!backImgElement) {
+		console.error("Back image element (.backimg) not found.");
+		return;
+	}
+	// Extract URLs from the images inside frontimg and backimg
+	var frontImgUrls = Array.from(frontImgElement.querySelectorAll('img')).map(el => el.src);
+	var backImgUrls = Array.from(backImgElement.querySelectorAll('img'));
+	// Iterate through back images and hide matching ones
+	backImgUrls.forEach(function(img) {
+		if(frontImgUrls.includes(img.src)) {
+			console.log(`Hiding matching image: ${img.src}`);
+			img.style.display = "none"; // Hide the matching image
+		}
+	});
+	console.log("Image comparison and hiding completed.");
+}, 10);
 </script>
-
+<!-- Select Answers and Highlight Green -->
 <script>
-    // v1.1.8 - https://github.com/SimonLammer/anki-persistence/blob/584396fea9dea0921011671a47a0fdda19265e62/script.js
-    if(void 0===window.Persistence){var e="github.com/SimonLammer/anki-persistence/",t="_default";if(window.Persistence_sessionStorage=function(){var i=!1;try{"object"==typeof window.sessionStorage&&(i=!0,this.clear=function(){for(var t=0;t<sessionStorage.length;t++){var i=sessionStorage.key(t);0==i.indexOf(e)&&(sessionStorage.removeItem(i),t--)}},this.setItem=function(i,n){void 0==n&&(n=i,i=t),sessionStorage.setItem(e+i,JSON.stringify(n))},this.getItem=function(i){return void 0==i&&(i=t),JSON.parse(sessionStorage.getItem(e+i))},this.removeItem=function(i){void 0==i&&(i=t),sessionStorage.removeItem(e+i)},this.getAllKeys=function(){for(var t=[],i=Object.keys(sessionStorage),n=0;n<i.length;n++){var s=i[n];0==s.indexOf(e)&&t.push(s.substring(e.length,s.length))}return t.sort()})}catch(n){}this.isAvailable=function(){return i}},window.Persistence_windowKey=function(i){var n=window[i],s=!1;"object"==typeof n&&(s=!0,this.clear=function(){n[e]={}},this.setItem=function(i,s){void 0==s&&(s=i,i=t),n[e][i]=s},this.getItem=function(i){return void 0==i&&(i=t),void 0==n[e][i]?null:n[e][i]},this.removeItem=function(i){void 0==i&&(i=t),delete n[e][i]},this.getAllKeys=function(){return Object.keys(n[e])},void 0==n[e]&&this.clear()),this.isAvailable=function(){return s}},window.Persistence=new Persistence_sessionStorage,Persistence.isAvailable()||(window.Persistence=new Persistence_windowKey("py")),!Persistence.isAvailable()){var i=window.location.toString().indexOf("title"),n=window.location.toString().indexOf("main",i);i>0&&n>0&&n-i<10&&(window.Persistence=new Persistence_windowKey("qt"))}}
+setTimeout(function() {
+	console.log("Checking DOM elements...");
+	var questionElement = document.querySelector(".choices");
+	var answerElement = document.querySelector(".answers");
+	if(!questionElement) {
+		console.error("Question element not found.");
+		return;
+	}
+	if(!answerElement) {
+		console.error("Answer element not found.");
+		return;
+	}
+	// Split the contents into lists by <li> tags
+	var questionList = Array.from(questionElement.querySelectorAll('li')).map(el => el.innerHTML.trim());
+	var answerList = Array.from(answerElement.querySelectorAll('li')).map(el => el.innerHTML.trim());
+	// Iterate over the question list and compare with the answer list
+	var modifiedQuestionList = questionList.map(function(item) {
+		return answerList.includes(item) ? `<div class="green-highlight"><li>${item}</li></div>` : `<li>${item}</li>`;
+	});
+	// Join the modified list back into HTML and set it
+	questionElement.innerHTML = modifiedQuestionList.join('');
+}, 100);
 </script>
-<script>
-    function applyShuffleFromPersistence() {
-        const listContainer = document.querySelector('.choices');
-        if (!listContainer || !Persistence.isAvailable()) return;
-    
-        const items = Array.from(listContainer.querySelectorAll('li'));
-        const shuffleOrder = Persistence.getItem('shuffleOrder'); // Retrieve saved shuffle order
-    
-        if (shuffleOrder) {
-          const shuffledItems = shuffleOrder.map(i => items[i]);
-          listContainer.innerHTML = ''; // Clear original container
-          shuffledItems.forEach(item => listContainer.appendChild(item)); // Append shuffled items
-    
-          Persistence.removeItem('shuffleOrder'); // Clear the shuffle order for the next card
-        }
-      }
-    
-      applyShuffleFromPersistence(); // Call the function
-</script>
-
-<script>
-    setTimeout(function () {
-        console.log("Applying white text color to all elements...");
-    
-        // Select all elements in the card
-        const allElements = document.querySelectorAll('*');
-    
-        // Loop through each element and set the text color to white
-        allElements.forEach(function (element) {
-          element.style.color = 'white';
-        });
-      }, 10);
-</script>
-                
                 """,
             },
         ],

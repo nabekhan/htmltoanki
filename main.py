@@ -232,6 +232,7 @@ def deckcreate(username, password, deck):
             {"name": "Back Image"},
             {"name": "URL"},
             {"name": "Tags"},
+            {"name": "Notes"},
         ],
         templates=[
             {
@@ -388,6 +389,7 @@ shuffleList(); // Call the function
 	<div class="Options">{{Options}}</div>
 	<div class="Options answers">{{Answers}}</div>
 	<br />{{Feedback}}
+	<br /><div class="notes">{{Notes}}</div>
 	<br />
 	<div class="chart">
 		<div class="backimg images">{{Back Image}}</div>
@@ -620,6 +622,9 @@ div:empty {
      object-fit: cover;
      max-width: 100%;
 }
+ .notes {
+     font: 15px Arial, sans-serif;
+}
 /* Options */
  .Options li {
      margin: 5px 0;
@@ -700,7 +705,7 @@ div:empty {
         print(f'Output: {question+desc+answers+feedback, stats, desc, question, multi, options, images, answers, feedback, backimage, url, filename}')
         note = genanki.Note(
             model=anki_model,
-            fields=[question+desc+answers+feedback, stats, desc, question, multi, options, images, answers, feedback, backimage, url, filename],
+            fields=[question+desc+answers+feedback, stats, desc, question, multi, options, images, answers, feedback, backimage, url, filename, ""],
         )
         anki_deck.add_note(note)
 

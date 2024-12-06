@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.DEBUG)
 def deckcreate(username, password, deck):
 
     if "details" in deck:
-        deck.replace("details", "printdeck")
+        deck = deck.replace("details", "printdeck")
 
         # Define URLs
     login_url = "https://cards.ucalgary.ca/login"

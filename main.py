@@ -12,7 +12,7 @@ def deckcreate(username, password, deck):
     if "details" in deck:
         deck = deck.replace("details", "printdeck")
 
-        # Define URLs
+    # Define URLs
     login_url = "https://cards.ucalgary.ca/login"
     collection_url = "https://cards.ucalgary.ca/collection"
 

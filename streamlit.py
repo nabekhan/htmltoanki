@@ -8,7 +8,7 @@ st.write("Log in, fetch your deck, and generate an Anki package.")
 with st.form("login_form"):
     username = st.text_input("Cards Username")
     password = st.text_input("Cards Password", type="password")
-    deck_url = st.text_input("Print Deck URL", value="https://cards.ucalgary.ca/printdeck/1020?bag_id=81")
+    deck_url = st.text_input("Deck URL", value="https://cards.ucalgary.ca/printdeck/1020?bag_id=81")
     submitted = st.form_submit_button("Generate Deck")
 
 if submitted:

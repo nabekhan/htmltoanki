@@ -174,8 +174,6 @@ def deckcreate(username, password, deck):
                 headers = div.find_all("h3")
                 listofheaders = []
                 for header in headers:
-                    header = processtxt(header)
-                    print(header)
                     listofheaders.append(header)
                 front["Question"] = listofheaders
 
@@ -208,8 +206,10 @@ def deckcreate(username, password, deck):
                 for answer in answers:
                     answer = processtxt(answer)
                     print(answer)
-                    answerletter = find_sublist_with_string(listofoptions, answer)[0]
-                    listofanswers.append([answerletter, answer])
+                    findanswerindex = find_sublist_with_string(listofoptions, answer)
+                    if findanswerindex:
+                        answerletter = findanswerindex[0]
+                        listofanswers.append([answerletter, answer])
                 back["Answers"] = listofanswers
 
                 # print feedback
@@ -318,7 +318,6 @@ def deckcreate(username, password, deck):
             for index, stat in enumerate(statslist):
                 stats += f'<div class=stat {typesofstats[index]}>{stat}</div>'
             stats = [stats]
-        print(stats)
         desc = front_data.get("Desc")
         question = front_data.get("Question")
         images = process_images(front_data.get("Images", []))
@@ -366,10 +365,9 @@ def deckcreate(username, password, deck):
     return output_file
     print(f"Anki deck created: {output_file}")
 
-"""
+
 if os.path.basename(__file__) == "fancycreate.py":
     from gitignore.userdetails import *
 
-    deck = "https://cards.ucalgary.ca/printdeck/865?bag_id=79"
+    deck = "https://cards.ucalgary.ca/printdeck/1052?bag_id=87"
     deckcreate(username, password, deck)
-"""

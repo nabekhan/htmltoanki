@@ -5,7 +5,6 @@ import logging
 import genanki
 import html2text
 import os
-import string
 import markdown2
 
 logging.basicConfig(level=logging.DEBUG)
@@ -20,7 +19,7 @@ text_maker.ignore_emphasis = False  # Keep bold/italic formatting
 text_maker.bypass_tables = False  # Preserve table formatting
 
 # Alphabet
-alphaUpper = list(string.ascii_uppercase)
+alphaUpper = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
 
 def processtxt(souphtml):

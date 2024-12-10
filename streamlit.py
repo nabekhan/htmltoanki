@@ -1,5 +1,5 @@
 import streamlit as st
-from main import deckcreate
+from fancycreate import deckcreate
 
 st.title("Anki Deck Generator")
 st.write("Log in, fetch your deck, and generate an Anki package.")

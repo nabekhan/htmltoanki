@@ -3,20 +3,62 @@ from bs4 import BeautifulSoup
 import requests
 import logging
 import genanki
+import html2text
+import os
+import string
+import markdown2
+
 logging.basicConfig(level=logging.DEBUG)
 
+# Convert HTML to plain text
+text_maker = html2text.HTML2Text()
+
+# Customize settings
+text_maker.ignore_links = False  # Include links in Markdown format
+text_maker.ignore_images = True  # Exclude images
+text_maker.ignore_emphasis = False  # Keep bold/italic formatting
+text_maker.bypass_tables = False  # Preserve table formatting
+
+# Alphabet
+alphaUpper = list(string.ascii_uppercase)
+
+
+def processtxt(souphtml):
+    # Use html2text or text_maker to convert HTML to Markdown-like text
+    souptext = text_maker.handle(str(souphtml))
+
+    # Remove all zero-width spaces
+    souptext = souptext.replace('\u200b', '')  # Removes all instances of \u200b
+
+    # Convert the processed Markdown text to HTML
+    souptext = markdown2.markdown(souptext)
+
+    # Replace all remaining newline characters with <br>
+    souptext = souptext.replace('\n\n', '<br>')
+
+    # Replace all remaining newline characters with <br>
+    souptext = souptext.replace('\n', "")
+
+    return souptext
+
+def find_sublist_with_string(list_of_lists, target_string):
+    for sublist in list_of_lists:
+        if target_string in sublist:
+            return sublist
+    return ""  # Return None if the string is not found in any sublist
+
 # Import files
-with open("src/frontside.html", "r", encoding="utf-8") as f:
+with open("src/mcfrontside.html", "r", encoding="utf-8") as f:
     qfmt_content = f.read()
 
-with open("src/backside.html", "r", encoding="utf-8") as f:
+with open("src/mcbackside.html", "r", encoding="utf-8") as f:
     afmt_content = f.read()
 
-with open("src/css.html", "r", encoding="utf-8") as f:
+with open("src/mccss.html", "r", encoding="utf-8") as f:
     css_content = f.read()
 
-def deckcreate(username, password, deck):
 
+def deckcreate(username, password, deck):
     if "details" in deck:
         deck = deck.replace("details", "printdeck")
 
@@ -82,15 +124,15 @@ def deckcreate(username, password, deck):
         logging.error("Login failed or unexpected response.")
 
     """
-    
+
     # Open the HTML file
     with open("gitignore/Cards.html", "r", encoding="utf-8") as html_file:
         S = BeautifulSoup(html_file, 'html.parser')
-    """
+"""
 
     # Print Name
     details_div = S.find("div", class_="details")
-    filename = details_div.find("p").text.strip() +"::"+  details_div.find("h1").text.strip()
+    filename = details_div.find("p").text.strip() + "::" + details_div.find("h1").text.strip()
     print(filename)
 
     # Select records
@@ -114,18 +156,18 @@ def deckcreate(username, password, deck):
                 stats = div.find_all("div", class_="stats")
                 listofstats = []
                 for stat in stats:
-                    stat = stat.text.strip()
+                    stat = processtxt(stat)
                     print(stat)
                     listofstats.append(stat)
                 front["Stats"] = listofstats
-
 
                 # print pt description
                 descriptions = div.find_all("div", class_="block group")
                 listofdesc = []
                 for description in descriptions:
-                    print(description.text.strip())
-                    #description = description.text.strip()
+                    description = processtxt(description)
+                    print(description)
+                    # description = description.text.strip()
                     listofdesc.append(description)
                 front["Desc"] = listofdesc
 
@@ -133,7 +175,7 @@ def deckcreate(username, password, deck):
                 headers = div.find_all("h3")
                 listofheaders = []
                 for header in headers:
-                    header = header.text.strip()
+                    header = processtxt(header)
                     print(header)
                     listofheaders.append(header)
                 front["Question"] = listofheaders
@@ -142,10 +184,10 @@ def deckcreate(username, password, deck):
                 options = div.select('div[class*="option"]')
                 option_list = [div.text.strip() for div in options][1:]
                 listofoptions = []
-                for option in option_list:
-                    option = option.strip("\u200b")
+                for index, option in enumerate(option_list):
+                    option = processtxt(option)
                     print(option)
-                    listofoptions.append(option)
+                    listofoptions.append([alphaUpper[index], option])
                 front["Options"] = listofoptions
 
                 # find images
@@ -165,16 +207,17 @@ def deckcreate(username, password, deck):
                 answers = div.find_all("div", class_="correct")
                 listofanswers = []
                 for answer in answers:
-                    answer = answer.text.strip().strip("\u200b")
+                    answer = processtxt(answer)
                     print(answer)
-                    listofanswers.append(answer)
+                    answerletter = find_sublist_with_string(listofoptions, answer)[0]
+                    listofanswers.append([answerletter, answer])
                 back["Answers"] = listofanswers
 
                 # print feedback
                 feedbacks = div.find_all("div", class_="results container")
                 listoffeed = []
                 for feedback in feedbacks:
-                    feedback = feedback.text.strip().strip("\u200b")
+                    feedback = processtxt(feedback)
                     print(feedback)
                     listoffeed.append(feedback)
                 back["Feedback"] = listoffeed
@@ -186,7 +229,10 @@ def deckcreate(username, password, deck):
                     bkurlstub = image.get("src")
                     bkurl = "https://cards.ucalgary.ca/" + bkurlstub[1:]
                     print(bkurl)
-                    listofbackimages.append(bkurl)
+                    if bkurl in listofimages:
+                        continue
+                    else:
+                        listofbackimages.append(bkurl)
                 back["BackImages"] = listofbackimages
 
                 notes[int(i / 2)] = [front, back]
@@ -196,55 +242,52 @@ def deckcreate(username, password, deck):
         print("No <div> elements with class 'page' found.")
     cards_dict = notes
 
-
-    #
-    # Helper function to process fields with <br> separator
-    def process_field(field):
-        if isinstance(field, list):
-            field = ''.join(f"{item}<br><br>" for item in field)
-        return str(field or "").replace("\n", "<br>")
-
-    def process_description(field):
-        if isinstance(field, list):
-            field = ''.join(f"{item}" for item in field)
-        return str(field or "").replace("\n", "<br>")
-    def process_choices(field, classtype):
-        if not isinstance(field, list):
-            return f'<div class="{classtype}"></div>'
-        choices = [f"<li>{str(choice)}</li>" for choice in field]
-        return f'<div class="{classtype}">' + ''.join(choices) + '</div>'
-
-    def process_stats(field):
-        if isinstance(field, list):
-            field = ''.join(f"{item}<br>" for item in field)
-        return '<div class="stats">'+str(field or "").replace("\n", "<br>")+'</div>'
-    def process_images(images):
-        if not isinstance(images, list):
-            return ""
-        return "<br>".join([f"<img src='{img}'>" for img in images if img])
-
     # Define a model for the Anki cards
     anki_model = genanki.Model(
         1607342344,  # Unique model ID
-        "Comprehensive Model",
+        "MC Model",
         fields=[
-            {"name": "ID"},
-            {"name": "Stats"},
-            {"name": "Description"},
-            {"name": "Question"},
-            {"name": "Multiple Choice"},
-            {"name": "Options"},
-            {"name": "Image"},
-            {"name": "Answers"},
-            {"name": "Feedback"},
-            {"name": "Back Image"},
-            {"name": "URL"},
+            {"name": "id"},
+            {"name": "frontimage"},
+            {"name": "stats"},
+            {"name": "desc"},
+            {"name": "question"},
+            {"name": "answer"},
+            {"name": "feedback"},
+            {"name": "backimage"},
+            {"name": "note"},
+            {"name": "url"},
             {"name": "Tags"},
-            {"name": "Notes"},
+            {"name": "optionA"},
+            {"name": "optionB"},
+            {"name": "optionC"},
+            {"name": "optionD"},
+            {"name": "optionE"},
+            {"name": "optionF"},
+            {"name": "optionG"},
+            {"name": "optionH"},
+            {"name": "optionI"},
+            {"name": "optionJ"},
+            {"name": "optionK"},
+            {"name": "optionL"},
+            {"name": "optionM"},
+            {"name": "optionN"},
+            {"name": "optionO"},
+            {"name": "optionP"},
+            {"name": "optionQ"},
+            {"name": "optionR"},
+            {"name": "optionS"},
+            {"name": "optionT"},
+            {"name": "optionU"},
+            {"name": "optionV"},
+            {"name": "optionW"},
+            {"name": "optionX"},
+            {"name": "optionY"},
+            {"name": "optionZ"},
         ],
         templates=[
             {
-                "name": "Comprehensive Card",
+                "name": "MC Card",
                 "qfmt": qfmt_content,
                 "afmt": afmt_content,
             },
@@ -252,49 +295,81 @@ def deckcreate(username, password, deck):
         css=css_content,
     )
 
-
     # Create the deck
     anki_deck = genanki.Deck(
-        2059400112,
+        205940548,
         filename
     )
+
+    def process_images(images):
+        if not isinstance(images, list):
+            return ""
+        return "<br>".join([f"<img src='{img}'>" for img in images if img])
 
     # Add cards from the dictionary
     for card_id, card_data in cards_dict.items():
         front_data = card_data[0]
         back_data = card_data[1]
 
-        stats = process_stats(front_data.get("Stats", []))
-        desc = process_description(front_data.get("Desc", []))
-        question = process_field(front_data.get("Question", []))
-        options = process_choices(front_data.get("Options", []), "choices")
+        stats = front_data.get("Stats")
+        if stats:
+            statslist = stats[0].split("<br>")
+            typesofstats = ["hr", "sp", "rr", "temp", "nbp"]
+            stats = ""
+            for index, stat in enumerate(statslist):
+                stats += f'<div class=stat {typesofstats[index]}>{stat}</div>'
+            stats = [stats]
+        print(stats)
+        desc = front_data.get("Desc")
+        question = front_data.get("Question")
         images = process_images(front_data.get("Images", []))
-        answers = process_choices(back_data.get("Answers", []), "answers")
-        feedback = process_field(back_data.get("Feedback", []))
-        backimage = process_images(back_data.get("BackImages", []))
-        url = deck
+        feedback = back_data.get("Feedback")
+        backimages = process_images(back_data.get("BackImages", []))
+        url = [f'<a href="{deck}">Link to Deck</a>']
+
+        options = front_data.get("Options")
+        optiontext = []
+        if options:
+            for option in options:
+                optiontext.append(option[1])
+
+        while len(optiontext) < 26:
+            optiontext.append("")
+
+        answers = back_data.get("Answers")
+        answerkey = []
+        if answers:
+            for answer in answers:
+                answerkey.append(answer[0])
+
+        passed_variables = [question + desc + answers + feedback + [images] + [backimages], images, stats, desc, question, "".join(answerkey), feedback, backimages, "", url, filename, *optiontext]
+
+        def process_field(field):
+            if isinstance(field, list):
+                # Join list items with <br><br> for HTML separation
+                field = ''.join(f"{item}" for item in field)
+            # Ensure the field is a string, replace None with ""
+            return str(field or "")
+
+        sanitized_fields = [process_field(field) for field in passed_variables]
+        #print(sanitized_fields)
 
         # Create a card (note)
-        if len(back_data.get("Answers", [])) > 1:
-            multi = "(Select All That Apply)"
-        else:
-            multi = ""
-        print(f'Output: {question+desc+answers+feedback, stats, desc, question, multi, options, images, answers, feedback, backimage, url, filename}')
+        #print("Output:", *sanitized_fields)
         note = genanki.Note(
             model=anki_model,
-            fields=[question+desc+answers+feedback, stats, desc, question, multi, options, images, answers, feedback, backimage, url, filename, ""],
+            fields=[*sanitized_fields],
         )
         anki_deck.add_note(note)
-
     # Save the deck as an Anki package
     output_file = (filename + ".apkg").replace("::", "__")
-    #genanki.Package(anki_deck).write_to_file(f"gitignore/{output_file}")
     genanki.Package(anki_deck).write_to_file(output_file)
     return output_file
     print(f"Anki deck created: {output_file}")
 
 
-if __name__ == "__main__":
+if os.path.basename(__file__) == "fancycreate.py":
     from gitignore.userdetails import *
-    deck = "https://cards.ucalgary.ca/printdeck/1020?bag_id=81"
+
+    deck = "https://cards.ucalgary.ca/printdeck/865?bag_id=79"
     deckcreate(username, password, deck)

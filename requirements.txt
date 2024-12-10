@@ -2,3 +2,6 @@ bs4
 requests
 genanki
 streamlit
+html2text
+string
+markdown2

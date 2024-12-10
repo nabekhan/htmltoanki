@@ -1,0 +1,10 @@
+<div id="at-back-indicator"></div>{{FrontSide}}
+<!-- Scroll to the question -->
+<script>
+  (function () {
+    const questionElement = document.getElementById('question');
+    if (questionElement) {
+      questionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  })();
+</script>

@@ -366,9 +366,10 @@ def deckcreate(username, password, deck):
     return output_file
     print(f"Anki deck created: {output_file}")
 
-
+"""
 if os.path.basename(__file__) == "fancycreate.py":
     from gitignore.userdetails import *
 
     deck = "https://cards.ucalgary.ca/printdeck/865?bag_id=79"
     deckcreate(username, password, deck)
+"""

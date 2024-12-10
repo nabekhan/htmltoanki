@@ -11,7 +11,19 @@
 	</div>
 	<br /><div id="question">{{Question}}</div>
 	<br />{{Multiple Choice}}
-	<div class="Options">{{Options}}</div>
+	<div tabindex="0" class="Options">{{Options}}</div>
+
+<style>
+  .Options {
+    filter: blur(5px); /* Initial blur */
+    cursor: pointer;   /* Indicate interactivity */
+  }
+
+  .Options:focus {
+    filter: none; /* Remove blur when clicked */
+  }
+</style>
+
 </div>
 <!-- Stats Fix -->
 <script>

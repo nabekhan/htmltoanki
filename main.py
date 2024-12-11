@@ -186,7 +186,8 @@ def deckcreate(username, password, deck):
                     bkurlstub = image.get("src")
                     bkurl = "https://cards.ucalgary.ca/" + bkurlstub[1:]
                     print(bkurl)
-                    listofbackimages.append(bkurl)
+                    if bkurl in listofimages:
+                        continue
                 back["BackImages"] = listofbackimages
 
                 notes[int(i / 2)] = [front, back]

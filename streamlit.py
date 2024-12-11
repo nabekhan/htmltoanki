@@ -49,4 +49,4 @@ if submitted:
 
 # Footer section for aesthetics
 st.markdown("---")
-st.caption("Built with 💪 by your friendly flashcard generator team.")
+st.caption("Built with 💪 by your friendly flashcard generator.")

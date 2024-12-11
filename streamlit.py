@@ -2,7 +2,7 @@ import streamlit as st
 from main import deckcreate
 
 # Set page configuration
-st.set_page_config(page_title="Anki Deck Generator", page_icon="assets/favicon.png", layout="centered")
+st.set_page_config(page_title="Anki Deck Generator", page_icon="assets/favicon.webp", layout="centered")
 
 # Page title and description
 st.title("🔹 Anki Deck Generator")

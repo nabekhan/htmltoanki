@@ -32,11 +32,11 @@ def processtxt(souphtml):
     # Convert the processed Markdown text to HTML
     souptext = markdown2.markdown(souptext)
 
-    # Replace all remaining newline characters with <br>
+    # Replace double newline characters with <br>
     souptext = souptext.replace('\n\n', '<br>')
 
-    # Replace all remaining newline characters with <br>
-    souptext = souptext.replace('\n', "")
+    # Replace all remaining newline characters with space
+    souptext = souptext.replace('\n', " ")
 
     return souptext
 

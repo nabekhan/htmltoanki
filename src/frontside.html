@@ -10,7 +10,14 @@
 		</div>
 	</div>
 	<br /><div id="question">{{Question}}</div>
-	<br />{{Multiple Choice}}
+<br />
+	<div id="hint" onclick="document.getElementById('multiple-choice').style.display='block'; this.style.display='none';" style="cursor: pointer;">
+    <u style="font-size: 18px;">Multiple Answers?</u>
+</div>
+
+<div id="multiple-choice" style="display: none; font-size: 18px;">
+    {{Multiple Choice}}
+</div>
 	<div tabindex="0" onclick="removeBlur(this)" class="Options">{{Options}}</div>
 
 <style>
@@ -31,7 +38,6 @@
     element.style.cursor = "default"; // Removes pointer cursor on click
   }
 </script>
-
 </div>
 <!-- Stats Fix -->
 <script>

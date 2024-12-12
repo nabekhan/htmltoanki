@@ -1,3 +1,8 @@
+"""
+suggestion: find a way to pull "correct" for each option. then create div class=correct in anki card and back highlights those cards
+"""
+
+
 # Import Packages
 from bs4 import BeautifulSoup
 import requests

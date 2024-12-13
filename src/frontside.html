@@ -1,182 +1,481 @@
-<div class="bar">
-	<div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
-	<div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
-	<div id="hint" onclick="document.getElementById('multiple-choice').style.display='block'; this.style.display='none';" style="cursor: pointer; font-size: 13px">
-    <u style="font-size: 13px;">Multiple Answers?</u>
-</div>
-
-<div id="multiple-choice" style="display: none; font-size: 13px;">
-    &nbsp; {{Multiple Choice}} &nbsp;
-</div>
-</div>
-<div class="background">
-	<div class="chart">
-		<div class="frontimg images">{{Image}}</div>{{Stats}}
-		<div class="background desc" style="margin: 8px 8px;">
-			<br />{{Description}}
-		</div>
-	</div>
-	<br /><div id="question">{{Question}}</div>
-
-<div tabindex="0" onclick="removeBlur(this)" class="Options">{{Options}}</div>
-
+<!-- Menu -->
 <style>
-  .Options {
-    filter: blur(5px); /* Initial blur */
-    cursor: pointer;   /* Indicate interactivity */
-    transition: filter 0.06s ease; /* Smooth transition */
-  }
+    /* Style for the gear icon */
+    .gear-icon {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 24px;
+        cursor: pointer;
+        color: white;
+        z-index: 1000;
+    }
 
-  .Options:focus {
-    filter: none; /* Remove blur when focused */
-  }
+    /* Style for the popup */
+    .settings-popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        background-color: #333;
+        color: white;
+        border: 1px solid #666;
+        border-radius: 8px;
+        padding: 20px;
+        z-index: 1001;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Close button */
+    .settings-popup .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        color: white;
+    }
+
+    /* Input label styles */
+    .settings-popup label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
 </style>
 
-<script>
-	// Function to remove blur
-	function removeBlur(element) {
-		element.style.filter = "none"; // Disable blur
-		element.style.cursor = "default"; // Change cursor to indicate no interactivity
-	}
+<div>
+    <!-- Gear icon for opening the settings -->
+    <div class="gear-icon" onclick="toggleSettingsPopup()">⚙</div>
 
-	// Add event listeners only once using a guard
-	if (!globalThis.blurEventListenerAdded) {
-		// Event listener for mouse click
-		document.addEventListener("click", (event) => {
-			if (event.target.classList.contains("Options")) {
-				removeBlur(event.target);
-			}
-		});
-
-		// Event listener for the "Q" key
-		document.addEventListener("keydown", (event) => {
-			if (event.key.toLowerCase() === "`") {
-				const optionsElement = document.querySelector(".Options");
-				if (optionsElement) {
-					removeBlur(optionsElement);
-				}
-			}
-		});
-	}
-</script>
+    <!-- Popup for settings -->
+    <div class="settings-popup" id="settings-popup">
+        <span class="close-btn" onclick="toggleSettingsPopup()">✖</span>
+        <h3>Settings</h3>
+        <label>
+            <span>Enable Multi-Answer</span>
+            <input type="checkbox" id="ToggleMC">
+        </label>
+        <label>
+            <span>Disable Blur</span>
+            <input type="checkbox" id="ToggleBlur">
+        </label>
+        <button onclick="applySettings()">Apply</button>
+    </div>
 </div>
 
-</div>
-<!-- Stats Fix -->
 <script>
-document.querySelectorAll('div.stats').forEach(div => {
-	// Get the inner HTML of the target div
-	let content = div.innerHTML;
-	// Replace three consecutive <br> tags with three tabs
-	content = content.replace(/(<br\s*\/?>\s*){3}/g, ' &nbsp;&nbsp; ');
-	// Replace single or remaining <br> tags with one tab
-	content = content.replace(/<br\s*\/?>/g, '&nbsp;');
-	// Update the div content
-	div.innerHTML = content;
-});
-</script>
-<!-- Text Colour Script -->
-<script>
-setTimeout(function() {
-	console.log("Applying white text color to all elements...");
-	// Select all elements in the card
-	const allElements = document.querySelectorAll('*');
-	// Loop through each element and set the text color to white
-	allElements.forEach(function(element) {
-		element.style.color = 'white';
-	});
-}, 10);
-</script>
-<!-- Shuffle Script -->
-<script>
-// v1.1.8 - https://github.com/SimonLammer/anki-persistence/blob/584396fea9dea0921011671a47a0fdda19265e62/script.js
-if(void 0 === window.Persistence) {
-	var e = "github.com/SimonLammer/anki-persistence/",
-		t = "_default";
-	if(window.Persistence_sessionStorage = function() {
-			var i = !1;
-			try {
-				"object" == typeof window.sessionStorage && (i = !0, this.clear = function() {
-					for(var t = 0; t < sessionStorage.length; t++) {
-						var i = sessionStorage.key(t);
-						0 == i.indexOf(e) && (sessionStorage.removeItem(i), t--);
-					}
-				}, this.setItem = function(i, n) {
-					void 0 == n && (n = i, i = t),
-						sessionStorage.setItem(e + i, JSON.stringify(n));
-				}, this.getItem = function(i) {
-					return void 0 == i && (i = t),
-						JSON.parse(sessionStorage.getItem(e + i));
-				}, this.removeItem = function(i) {
-					void 0 == i && (i = t),
-						sessionStorage.removeItem(e + i);
-				}, this.getAllKeys = function() {
-					for(var t = [], i = Object.keys(sessionStorage), n = 0; n < i.length; n++) {
-						var s = i[n];
-						0 == s.indexOf(e) && t.push(s.substring(e.length, s.length));
-					}
-					return t.sort();
-				});
-			} catch (n) {}
-			this.isAvailable = function() {
-				return i;
-			}
-		}, window.Persistence_windowKey = function(i) {
-			var n = window[i],
-				s = !1;
-			"object" == typeof n && (s = !0, this.clear = function() {
-					n[e] = {};
-				}, this.setItem = function(i, s) {
-					void 0 == s && (s = i, i = t),
-						n[e][i] = s;
-				}, this.getItem = function(i) {
-					return void 0 == i && (i = t),
-						void 0 == n[e][i] ? null : n[e][i];
-				}, this.removeItem = function(i) {
-					void 0 == i && (i = t),
-						delete n[e][i];
-				}, this.getAllKeys = function() {
-					return Object.keys(n[e]);
-				}, void 0 == n[e] && this.clear()),
-				this.isAvailable = function() {
-					return s;
-				}
-		}, window.Persistence = new Persistence_sessionStorage, Persistence.isAvailable() || (window.Persistence = new Persistence_windowKey("py")), !Persistence.isAvailable()) {
-		var i = window.location.toString().indexOf("title"),
-			n = window.location.toString().indexOf("main", i);
-		i > 0 && n > 0 && n - i < 10 && (window.Persistence = new Persistence_windowKey("qt"));
-	}
-}
-// Clear persistence when the front side loads
-(function clearPersistenceOnLoad() {
-	if(typeof Persistence !== "undefined" && Persistence.isAvailable()) {
-		console.log("Clearing persistence data on front side...");
-		Persistence.clear();
-	} else {
-		console.warn("Persistence is not available.");
-	}
-})();
+    // Toggle the visibility of the settings popup
+    function toggleSettingsPopup() {
+        const popup = document.getElementById('settings-popup');
+        popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+    }
 
-function shuffleList() {
-	const listContainer = document.querySelector('.choices');
-	if(!listContainer) return;
-	const items = Array.from(listContainer.querySelectorAll('li'));
-	if(Persistence.isAvailable()) {
-		let shuffleOrder = Persistence.getItem('shuffleOrder'); // Retrieve existing shuffle order
-		if(!shuffleOrder) {
-			// Generate a new shuffle order using Fisher-Yates algorithm
-			shuffleOrder = items.map((_, i) => i);
-			for(let i = shuffleOrder.length - 1; i > 0; i--) {
-				const j = Math.floor(Math.random() * (i + 1));
-				[shuffleOrder[i], shuffleOrder[j]] = [shuffleOrder[j], shuffleOrder[i]];
-			}
-			Persistence.setItem('shuffleOrder', shuffleOrder); // Save the shuffle order
-		}
-		// Apply the shuffle order
-		const shuffledItems = shuffleOrder.map(i => items[i]);
-		listContainer.innerHTML = ''; // Clear original container
-		shuffledItems.forEach(item => listContainer.appendChild(item)); // Append shuffled items
-	}
-}
-shuffleList(); // Call the function
+    // Save settings to persistence
+    function saveSetting(key, value) {
+        if (typeof Persistence !== 'undefined' && Persistence.isAvailable()) {
+            Persistence.setItem(key, value);
+            console.log(`Saved setting: ${key} = ${value}`);
+        } else {
+            console.warn("Persistence is unavailable.");
+        }
+    }
+
+    // Load settings from persistence
+    function loadSetting(key, defaultValue) {
+        if (typeof Persistence !== 'undefined' && Persistence.isAvailable()) {
+            const savedValue = Persistence.getItem(key);
+            return savedValue !== null ? savedValue : defaultValue;
+        }
+        console.warn("Persistence is unavailable. Using default value.");
+        return defaultValue;
+    }
+
+    // Apply settings and save them
+    function applySettings() {
+        const setting1 = document.getElementById('ToggleMC').checked;
+        const setting2 = document.getElementById('ToggleBlur').checked;
+
+        saveSetting('ToggleMC', setting1);
+        saveSetting('ToggleBlur', setting2);
+
+        toggleSettingsPopup(); // Close the popup after applying settings
+    }
+
+    // Initialize settings based on persistence
+    function initializeSettings() {
+        const setting1 = loadSetting('ToggleMC', false); // Default to false
+        const setting2 = loadSetting('ToggleBlur', false); // Default to false
+
+        document.getElementById('ToggleMC').checked = setting1;
+        document.getElementById('ToggleBlur').checked = setting2;
+
+        console.log(`Settings initialized: ToggleMC=${setting1}, ToggleBlur=${setting2}`);
+    }
+
+    // Initialize settings on page load
+    initializeSettings()
 </script>
+
+
+
+
+<html>
+    <!-- Information Bar -->
+    <div class="bar">
+        <div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
+        <div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
+        <div id="hint" onclick="document.getElementById('multiple-choice').style.display='block'; this.style.display='none';" style="cursor: pointer; font-size: 13px">
+            <u style="font-size: 13px;">Multiple Answers</u>
+        </div>
+        <div id="multiple-choice" style="display: none; font-size: 13px;">&nbsp; {{Multiple Choice}}</div>
+    </div>
+
+
+    <div class="background">
+        <div class="chart">
+            <div class="frontimg images">{{Image}}</div>{{Stats}}
+            <div class="background desc" style="margin: 8px 8px;">
+                <br>{{Description}}
+            </div>
+        </div>
+        <br>
+        <div id="question">{{Question}}</div>
+        <div tabindex="0" onclick="removeBlur(this)" class="Options">{{Options}}</div>
+        <style>
+            .Options {
+                filter: blur(5px); /* Initial blur */
+                cursor: pointer;   /* Indicate interactivity */
+                transition: filter 0.06s ease; /* Smooth transition */
+            }
+
+            .Options:focus {
+                filter: none; /* Remove blur when focused */
+            }
+
+        </style>
+
+        <script>
+            // Function to remove blur
+            function removeBlur(element) {
+                element.style.filter = "none"; // Disable blur
+                element.style.cursor = "default"; // Change cursor to indicate no interactivity
+            }
+
+            // Add event listeners only once using a guard
+            if (!globalThis.blurEventListenerAdded) {
+                // Event listener for mouse click
+                document.addEventListener("click", (event) => {
+                    if (event.target.classList.contains("Options")) {
+                        removeBlur(event.target);
+                    }
+                });
+
+                // Event listener for the "Q" key
+                document.addEventListener("keydown", (event) => {
+                    if (event.key.toLowerCase() === "`") {
+                        const optionsElement = document.querySelector(".Options");
+                        if (optionsElement) {
+                            removeBlur(optionsElement);
+                        }
+                    }
+                });
+            }
+        </script>
+        <div class="flipped" id="flipped" style="display: none;">
+            <div class="Options answers">{{Answers}}</div>
+			<br>{{Feedback}}
+			<br>
+			<div class="notes">{{Notes}}</div>
+			<br>
+			<div class="chart">
+				<div class="backimg images">{{Back Image}}</div>
+				<div style="text-align: center;">
+					<a href="{{URL}}">
+						<u>Link To Card</u>
+					</a>
+				</div>
+			</div>
+        </div>
+    </div>
+
+    <!-- Persistence JS -->
+	<script>
+        // v1.1.8 - https://github.com/SimonLammer/anki-persistence/blob/584396fea9dea0921011671a47a0fdda19265e62/script.js
+        if(void 0 === window.Persistence) {
+            var e = "github.com/SimonLammer/anki-persistence/",
+                t = "_default";
+            if(window.Persistence_sessionStorage = function() {
+                    var i = !1;
+                    try {
+                        "object" == typeof window.sessionStorage && (i = !0, this.clear = function() {
+                            for(var t = 0; t < sessionStorage.length; t++) {
+                                var i = sessionStorage.key(t);
+                                0 == i.indexOf(e) && (sessionStorage.removeItem(i), t--);
+                            }
+                        }, this.setItem = function(i, n) {
+                            void 0 == n && (n = i, i = t),
+                                sessionStorage.setItem(e + i, JSON.stringify(n));
+                        }, this.getItem = function(i) {
+                            return void 0 == i && (i = t),
+                                JSON.parse(sessionStorage.getItem(e + i));
+                        }, this.removeItem = function(i) {
+                            void 0 == i && (i = t),
+                                sessionStorage.removeItem(e + i);
+                        }, this.getAllKeys = function() {
+                            for(var t = [], i = Object.keys(sessionStorage), n = 0; n < i.length; n++) {
+                                var s = i[n];
+                                0 == s.indexOf(e) && t.push(s.substring(e.length, s.length));
+                            }
+                            return t.sort();
+                        });
+                    } catch (n) {}
+                    this.isAvailable = function() {
+                        return i;
+                    }
+                }, window.Persistence_windowKey = function(i) {
+                    var n = window[i],
+                        s = !1;
+                    "object" == typeof n && (s = !0, this.clear = function() {
+                            n[e] = {};
+                        }, this.setItem = function(i, s) {
+                            void 0 == s && (s = i, i = t),
+                                n[e][i] = s;
+                        }, this.getItem = function(i) {
+                            return void 0 == i && (i = t),
+                                void 0 == n[e][i] ? null : n[e][i];
+                        }, this.removeItem = function(i) {
+                            void 0 == i && (i = t),
+                                delete n[e][i];
+                        }, this.getAllKeys = function() {
+                            return Object.keys(n[e]);
+                        }, void 0 == n[e] && this.clear()),
+                        this.isAvailable = function() {
+                            return s;
+                        }
+                }, window.Persistence = new Persistence_sessionStorage, Persistence.isAvailable() || (window.Persistence = new Persistence_windowKey("py")), !Persistence.isAvailable()) {
+                var i = window.location.toString().indexOf("title"),
+                    n = window.location.toString().indexOf("main", i);
+                i > 0 && n > 0 && n - i < 10 && (window.Persistence = new Persistence_windowKey("qt"));
+            }
+        }
+    </script>
+
+    <!-- FRONT ONLY SCRIPTS -->
+    <!-- Check if front -->
+    <script>
+        function checkForFront() {
+                const backIndicator = document.getElementById("at-back-indicator");
+
+                if (backIndicator) {
+                    console.log("Back indicator found. Skipping actions for the front.");
+                    // Add any specific logic for back side here if needed
+                } else {
+                    console.log("Back indicator not found. Running actions for the front...");
+                    clearPersistenceOnLoad();
+                    shuffleList();
+                    if(Persistence.getItem('ToggleMC')) {
+                        showMultiAns()
+                    }
+                    if(Persistence.getItem('ToggleBlur')) {
+                        removeBlur(document.querySelector(".Options"))
+                    }
+                }
+            }; // Adjust delay if necessary
+        checkForFront()
+    </script>
+
+    <!-- Clear Persistence -->
+    <script>
+        // Clear persistence when the front side loads
+        function clearPersistenceOnLoad() {
+            if(typeof Persistence !== "undefined" && Persistence.isAvailable()) {
+                Persistence.removeItem("shuffleOrder");
+            }
+        }
+    </script>
+
+    <!-- Shuffle -->
+    <script>
+        function shuffleList() {
+            const listContainer = document.querySelector('.choices');
+            if(!listContainer) return;
+            const items = Array.from(listContainer.querySelectorAll('li'));
+            if(Persistence.isAvailable()) {
+                let shuffleOrder = Persistence.getItem('shuffleOrder'); // Retrieve existing shuffle order
+                if(!shuffleOrder) {
+                    // Generate a new shuffle order using Fisher-Yates algorithm
+                    shuffleOrder = items.map((_, i) => i);
+                    for(let i = shuffleOrder.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [shuffleOrder[i], shuffleOrder[j]] = [shuffleOrder[j], shuffleOrder[i]];
+                    }
+                    Persistence.setItem('shuffleOrder', shuffleOrder); // Save the shuffle order
+                }
+                // Apply the shuffle order
+                const shuffledItems = shuffleOrder.map(i => items[i]);
+                listContainer.innerHTML = ''; // Clear original container
+                shuffledItems.forEach(item => listContainer.appendChild(item)); // Append shuffled items
+            }
+        }
+    </script>
+
+    <!-- FLIP SCRIPTS -->
+    <!-- Check if Backside and Then Run Scripts -->
+    <script>
+        function checkForBackIndicator() {
+            const backIndicator = document.getElementById("at-back-indicator");
+            if (backIndicator) {
+                processChoicesAndAnswers()
+                applyShuffleFromPersistence()
+                scrolltoquestion()
+                showFlippedSection()
+                showMultiAns()
+                removeBlur(document.querySelector(".Options"))
+            } else {
+                setTimeout(checkForBackIndicator, 50); // Retry after 100ms
+            }
+        }
+
+        // Start checking for the back indicator
+        checkForBackIndicator();
+    </script>
+
+    <!-- Clean Duplicate Images -->
+    <script>
+        setTimeout(function() {
+            console.log("Checking image elements...");
+            // Get the elements containing the front and back images
+            var frontImgElement = document.querySelector(".frontimg");
+            var backImgElement = document.querySelector(".backimg");
+            // Validate that both elements exist
+            if (!frontImgElement) {
+                console.error("Front image element (.frontimg) not found.");
+                return;
+            }
+            if (!backImgElement) {
+                console.error("Back image element (.backimg) not found.");
+                return;
+            }
+            // Extract URLs from the images inside frontimg and backimg
+            var frontImgUrls = Array.from(frontImgElement.querySelectorAll('img')).map(el => el.src);
+            var backImgUrls = Array.from(backImgElement.querySelectorAll('img'));
+            // Iterate through back images and hide matching ones
+            backImgUrls.forEach(function(img) {
+                if (frontImgUrls.includes(img.src)) {
+                    console.log(`Hiding matching image: ${img.src}`);
+                    img.style.display = "none"; // Hide the matching image
+                }
+            });
+            console.log("Image comparison and hiding completed.");
+        }, 10);
+    </script>
+
+    <!-- Set Order -->
+    <script>
+      function applyShuffleFromPersistence() {
+      	const listContainer = document.querySelector('.choices');
+      	if(!listContainer || !Persistence.isAvailable()) return;
+      	const items = Array.from(listContainer.querySelectorAll('li'));
+      	const shuffleOrder = Persistence.getItem('shuffleOrder'); // Retrieve saved shuffle order
+      	if(shuffleOrder) {
+      		const shuffledItems = shuffleOrder.map(i => items[i]);
+      		listContainer.innerHTML = ''; // Clear original container
+      		shuffledItems.forEach(item => listContainer.appendChild(item)); // Append shuffled items
+      		Persistence.removeItem('shuffleOrder'); // Clear the shuffle order for the next card
+      	}
+      }
+    </script>
+
+    <!-- Select Answers and Highlight Green -->
+	<script>
+        function processChoicesAndAnswers() {
+          setTimeout(function() {
+              console.log("Checking DOM elements...");
+              var questionElement = document.querySelector(".choices");
+              var answerElement = document.querySelector(".answers");
+              if (!questionElement) {
+                  console.error("Question element not found.");
+                  return;
+              }
+              if (!answerElement) {
+                  console.error("Answer element not found.");
+                  return;
+              }
+              // Split the contents into lists by <li> tags
+              var questionList = Array.from(questionElement.querySelectorAll('li')).map(el => el.innerHTML.trim());
+              var answerList = Array.from(answerElement.querySelectorAll('li')).map(el => el.innerHTML.trim());
+              // Iterate over the question list and compare with the answer list
+              var modifiedQuestionList = questionList.map(function(item) {
+                  return answerList.includes(item) ? `<div class="green-highlight"><li>${item}</li></div>` : `<li>${item}</li>`;
+              });
+              // Join the modified list back into HTML and set it
+              questionElement.innerHTML = modifiedQuestionList.join('');
+          }, 100);
+        }
+    </script>
+
+    <!-- Scroll to the question -->
+    <script>
+        function scrolltoquestion() {
+          (function () {
+              const questionElement = document.getElementById('question');
+              if (questionElement) {
+              questionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+          })();
+        }
+    </script>
+
+    <!-- Show Back -->
+    <script>
+    // Function to show the flipped section
+        function showFlippedSection() {
+            const flippedSection = document.getElementById("flipped");
+            if (flippedSection) {
+                flippedSection.style.display = "block"; // Make it visible
+            }
+        }
+    </script>
+
+    <!-- Show MC -->
+    <script>
+        function showMultiAns() {
+            document.getElementById('hint').style.display='none'
+            document.getElementById('multiple-choice').style.display='block'
+        }
+    </script>
+
+    <!-- OTHER SCRIPTS -->
+    <!-- Stats Fix -->
+    <script>
+        document.querySelectorAll('div.stats').forEach(div => {
+            // Get the inner HTML of the target div
+            let content = div.innerHTML;
+            // Replace three consecutive <br> tags with three tabs
+            content = content.replace(/(<br\s*\/?>\s*){3}/g, ' &nbsp;&nbsp; ');
+            // Replace single or remaining <br> tags with one tab
+            content = content.replace(/<br\s*\/?>/g, '&nbsp;');
+            // Update the div content
+            div.innerHTML = content;
+        });
+
+	</script>
+
+	<!-- Text Colour Script -->
+	<script>
+        setTimeout(function() {
+            console.log("Applying white text color to all elements...");
+            // Select all elements in the card
+            const allElements = document.querySelectorAll('*');
+            // Loop through each element and set the text color to white
+            allElements.forEach(function(element) {
+                element.style.color = 'white';
+            });
+        }, 10);
+
+	</script>
+</html>

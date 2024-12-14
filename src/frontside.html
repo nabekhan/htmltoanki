@@ -128,9 +128,6 @@
     initializeSettings()
 </script>
 
-
-
-
 <!-- Card -->
 <style>
     div:empty {
@@ -247,6 +244,14 @@
      .answers {
          display: none;
     }
+    .Options {
+        filter: blur(5px); /* Initial blur */
+        cursor: pointer;   /* Indicate interactivity */
+        transition: filter 0.06s ease; /* Smooth transition */
+    }
+    .Options:focus {
+        filter: none; /* Remove blur when focused */
+    }
 </style>
 
 <html>
@@ -260,7 +265,6 @@
         <div id="multiple-choice" style="display: none; font-size: 13px;">&nbsp; {{Multiple Choice}}</div>
     </div>
 
-
     <div class="background">
         <div class="chart">
             <div class="frontimg images">{{Image}}</div>{{Stats}}
@@ -271,46 +275,6 @@
         <br>
         <div id="question">{{Question}}</div>
         <div tabindex="0" onclick="removeBlur(this)" class="Options">{{Options}}</div>
-        <style>
-            .Options {
-                filter: blur(5px); /* Initial blur */
-                cursor: pointer;   /* Indicate interactivity */
-                transition: filter 0.06s ease; /* Smooth transition */
-            }
-
-            .Options:focus {
-                filter: none; /* Remove blur when focused */
-            }
-
-        </style>
-
-        <script>
-            // Function to remove blur
-            function removeBlur(element) {
-                element.style.filter = "none"; // Disable blur
-                element.style.cursor = "default"; // Change cursor to indicate no interactivity
-            }
-
-            // Add event listeners only once using a guard
-            if (!globalThis.blurEventListenerAdded) {
-                // Event listener for mouse click
-                document.addEventListener("click", (event) => {
-                    if (event.target.classList.contains("Options")) {
-                        removeBlur(event.target);
-                    }
-                });
-
-                // Event listener for the "Q" key
-                document.addEventListener("keydown", (event) => {
-                    if (event.key.toLowerCase() === "`") {
-                        const optionsElement = document.querySelector(".Options");
-                        if (optionsElement) {
-                            removeBlur(optionsElement);
-                        }
-                    }
-                });
-            }
-        </script>
         <div class="flipped" id="flipped" style="display: none;">
             <div class="Options answers">{{Answers}}</div>
 			<br>{{Feedback}}
@@ -418,9 +382,7 @@
     <script>
         // Clear persistence when the front side loads
         function clearPersistenceOnLoad() {
-            if(typeof Persistence !== "undefined" && Persistence.isAvailable()) {
-                Persistence.removeItem("shuffleOrder");
-            }
+            Persistence.removeItem('shuffleOrder'); // Clear the shuffle order for the next card
         }
     </script>
 
@@ -576,6 +538,35 @@
     </script>
 
     <!-- OTHER SCRIPTS -->
+    <!-- Blur Interaction -->
+    <script>
+        // Function to remove blur
+        function removeBlur(element) {
+            element.style.filter = "none"; // Disable blur
+            element.style.cursor = "default"; // Change cursor to indicate no interactivity
+        }
+
+        // Add event listeners only once using a guard
+        if (!globalThis.blurEventListenerAdded) {
+            // Event listener for mouse click
+            document.addEventListener("click", (event) => {
+                if (event.target.classList.contains("Options")) {
+                    removeBlur(event.target);
+                }
+            });
+
+            // Event listener for the "Q" key
+            document.addEventListener("keydown", (event) => {
+                if (event.key.toLowerCase() === "`") {
+                    const optionsElement = document.querySelector(".Options");
+                    if (optionsElement) {
+                        removeBlur(optionsElement);
+                    }
+                }
+            });
+        }
+    </script>
+
     <!-- Stats Fix -->
     <script>
         document.querySelectorAll('div.stats').forEach(div => {

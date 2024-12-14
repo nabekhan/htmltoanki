@@ -103,6 +103,7 @@
         saveSetting('ToggleBlur', setting2);
 
         toggleSettingsPopup(); // Close the popup after applying settings
+        performOnFront();
     }
 
     // Initialize settings based on persistence
@@ -385,7 +386,7 @@
     <!-- FRONT ONLY SCRIPTS -->
     <!-- Check if front -->
     <script>
-        function checkForFront() {
+        function performOnFront() {
                 const backIndicator = document.getElementById("at-back-indicator");
 
                 if (backIndicator) {
@@ -403,7 +404,7 @@
                     }
                 }
             }; // Adjust delay if necessary
-        checkForFront()
+        performOnFront()
     </script>
 
     <!-- Clear Persistence -->

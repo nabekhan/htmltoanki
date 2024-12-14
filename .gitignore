@@ -6,3 +6,5 @@
 /.idea/modules.xml
 /.idea/inspectionProfiles/profiles_settings.xml
 /.idea/vcs.xml
+# Exclude all .apkg files
+*.apkg

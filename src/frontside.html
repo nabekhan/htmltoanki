@@ -588,7 +588,6 @@
             // Update the div content
             div.innerHTML = content;
         });
-
 	</script>
 
 	<!-- Text Colour Script -->
@@ -602,6 +601,16 @@
                 element.style.color = 'white';
             });
         }, 10);
-
 	</script>
+
+    <!-- Hide Empty Divs -->
+    <script>
+        document.querySelectorAll('div').forEach(div => {
+            const hasText = div.textContent.trim().length > 0; // Check for non-whitespace text
+            const hasSrc = div.querySelector('[src]'); // Check for child elements with a src attribute
+            if (!hasText && !hasSrc) {
+                div.style.display = 'none'; // Hide the div if it has no text and no elements with src
+            }
+        });
+    </script>
 </html>

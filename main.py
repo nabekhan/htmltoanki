@@ -282,9 +282,9 @@ def deckcreate(username, password, deck):
 
         # Create a card (note)
         if len(back_data.get("Answers", [])) > 1:
-            multi = "Multiple Correct Answers"
+            multi = "Multiple Answers"
         else:
-            multi = "Single Correct Answer"
+            multi = "One Answer"
         print(f'Output: {question+desc+answers+feedback, stats, desc, question, multi, options, images, answers, feedback, backimage, url, filename}')
         note = genanki.Note(
             model=anki_model,

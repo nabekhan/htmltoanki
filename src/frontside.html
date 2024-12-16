@@ -137,7 +137,7 @@
     }
 
     // Initialize settings on page load
-    setTimeout(initializeSettings, 10);
+    waitForElement('#multiple-choice', initializeSettings);
 </script>
 
 <!-- Card -->
@@ -309,6 +309,18 @@
 			</div>
         </div>
     </div>
+
+    <!-- Wait for Element Script - Use this Script if Waiting For DOM -->
+    <script>
+    function waitForElement(selector, callback) {         // selector can be a class ('.class') or id #id
+        const element = document.querySelector(selector);
+        if (element) {
+            callback();
+        } else {
+            setTimeout(() => waitForElement(selector, callback), 5); // Check again after 50ms
+        }
+    }
+    </script>
 
     <!-- Persistence JS -->
 	<script>

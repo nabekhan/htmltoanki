@@ -238,7 +238,6 @@ def deckcreate(username, password, deck):
             {"name": "Stats"},
             {"name": "Description"},
             {"name": "Question"},
-            {"name": "Multiple Choice"},
             {"name": "Options"},
             {"name": "Image"},
             {"name": "Answers"},
@@ -280,15 +279,10 @@ def deckcreate(username, password, deck):
         backimage = process_images(back_data.get("BackImages", []))
         url = deck
 
-        # Create a card (note)
-        if len(back_data.get("Answers", [])) > 1:
-            multi = "Multiple Answers"
-        else:
-            multi = "One Answer"
-        print(f'Output: {question+desc+answers+feedback, stats, desc, question, multi, options, images, answers, feedback, backimage, url, filename}')
+        print(f'Output: {question+desc+answers+feedback, stats, desc, question, options, images, answers, feedback, backimage, url, filename}')
         note = genanki.Note(
             model=anki_model,
-            fields=[question+desc+answers+feedback, stats, desc, question, multi, options, images, answers, feedback, backimage, url, filename, ""],
+            fields=[question+desc+answers+feedback, stats, desc, question, options, images, answers, feedback, backimage, url, filename, ""],
         )
         anki_deck.add_note(note)
 

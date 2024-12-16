@@ -260,12 +260,18 @@
     <div class="bar">
         <div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
         <div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
-        <div id="hint" onclick="document.getElementById('multiple-choice').style.display='block'; this.style.display='none';" style="cursor: pointer; font-size: 13px">
+        <div id="hint"
+            onclick="
+                document.getElementById('multiple-choice').style.display = 'block';
+                document.getElementById('hint').style.display = 'none';
+                document.getElementById('multiple-choice').innerHTML = checkAnswers();
+            "
+            style="cursor: pointer; font-size: 13px;">
             <u style="font-size: 13px;">Number of Answers</u>
         </div>
-        <div id="multiple-choice" style="display: none; font-size: 13px;">&nbsp; {{Multiple Choice}}</div>
-    </div>
 
+        <div id="multiple-choice" style="display: none; font-size: 13px;">&nbsp;</div>
+    </div>
     <div class="background">
         <div class="chart">
             <div class="frontimg images">{{Image}}</div>{{Stats}}
@@ -477,6 +483,21 @@
       		Persistence.removeItem('shuffleOrder'); // Clear the shuffle order for the next card
       	}
       }
+    </script>
+
+    <!-- Determine Number of Answers -->
+    <script>
+        function checkAnswers() {
+            var answerDiv = document.querySelector(".answers");
+
+            if (answerDiv) {
+                var listofanswers = Array.from(answerDiv.querySelectorAll('li')).map(el => el.innerHTML.trim());
+
+                return listofanswers.length > 1 ? "Multiple Answers" : "One Answer";
+            } else {
+                return "";
+            }
+        }
     </script>
 
     <!-- Select Answers and Highlight Green -->

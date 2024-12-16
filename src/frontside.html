@@ -15,7 +15,7 @@
     .settings-popup {
         display: none;
         position: fixed;
-        top: 10%;
+        top: 20px;
         left: 50%;
         transform: translate(-50%);
         width: 300px;
@@ -114,19 +114,30 @@
         performOnFront();
     }
 
-    // Initialize settings based on persistence
     function initializeSettings() {
-        const setting1 = loadSetting('ToggleMC', false); // Default to false
-        const setting2 = loadSetting('ToggleBlur', false); // Default to false
+        const setting1 = loadSetting('ToggleMC', false); // Load saved state
+        const setting2 = loadSetting('ToggleBlur', false); // Load saved state
 
+        // Update checkbox UI
         document.getElementById('ToggleMC').checked = setting1;
         document.getElementById('ToggleBlur').checked = setting2;
+
+        // Apply behavior based on settings
+        if (setting1) {
+            console.log("Applying Multi-Answer mode from saved settings.");
+            showMultiAns();
+        }
+
+        if (setting2) {
+            console.log("Removing blur from saved settings.");
+            removeBlur(document.querySelector(".Options"));
+        }
 
         console.log(`Settings initialized: ToggleMC=${setting1}, ToggleBlur=${setting2}`);
     }
 
     // Initialize settings on page load
-    initializeSettings()
+    setTimeout(initializeSettings, 10);
 </script>
 
 <!-- Card -->
@@ -374,14 +385,8 @@
                     console.log("Back indicator not found. Running actions for the front...");
                     clearPersistenceOnLoad();
                     shuffleList();
-                    if(Persistence.getItem('ToggleMC')) {
-                        showMultiAns()
-                    }
-                    if(Persistence.getItem('ToggleBlur')) {
-                        removeBlur(document.querySelector(".Options"))
-                    }
                 }
-            }; // Adjust delay if necessary
+            };
         performOnFront()
     </script>
 
@@ -495,7 +500,7 @@
 
                 return listofanswers.length > 1 ? "Multiple Answers" : "One Answer";
             } else {
-                return "";
+                return " ";
             }
         }
     </script>
@@ -554,8 +559,9 @@
     <!-- Show MC -->
     <script>
         function showMultiAns() {
-            document.getElementById('hint').style.display='none'
-            document.getElementById('multiple-choice').style.display='block'
+            document.getElementById('multiple-choice').style.display = 'block';
+            document.getElementById('hint').style.display = 'none';
+            document.getElementById('multiple-choice').innerHTML = checkAnswers();
         }
     </script>
 

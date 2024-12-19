@@ -337,7 +337,7 @@ def deckcreate(username, password, deck):
             for answer in answers:
                 answerkey.append(answer[0])
 
-        passed_variables = [question + desc + answers + feedback + [images] + [backimage], stats, images, desc, question, feedback, backimage, "", url, filename, "".join(answerkey), *optiontext]
+        passed_variables = [question + desc + answers + feedback, stats, images, desc, question, feedback, backimage, "", url, filename, "".join(answerkey), *optiontext]
 
 
         def process_field(field):

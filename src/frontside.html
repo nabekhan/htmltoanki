@@ -218,6 +218,9 @@
     .Options:focus {
         filter: none; /* Remove blur when focused */
     }
+    .vitals-container {
+        margin-bottom: 5px;
+    }
     .vitals-container > div {
         background-color: #444; /* Dark card background */
         border-radius: 10px;
@@ -256,6 +259,15 @@
     .vitals-container .bp span {
         color: #4ade80; /* Green */
     }
+    .Feedback {
+        margin-bottom: 5px;
+    }
+    .Notes {
+        margin-bottom: 5px;
+    }
+    .Question {
+        margin-bottom: 20px;
+    }
 </style>
 
 <html>
@@ -265,10 +277,10 @@
         <div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
         <div id="hint"
             onclick="
-                document.getElementById('multiple-choice').style.display = 'block';
-                document.getElementById('hint').style.display = 'none';
-                document.getElementById('multiple-choice').innerHTML = checkAnswers();
-            "
+                    document.getElementById('multiple-choice').style.display = 'block';
+                    document.getElementById('hint').style.display = 'none';
+                    document.getElementById('multiple-choice').innerHTML = checkAnswers();
+                    "
             style="cursor: pointer; font-size: 13px;">
             <u style="font-size: 13px;">Number of Answers</u>
         </div>
@@ -278,11 +290,8 @@
     <div class="background ">
             <div class="canvas"><div class="frontimg images">{{Front Image}}</div></div>
             <div class="vitals-container">{{Stats}}</div>
-            <div class="desc">
-                <br>{{Description}}
-            </div>
-        <br>
-        <div id="question" style="font-weight: bold">{{Question}}</div><br>
+            <div class="desc">{{Description}}</div>
+        <div class="Question" id="question" style="font-weight: bold">{{Question}}</div>
         <div tabindex="0" onclick="removeBlur(this)" class="Options">
                 <div class="Option" id="at-field-optionA">{{optionA}}</div>
                 <div class="Option" id="at-field-optionB">{{optionB}}</div>
@@ -312,11 +321,10 @@
                 <div class="Option" id="at-field-optionZ">{{optionZ}}</div>
         </div>
         <div class="flipped" id="flipped" style="display: none;">
+            <br>
             <div class="Answers">{{Answers}}</div>
-			<br>{{Feedback}}
-			<br>
-			<div class="notes">{{Notes}}</div>
-			<br>
+            <div class="Feedback">{{Feedback}}</div>
+			<div class="Notes">{{Notes}}</div>
             <div class="canvas">
                 <div class="backimg images">{{Back Image}}</div>
                 <div style="text-align: center;">{{URL}}</div>
@@ -620,6 +628,7 @@ function shuffleList() {
         }
     }
 </script>
+
 <!-- Hide Empty Divs -->
 <script>
     document.querySelectorAll('div').forEach(div => {

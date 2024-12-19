@@ -1,14 +1,51 @@
 """
 suggestion: find a way to pull "correct" for each option. then create div class=correct in anki card and back highlights those cards
 """
-
-
+import html2text
+import markdown2
 # Import Packages
 from bs4 import BeautifulSoup
 import requests
 import logging
 import genanki
 logging.basicConfig(level=logging.DEBUG)
+
+# Convert HTML to plain text
+text_maker = html2text.HTML2Text()
+
+# Customize settings
+text_maker.ignore_links = False  # Include links in Markdown format
+text_maker.ignore_images = True  # Exclude images
+text_maker.ignore_emphasis = False  # Keep bold/italic formatting
+text_maker.bypass_tables = False  # Preserve table formatting
+
+# Alphabet
+alphaUpper = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+
+def processtxt(souphtml):
+    # Use html2text or text_maker to convert HTML to Markdown-like text
+    souptext = text_maker.handle(str(souphtml))
+
+    # Remove all zero-width spaces
+    souptext = souptext.replace('\u200b', '')  # Removes all instances of \u200b
+
+    # Convert the processed Markdown text to HTML
+    souptext = markdown2.markdown(souptext)
+
+    # Replace double newline characters with <br>
+    souptext = souptext.replace('\n\n', '<br>')
+
+    # Replace all remaining newline characters with space
+    souptext = souptext.replace('\n', " ")
+
+    return souptext
+
+def find_sublist_with_string(list_of_lists, target_string):
+    for sublist in list_of_lists:
+        if target_string in sublist:
+            return sublist
+    return ""  # Return None if the string is not found in any sublist
+
 
 # Import files
 with open("src/frontside.html", "r", encoding="utf-8") as f:
@@ -91,6 +128,7 @@ def deckcreate(username, password, deck):
     # Open the HTML file
     with open("gitignore/Cards.html", "r", encoding="utf-8") as html_file:
         S = BeautifulSoup(html_file, 'html.parser')
+        
     """
 
     # Print Name
@@ -119,18 +157,17 @@ def deckcreate(username, password, deck):
                 stats = div.find_all("div", class_="stats")
                 listofstats = []
                 for stat in stats:
-                    stat = stat.text.strip()
+                    stat.attrs = {}
                     print(stat)
                     listofstats.append(stat)
                 front["Stats"] = listofstats
-
 
                 # print pt description
                 descriptions = div.find_all("div", class_="block group")
                 listofdesc = []
                 for description in descriptions:
-                    print(description.text.strip())
-                    #description = description.text.strip()
+                    description = processtxt(description)
+                    print(description)
                     listofdesc.append(description)
                 front["Desc"] = listofdesc
 
@@ -147,10 +184,10 @@ def deckcreate(username, password, deck):
                 options = div.select('div[class*="option"]')
                 option_list = [div.text.strip() for div in options][1:]
                 listofoptions = []
-                for option in option_list:
+                for index, option in enumerate(option_list):
                     option = option.strip("\u200b")
                     print(option)
-                    listofoptions.append(option)
+                    listofoptions.append([alphaUpper[index], option])
                 front["Options"] = listofoptions
 
                 # find images
@@ -172,14 +209,17 @@ def deckcreate(username, password, deck):
                 for answer in answers:
                     answer = answer.text.strip().strip("\u200b")
                     print(answer)
-                    listofanswers.append(answer)
+                    findanswerindex = find_sublist_with_string(listofoptions, answer)
+                    if findanswerindex:
+                        answerletter = findanswerindex[0]
+                        listofanswers.append([answerletter, answer])
                 back["Answers"] = listofanswers
 
                 # print feedback
                 feedbacks = div.find_all("div", class_="results container")
                 listoffeed = []
                 for feedback in feedbacks:
-                    feedback = feedback.text.strip().strip("\u200b")
+                    feedback = processtxt(feedback)
                     print(feedback)
                     listoffeed.append(feedback)
                 back["Feedback"] = listoffeed
@@ -193,6 +233,8 @@ def deckcreate(username, password, deck):
                     print(bkurl)
                     if bkurl in listofimages:
                         continue
+                    else:
+                        listofbackimages.append(bkurl)
                 back["BackImages"] = listofbackimages
 
                 notes[int(i / 2)] = [front, back]
@@ -202,28 +244,6 @@ def deckcreate(username, password, deck):
         print("No <div> elements with class 'page' found.")
     cards_dict = notes
 
-
-    #
-    # Helper function to process fields with <br> separator
-    def process_field(field):
-        if isinstance(field, list):
-            field = ''.join(f"{item}<br><br>" for item in field)
-        return str(field or "").replace("\n", "<br>")
-
-    def process_description(field):
-        if isinstance(field, list):
-            field = ''.join(f"{item}" for item in field)
-        return str(field or "").replace("\n", "<br>")
-    def process_choices(field, classtype):
-        if not isinstance(field, list):
-            return f'<div class="{classtype}"></div>'
-        choices = [f"<li>{str(choice)}</li>" for choice in field]
-        return f'<div class="{classtype}">' + ''.join(choices) + '</div>'
-
-    def process_stats(field):
-        if isinstance(field, list):
-            field = ''.join(f"{item}<br>" for item in field)
-        return '<div class="stats">'+str(field or "").replace("\n", "<br>")+'</div>'
     def process_images(images):
         if not isinstance(images, list):
             return ""
@@ -236,20 +256,45 @@ def deckcreate(username, password, deck):
         fields=[
             {"name": "ID"},
             {"name": "Stats"},
+            {"name": "Front Image"},
             {"name": "Description"},
             {"name": "Question"},
-            {"name": "Options"},
-            {"name": "Image"},
-            {"name": "Answers"},
             {"name": "Feedback"},
             {"name": "Back Image"},
+            {"name": "Notes"},
             {"name": "URL"},
             {"name": "Tags"},
-            {"name": "Notes"},
+            {"name": "Answers"},
+            {"name": "optionA"},
+            {"name": "optionB"},
+            {"name": "optionC"},
+            {"name": "optionD"},
+            {"name": "optionE"},
+            {"name": "optionF"},
+            {"name": "optionG"},
+            {"name": "optionH"},
+            {"name": "optionI"},
+            {"name": "optionJ"},
+            {"name": "optionK"},
+            {"name": "optionL"},
+            {"name": "optionM"},
+            {"name": "optionN"},
+            {"name": "optionO"},
+            {"name": "optionP"},
+            {"name": "optionQ"},
+            {"name": "optionR"},
+            {"name": "optionS"},
+            {"name": "optionT"},
+            {"name": "optionU"},
+            {"name": "optionV"},
+            {"name": "optionW"},
+            {"name": "optionX"},
+            {"name": "optionY"},
+            {"name": "optionZ"},
         ],
         templates=[
             {
-                "name": "Comprehensive Card",
+                "name": "Multiple Choice",
                 "qfmt": qfmt_content,
                 "afmt": afmt_content,
             },
@@ -269,20 +314,46 @@ def deckcreate(username, password, deck):
         front_data = card_data[0]
         back_data = card_data[1]
 
-        stats = process_stats(front_data.get("Stats", []))
-        desc = process_description(front_data.get("Desc", []))
-        question = process_field(front_data.get("Question", []))
-        options = process_choices(front_data.get("Options", []), "choices")
+        stats = front_data.get("Stats")
+        desc = front_data.get("Desc")
+        question = front_data.get("Question")
         images = process_images(front_data.get("Images", []))
-        answers = process_choices(back_data.get("Answers", []), "answers")
-        feedback = process_field(back_data.get("Feedback", []))
+        feedback = back_data.get("Feedback")
         backimage = process_images(back_data.get("BackImages", []))
-        url = deck
+        url = [f'<a href="{deck}">Link to Deck</a>']
 
-        print(f'Output: {question+desc+answers+feedback, stats, desc, question, options, images, answers, feedback, backimage, url, filename}')
+        options = front_data.get("Options")
+        optiontext = []
+        if options:
+            for option in options:
+                optiontext.append(option[1])
+
+        while len(optiontext) < 26:
+            optiontext.append("")
+
+        answers = back_data.get("Answers")
+        answerkey = []
+        if answers:
+            for answer in answers:
+                answerkey.append(answer[0])
+
+        passed_variables = [question + desc + answers + feedback + [images] + [backimage], stats, images, desc, question, feedback, backimage, "", url, filename, "".join(answerkey), *optiontext]
+
+
+        def process_field(field):
+            if isinstance(field, list):
+                # Join list items with <br><br> for HTML separation
+                field = ''.join(f"{item}" for item in field)
+            # Ensure the field is a string, replace None with ""
+            return str(field or "")
+
+        sanitized_fields = [process_field(field) for field in passed_variables]
+
+
+        print(f'Output: {sanitized_fields}')
         note = genanki.Note(
             model=anki_model,
-            fields=[question+desc+answers+feedback, stats, desc, question, options, images, answers, feedback, backimage, url, filename, ""],
+            fields=[*sanitized_fields],
         )
         anki_deck.add_note(note)
 

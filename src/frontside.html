@@ -147,7 +147,7 @@
     }
      .card {
          padding: 15px 20px;
-         font: 20px Arial, sans-serif;
+         font: 17px Arial, sans-serif;
          color: white;
     }
      .background {
@@ -155,31 +155,16 @@
          padding: 20px;
          background: #1e1e1e;
     }
-     .background img {
-         width: auto;
-         height: auto;
-         display: block;
-         margin-left: auto;
-         margin-right: auto;
-    }
-     .background.night_mode {
-         border-radius: 9px;
-         padding: 20px;
-         background: #1e1e1e;
-    }
-     .cloze {
-         font-weight: bold;
-         color: orange;
-    }
      .bar {
          margin-bottom: -25px;
          background: #121212;
          border-top-right-radius: 9px;
          border-top-left-radius: 9px;
          padding-top: 10px;
-         padding-bottom: 30px;
+         padding-bottom: 34px;
          z-index: -1;
          text-align: center;
+         font-size: 14px;
     }
      .subdeck {
          color: rgba(255, 255, 255, 0.6);
@@ -192,7 +177,6 @@
     }
      .images {
          max-width: 800px;
-         display: flex;
          flex-flow: row wrap;
          margin: auto;
          justify-content: center;
@@ -200,18 +184,15 @@
      .images > div {
          width: 50%;
     }
-     img {
-         display: block;
-         width: 100%;
-         height: 100%;
-         object-fit: cover;
-         max-width: 100%;
-    }
-     .notes {
-         font: 15px Arial, sans-serif;
+    .canvas {
+         background-color: #444;
+         border-radius: 9px;
+         margin: 5px 0;
+         padding: 10px;
+         text-align: center;
     }
     /* Options */
-     .Options li {
+     .Option {
          margin: 5px 0;
          display: flex;
          align-items: center;
@@ -225,35 +206,10 @@
          background-color: green !important;
          color: white !important;
     }
-    /* Desc */
-     .desc {
-         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    }
      .desc br {
          display: none;
     }
-    /* Stats */
-     .stats {
-         border-radius: 8px;
-         font-weight: bold;
-         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-         margin: 8px 8px;
-         padding: 10px;
-         background: #1e1e1e;
-         text-align: center;
-    }
-    /* Pt Chart */
-     .chart {
-         background-color: #444;
-         border-radius: 8px;
-         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-         margin: 8px 0;
-         padding: 10px;
-         margin: 8px 8px;
-         flex-direction: column;
-    }
-    /* Answers */
-     .answers {
+     .Answers {
          display: none;
     }
     .Options {
@@ -263,6 +219,43 @@
     }
     .Options:focus {
         filter: none; /* Remove blur when focused */
+    }
+    .vitals-container > div {
+        background-color: #444; /* Dark card background */
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        padding: 5px;
+        display: flex;
+        justify-content: center; /* Center content vertically */
+        align-items: center; /* Center content horizontally */
+        gap: 10px; /* Add space between the child divs */
+    }
+    .vitals-container .title {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .vitals-container .units {
+        color: #cbd5e1;
+        margin-bottom: 5px;
+    }
+    .vitals-container span {
+        font-weight: bold;
+    }
+    /* Color Coding */
+    .vitals-container .hr span {
+        color: #f87171; /* Red */
+    }
+    .vitals-container .o2 span {
+        color: #60a5fa; /* Blue */
+    }
+    .vitals-container .rr span {
+        color: #facc15; /* Yellow */
+    }
+    .vitals-container .temp span {
+        color: #4ade80; /* Green */
+    }
+    .vitals-container .bp span {
+        color: #4ade80; /* Green */
     }
 </style>
 
@@ -283,365 +276,358 @@
 
         <div id="multiple-choice" style="display: none; font-size: 13px;">&nbsp;</div>
     </div>
-    <div class="background">
-        <div class="chart">
-            <div class="frontimg images">{{Image}}</div>{{Stats}}
-            <div class="background desc" style="margin: 8px 8px;">
+    <div class="background ">
+            <div class="canvas"><div class="frontimg images">{{Front Image}}</div></div>
+            <div class="vitals-container">{{Stats}}</div>
+            <div class="desc" style="margin: 8px 8px;">
                 <br>{{Description}}
             </div>
-        </div>
         <br>
-        <div id="question">{{Question}}</div>
-        <div tabindex="0" onclick="removeBlur(this)" class="Options">{{Options}}</div>
+        <div id="question" style="font-weight: bold">{{Question}}</div><br>
+        <div tabindex="0" onclick="removeBlur(this)" class="Options">
+                <div class="Option" id="at-field-optionA">{{optionA}}</div>
+                <div class="Option" id="at-field-optionB">{{optionB}}</div>
+                <div class="Option" id="at-field-optionC">{{optionC}}</div>
+                <div class="Option" id="at-field-optionD">{{optionD}}</div>
+                <div class="Option" id="at-field-optionE">{{optionE}}</div>
+                <div class="Option" id="at-field-optionF">{{optionF}}</div>
+                <div class="Option" id="at-field-optionG">{{optionG}}</div>
+                <div class="Option" id="at-field-optionH">{{optionH}}</div>
+                <div class="Option" id="at-field-optionI">{{optionI}}</div>
+                <div class="Option" id="at-field-optionJ">{{optionJ}}</div>
+                <div class="Option" id="at-field-optionK">{{optionK}}</div>
+                <div class="Option" id="at-field-optionL">{{optionL}}</div>
+                <div class="Option" id="at-field-optionM">{{optionM}}</div>
+                <div class="Option" id="at-field-optionN">{{optionN}}</div>
+                <div class="Option" id="at-field-optionO">{{optionO}}</div>
+                <div class="Option" id="at-field-optionP">{{optionP}}</div>
+                <div class="Option" id="at-field-optionQ">{{optionQ}}</div>
+                <div class="Option" id="at-field-optionR">{{optionR}}</div>
+                <div class="Option" id="at-field-optionS">{{optionS}}</div>
+                <div class="Option" id="at-field-optionT">{{optionT}}</div>
+                <div class="Option" id="at-field-optionU">{{optionU}}</div>
+                <div class="Option" id="at-field-optionV">{{optionV}}</div>
+                <div class="Option" id="at-field-optionW">{{optionW}}</div>
+                <div class="Option" id="at-field-optionX">{{optionX}}</div>
+                <div class="Option" id="at-field-optionY">{{optionY}}</div>
+                <div class="Option" id="at-field-optionZ">{{optionZ}}</div>
+        </div>
         <div class="flipped" id="flipped" style="display: none;">
-            <div class="Options answers">{{Answers}}</div>
+            <div class="Answers">{{Answers}}</div>
 			<br>{{Feedback}}
 			<br>
 			<div class="notes">{{Notes}}</div>
 			<br>
-			<div class="chart">
-				<div class="backimg images">{{Back Image}}</div>
-				<div style="text-align: center;">
-					<a href="{{URL}}">
-						<u>Link To Card</u>
-					</a>
-				</div>
-			</div>
+            <div class="canvas">
+                <div class="backimg images">{{Back Image}}</div>
+                <div style="text-align: center;">{{URL}}</div>
+            </div>
         </div>
     </div>
+</html>
 
-    <!-- Wait for Element Script - Use this Script if Waiting For DOM -->
-    <script>
-    function waitForElement(selector, callback) {         // selector can be a class ('.class') or id #id
-        const element = document.querySelector(selector);
-        if (element) {
-            callback();
-        } else {
-            setTimeout(() => waitForElement(selector, callback), 5); // Check again after 50ms
+<!-- Wait for Element Script - Use this Script if Waiting For DOM -->
+<script>
+function waitForElement(selector, callback) {  // selector can be a class ('.class') or id #id
+    const element = document.querySelector(selector);
+    if (element) {
+        callback();
+    } else {
+        setTimeout(() => waitForElement(selector, callback), 5); // Check again after 50ms
+    }
+}
+</script>
+
+<!-- Persistence JS -->
+<script>
+    // v1.1.8 - https://github.com/SimonLammer/anki-persistence/blob/584396fea9dea0921011671a47a0fdda19265e62/script.js
+    if(void 0 === window.Persistence) {
+        var e = "github.com/SimonLammer/anki-persistence/",
+            t = "_default";
+        if(window.Persistence_sessionStorage = function() {
+                var i = !1;
+                try {
+                    "object" == typeof window.sessionStorage && (i = !0, this.clear = function() {
+                        for(var t = 0; t < sessionStorage.length; t++) {
+                            var i = sessionStorage.key(t);
+                            0 == i.indexOf(e) && (sessionStorage.removeItem(i), t--);
+                        }
+                    }, this.setItem = function(i, n) {
+                        void 0 == n && (n = i, i = t),
+                            sessionStorage.setItem(e + i, JSON.stringify(n));
+                    }, this.getItem = function(i) {
+                        return void 0 == i && (i = t),
+                            JSON.parse(sessionStorage.getItem(e + i));
+                    }, this.removeItem = function(i) {
+                        void 0 == i && (i = t),
+                            sessionStorage.removeItem(e + i);
+                    }, this.getAllKeys = function() {
+                        for(var t = [], i = Object.keys(sessionStorage), n = 0; n < i.length; n++) {
+                            var s = i[n];
+                            0 == s.indexOf(e) && t.push(s.substring(e.length, s.length));
+                        }
+                        return t.sort();
+                    });
+                } catch (n) {}
+                this.isAvailable = function() {
+                    return i;
+                }
+            }, window.Persistence_windowKey = function(i) {
+                var n = window[i],
+                    s = !1;
+                "object" == typeof n && (s = !0, this.clear = function() {
+                        n[e] = {};
+                    }, this.setItem = function(i, s) {
+                        void 0 == s && (s = i, i = t),
+                            n[e][i] = s;
+                    }, this.getItem = function(i) {
+                        return void 0 == i && (i = t),
+                            void 0 == n[e][i] ? null : n[e][i];
+                    }, this.removeItem = function(i) {
+                        void 0 == i && (i = t),
+                            delete n[e][i];
+                    }, this.getAllKeys = function() {
+                        return Object.keys(n[e]);
+                    }, void 0 == n[e] && this.clear()),
+                    this.isAvailable = function() {
+                        return s;
+                    }
+            }, window.Persistence = new Persistence_sessionStorage, Persistence.isAvailable() || (window.Persistence = new Persistence_windowKey("py")), !Persistence.isAvailable()) {
+            var i = window.location.toString().indexOf("title"),
+                n = window.location.toString().indexOf("main", i);
+            i > 0 && n > 0 && n - i < 10 && (window.Persistence = new Persistence_windowKey("qt"));
         }
     }
-    </script>
+</script>
 
-    <!-- Persistence JS -->
-	<script>
-        // v1.1.8 - https://github.com/SimonLammer/anki-persistence/blob/584396fea9dea0921011671a47a0fdda19265e62/script.js
-        if(void 0 === window.Persistence) {
-            var e = "github.com/SimonLammer/anki-persistence/",
-                t = "_default";
-            if(window.Persistence_sessionStorage = function() {
-                    var i = !1;
-                    try {
-                        "object" == typeof window.sessionStorage && (i = !0, this.clear = function() {
-                            for(var t = 0; t < sessionStorage.length; t++) {
-                                var i = sessionStorage.key(t);
-                                0 == i.indexOf(e) && (sessionStorage.removeItem(i), t--);
-                            }
-                        }, this.setItem = function(i, n) {
-                            void 0 == n && (n = i, i = t),
-                                sessionStorage.setItem(e + i, JSON.stringify(n));
-                        }, this.getItem = function(i) {
-                            return void 0 == i && (i = t),
-                                JSON.parse(sessionStorage.getItem(e + i));
-                        }, this.removeItem = function(i) {
-                            void 0 == i && (i = t),
-                                sessionStorage.removeItem(e + i);
-                        }, this.getAllKeys = function() {
-                            for(var t = [], i = Object.keys(sessionStorage), n = 0; n < i.length; n++) {
-                                var s = i[n];
-                                0 == s.indexOf(e) && t.push(s.substring(e.length, s.length));
-                            }
-                            return t.sort();
-                        });
-                    } catch (n) {}
-                    this.isAvailable = function() {
-                        return i;
-                    }
-                }, window.Persistence_windowKey = function(i) {
-                    var n = window[i],
-                        s = !1;
-                    "object" == typeof n && (s = !0, this.clear = function() {
-                            n[e] = {};
-                        }, this.setItem = function(i, s) {
-                            void 0 == s && (s = i, i = t),
-                                n[e][i] = s;
-                        }, this.getItem = function(i) {
-                            return void 0 == i && (i = t),
-                                void 0 == n[e][i] ? null : n[e][i];
-                        }, this.removeItem = function(i) {
-                            void 0 == i && (i = t),
-                                delete n[e][i];
-                        }, this.getAllKeys = function() {
-                            return Object.keys(n[e]);
-                        }, void 0 == n[e] && this.clear()),
-                        this.isAvailable = function() {
-                            return s;
-                        }
-                }, window.Persistence = new Persistence_sessionStorage, Persistence.isAvailable() || (window.Persistence = new Persistence_windowKey("py")), !Persistence.isAvailable()) {
-                var i = window.location.toString().indexOf("title"),
-                    n = window.location.toString().indexOf("main", i);
-                i > 0 && n > 0 && n - i < 10 && (window.Persistence = new Persistence_windowKey("qt"));
+<!-- FRONT ONLY SCRIPTS -->
+<!-- Check if front -->
+<script>
+    function performOnFront() {
+            const itsBackIndicator = document.getElementById("at-back-indicator");
+
+            if (itsBackIndicator) {
+                console.log("Back indicator found. Skipping actions for the front.");
+                // Add any specific logic for back side here if needed
+            } else {
+                console.log("Back indicator not found. Running actions for the front...");
+                clearPersistenceOnLoad();
+                shuffleList();
             }
+        };
+    performOnFront()
+</script>
+
+<!-- Clear Persistence -->
+<script>
+    // Clear persistence when the front side loads
+    function clearPersistenceOnLoad() {
+        Persistence.removeItem('shuffleOrder'); // Clear the shuffle order for the next card
+    }
+</script>
+
+<!-- Shuffle -->
+<script>
+function shuffleList() {
+    const optionsContainer = document.querySelector('.Options'); // Select the container
+    if (!optionsContainer) return; // Exit if container doesn't exist
+
+    const items = Array.from(optionsContainer.querySelectorAll('.Option')); // Get all div.Option elements
+
+    if (Persistence.isAvailable()) {
+        let shuffleOrder = Persistence.getItem('shuffleOrder'); // Retrieve existing shuffle order
+
+        if (!shuffleOrder) {
+            // Generate a new shuffle order using Fisher-Yates algorithm
+            shuffleOrder = items.map((_, i) => i); // Create an array of indices
+            for (let i = shuffleOrder.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffleOrder[i], shuffleOrder[j]] = [shuffleOrder[j], shuffleOrder[i]];
+            }
+            Persistence.setItem('shuffleOrder', shuffleOrder); // Save the shuffle order
         }
-    </script>
 
-    <!-- FRONT ONLY SCRIPTS -->
-    <!-- Check if front -->
-    <script>
-        function performOnFront() {
-                const itsBackIndicator = document.getElementById("at-back-indicator");
+        // Apply the shuffle order
+        const shuffledItems = shuffleOrder.map(i => items[i]); // Map indices to elements
+        optionsContainer.innerHTML = ''; // Clear the original container
+        shuffledItems.forEach(item => optionsContainer.appendChild(item)); // Append shuffled divs
+    }
+}
+</script>
 
-                if (itsBackIndicator) {
-                    console.log("Back indicator found. Skipping actions for the front.");
-                    // Add any specific logic for back side here if needed
-                } else {
-                    console.log("Back indicator not found. Running actions for the front...");
-                    clearPersistenceOnLoad();
-                    shuffleList();
-                }
-            };
-        performOnFront()
-    </script>
+<!-- FLIP SCRIPTS -->
+<!-- Check if Backside and Then Run Scripts -->
+<script>
+    function checkForBackIndicator() {
+        const backIndicator = document.getElementById("at-back-indicator");
+        if (backIndicator) {
+            highlightCorrectOptions();
+            applyShuffleFromPersistence();
+            scrolltoquestion();
+            showFlippedSection();
+            showMultiAns();
+            removeBlur(document.querySelector(".Options"))
+        } else {
+            setTimeout(checkForBackIndicator, 50); // Retry after 100ms
+        }
+    }
 
-    <!-- Clear Persistence -->
-    <script>
-        // Clear persistence when the front side loads
-        function clearPersistenceOnLoad() {
+    // Start checking for the back indicator
+    checkForBackIndicator();
+</script>
+
+<!-- Set Order -->
+<script>
+    function applyShuffleFromPersistence() {
+        const optionsContainer = document.querySelector('.Options'); // Select the Options container
+        if (!optionsContainer || !Persistence.isAvailable()) return; // Exit if container doesn't exist or persistence is unavailable
+
+        const items = Array.from(optionsContainer.querySelectorAll('.Option')); // Get all div.Option elements
+        const shuffleOrder = Persistence.getItem('shuffleOrder'); // Retrieve saved shuffle order
+
+        if (shuffleOrder) {
+            // Reorder items based on the saved shuffle order
+            const shuffledItems = shuffleOrder.map(i => items[i]); // Map indices to elements
+            optionsContainer.innerHTML = ''; // Clear the original container
+            shuffledItems.forEach(item => optionsContainer.appendChild(item)); // Append shuffled divs
             Persistence.removeItem('shuffleOrder'); // Clear the shuffle order for the next card
         }
-    </script>
+    }
+</script>
 
-    <!-- Shuffle -->
-    <script>
-        function shuffleList() {
-            const listContainer = document.querySelector('.choices');
-            if(!listContainer) return;
-            const items = Array.from(listContainer.querySelectorAll('li'));
-            if(Persistence.isAvailable()) {
-                let shuffleOrder = Persistence.getItem('shuffleOrder'); // Retrieve existing shuffle order
-                if(!shuffleOrder) {
-                    // Generate a new shuffle order using Fisher-Yates algorithm
-                    shuffleOrder = items.map((_, i) => i);
-                    for(let i = shuffleOrder.length - 1; i > 0; i--) {
-                        const j = Math.floor(Math.random() * (i + 1));
-                        [shuffleOrder[i], shuffleOrder[j]] = [shuffleOrder[j], shuffleOrder[i]];
-                    }
-                    Persistence.setItem('shuffleOrder', shuffleOrder); // Save the shuffle order
-                }
-                // Apply the shuffle order
-                const shuffledItems = shuffleOrder.map(i => items[i]);
-                listContainer.innerHTML = ''; // Clear original container
-                shuffledItems.forEach(item => listContainer.appendChild(item)); // Append shuffled items
-            }
-        }
-    </script>
+<!-- Select Answers and Highlight Green -->
+<script>
+    function highlightCorrectOptions() {
+        setTimeout(function () {
+            console.log("Processing options and answers...");
 
-    <!-- FLIP SCRIPTS -->
-    <!-- Check if Backside and Then Run Scripts -->
-    <script>
-        function checkForBackIndicator() {
-            const backIndicator = document.getElementById("at-back-indicator");
-            if (backIndicator) {
-                processChoicesAndAnswers()
-                applyShuffleFromPersistence()
-                scrolltoquestion()
-                showFlippedSection()
-                showMultiAns()
-                removeBlur(document.querySelector(".Options"))
-            } else {
-                setTimeout(checkForBackIndicator, 50); // Retry after 100ms
-            }
-        }
+            // Retrieve the options container and answers
+            var optionsContainer = document.querySelector(".Options");
+            var answersElement = document.querySelector(".Answers");
 
-        // Start checking for the back indicator
-        checkForBackIndicator();
-    </script>
-
-    <!-- Clean Duplicate Images -->
-    <script>
-        setTimeout(function() {
-            console.log("Checking image elements...");
-            // Get the elements containing the front and back images
-            var frontImgElement = document.querySelector(".frontimg");
-            var backImgElement = document.querySelector(".backimg");
-            // Validate that both elements exist
-            if (!frontImgElement) {
-                console.error("Front image element (.frontimg) not found.");
+            // Check if both elements exist
+            if (!optionsContainer) {
+                console.error("Options container not found.");
                 return;
             }
-            if (!backImgElement) {
-                console.error("Back image element (.backimg) not found.");
+            if (!answersElement) {
+                console.error("Answers element not found.");
                 return;
             }
-            // Extract URLs from the images inside frontimg and backimg
-            var frontImgUrls = Array.from(frontImgElement.querySelectorAll('img')).map(el => el.src);
-            var backImgUrls = Array.from(backImgElement.querySelectorAll('img'));
-            // Iterate through back images and hide matching ones
-            backImgUrls.forEach(function(img) {
-                if (frontImgUrls.includes(img.src)) {
-                    console.log(`Hiding matching image: ${img.src}`);
-                    img.style.display = "none"; // Hide the matching image
+
+            // Retrieve the answer string (e.g., "BDE") and trim whitespace
+            var answerString = answersElement.textContent.trim();
+            if (!answerString || answerString.length === 0) {
+                console.error("Answer string is empty.");
+                return;
+            }
+
+            // Map options (e.g., A, B, C...) to their corresponding elements
+            var optionElements = optionsContainer.querySelectorAll(".Option");
+            optionElements.forEach(function (option) {
+                var optionId = option.id; // e.g., at-field-optionA
+                var optionLetter = optionId.slice(-1); // Get the last character: A, B, C...
+
+                // Check if the optionLetter is in the answer string
+                if (answerString.includes(optionLetter)) {
+                    option.classList.add("green-highlight");
                 }
             });
-            console.log("Image comparison and hiding completed.");
-        }, 10);
-    </script>
+        }, 100);
+    }
+</script>
 
-    <!-- Set Order -->
-    <script>
-      function applyShuffleFromPersistence() {
-      	const listContainer = document.querySelector('.choices');
-      	if(!listContainer || !Persistence.isAvailable()) return;
-      	const items = Array.from(listContainer.querySelectorAll('li'));
-      	const shuffleOrder = Persistence.getItem('shuffleOrder'); // Retrieve saved shuffle order
-      	if(shuffleOrder) {
-      		const shuffledItems = shuffleOrder.map(i => items[i]);
-      		listContainer.innerHTML = ''; // Clear original container
-      		shuffledItems.forEach(item => listContainer.appendChild(item)); // Append shuffled items
-      		Persistence.removeItem('shuffleOrder'); // Clear the shuffle order for the next card
-      	}
-      }
-    </script>
+<!-- Scroll to the question -->
+<script>
+    function scrolltoquestion() {
+      (function () {
+          const questionElement = document.getElementById('question');
+          if (questionElement) {
+          questionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+      })();
+    }
+</script>
 
-    <!-- Determine Number of Answers -->
-    <script>
-        function checkAnswers() {
-            var answerDiv = document.querySelector(".answers");
+<!-- Show Back -->
+<script>
+// Function to show the flipped section
+    function showFlippedSection() {
+        const flippedSection = document.getElementById("flipped");
+        if (flippedSection) {
+            flippedSection.style.display = "block"; // Make it visible
+        }
+    }
+</script>
 
-            if (answerDiv) {
-                var listofanswers = Array.from(answerDiv.querySelectorAll('li')).map(el => el.innerHTML.trim());
+<!-- Show MC -->
+<script>
+    function showMultiAns() {
+        document.getElementById('multiple-choice').style.display = 'block';
+        document.getElementById('hint').style.display = 'none';
+        document.getElementById('multiple-choice').innerHTML = checkAnswers();
+    }
+</script>
 
-                return listofanswers.length > 1 ? "Multiple Answers" : "One Answer";
+<!-- OTHER SCRIPTS -->
+<!-- Blur Interaction -->
+<script>
+    // Function to remove blur
+    function removeBlur(element) {
+        element.style.filter = "none"; // Disable blur
+        element.style.cursor = "default"; // Change cursor to indicate no interactivity
+    }
+
+    // Add event listeners only once using a guard
+    if (!globalThis.blurEventListenerAdded) {
+        // Event listener for mouse click
+        document.addEventListener("click", (event) => {
+            if (event.target.classList.contains("Options")) {
+                removeBlur(event.target);
+            }
+        });
+
+        // Event listener for the "Q" key
+        document.addEventListener("keydown", (event) => {
+            if (event.key.toLowerCase() === "`") {
+                const optionsElement = document.querySelector(".Options");
+                if (optionsElement) {
+                    removeBlur(optionsElement);
+                }
+            }
+        });
+    }
+</script>
+
+<!-- Determine Number of Answers -->
+<script>
+    function checkAnswers() {
+        var answerDiv = document.querySelector(".Answers");
+
+        if (answerDiv) {
+            // Retrieve the text content of the answerDiv
+            var answers = answerDiv.textContent.trim();
+
+            // Check the length of the text
+            if (answers.length === 0) {
+                return "&nbsp;";
+            } else if (answers.length > 1) {
+                return "Multiple Answers";
             } else {
-                return " ";
+                return "One Answer";
             }
+        } else {
+            return "&nbsp;";
         }
-    </script>
-
-    <!-- Select Answers and Highlight Green -->
-	<script>
-        function processChoicesAndAnswers() {
-          setTimeout(function() {
-              console.log("Checking DOM elements...");
-              var questionElement = document.querySelector(".choices");
-              var answerElement = document.querySelector(".answers");
-              if (!questionElement) {
-                  console.error("Question element not found.");
-                  return;
-              }
-              if (!answerElement) {
-                  console.error("Answer element not found.");
-                  return;
-              }
-              // Split the contents into lists by <li> tags
-              var questionList = Array.from(questionElement.querySelectorAll('li')).map(el => el.innerHTML.trim());
-              var answerList = Array.from(answerElement.querySelectorAll('li')).map(el => el.innerHTML.trim());
-              // Iterate over the question list and compare with the answer list
-              var modifiedQuestionList = questionList.map(function(item) {
-                  return answerList.includes(item) ? `<div class="green-highlight"><li>${item}</li></div>` : `<li>${item}</li>`;
-              });
-              // Join the modified list back into HTML and set it
-              questionElement.innerHTML = modifiedQuestionList.join('');
-          }, 100);
+    }
+</script>
+<!-- Hide Empty Divs -->
+<script>
+    document.querySelectorAll('div').forEach(div => {
+        const hasText = div.textContent.trim().length > 0; // Check for non-whitespace text
+        const hasSrc = div.querySelector('[src]'); // Check for child elements with a src attribute
+        if (!hasText && !hasSrc) {
+            div.style.display = 'none'; // Hide the div if it has no text and no elements with src
         }
-    </script>
-
-    <!-- Scroll to the question -->
-    <script>
-        function scrolltoquestion() {
-          (function () {
-              const questionElement = document.getElementById('question');
-              if (questionElement) {
-              questionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }
-          })();
-        }
-    </script>
-
-    <!-- Show Back -->
-    <script>
-    // Function to show the flipped section
-        function showFlippedSection() {
-            const flippedSection = document.getElementById("flipped");
-            if (flippedSection) {
-                flippedSection.style.display = "block"; // Make it visible
-            }
-        }
-    </script>
-
-    <!-- Show MC -->
-    <script>
-        function showMultiAns() {
-            document.getElementById('multiple-choice').style.display = 'block';
-            document.getElementById('hint').style.display = 'none';
-            document.getElementById('multiple-choice').innerHTML = checkAnswers();
-        }
-    </script>
-
-    <!-- OTHER SCRIPTS -->
-    <!-- Blur Interaction -->
-    <script>
-        // Function to remove blur
-        function removeBlur(element) {
-            element.style.filter = "none"; // Disable blur
-            element.style.cursor = "default"; // Change cursor to indicate no interactivity
-        }
-
-        // Add event listeners only once using a guard
-        if (!globalThis.blurEventListenerAdded) {
-            // Event listener for mouse click
-            document.addEventListener("click", (event) => {
-                if (event.target.classList.contains("Options")) {
-                    removeBlur(event.target);
-                }
-            });
-
-            // Event listener for the "Q" key
-            document.addEventListener("keydown", (event) => {
-                if (event.key.toLowerCase() === "`") {
-                    const optionsElement = document.querySelector(".Options");
-                    if (optionsElement) {
-                        removeBlur(optionsElement);
-                    }
-                }
-            });
-        }
-    </script>
-
-    <!-- Stats Fix -->
-    <script>
-        document.querySelectorAll('div.stats').forEach(div => {
-            // Get the inner HTML of the target div
-            let content = div.innerHTML;
-            // Replace three consecutive <br> tags with three tabs
-            content = content.replace(/(<br\s*\/?>\s*){3}/g, ' &nbsp;&nbsp; ');
-            // Replace single or remaining <br> tags with one tab
-            content = content.replace(/<br\s*\/?>/g, '&nbsp;');
-            // Update the div content
-            div.innerHTML = content;
-        });
-	</script>
-
-	<!-- Text Colour Script -->
-	<script>
-        setTimeout(function() {
-            console.log("Applying white text color to all elements...");
-            // Select all elements in the card
-            const allElements = document.querySelectorAll('*');
-            // Loop through each element and set the text color to white
-            allElements.forEach(function(element) {
-                element.style.color = 'white';
-            });
-        }, 10);
-	</script>
-
-    <!-- Hide Empty Divs -->
-    <script>
-        document.querySelectorAll('div').forEach(div => {
-            const hasText = div.textContent.trim().length > 0; // Check for non-whitespace text
-            const hasSrc = div.querySelector('[src]'); // Check for child elements with a src attribute
-            if (!hasText && !hasSrc) {
-                div.style.display = 'none'; // Hide the div if it has no text and no elements with src
-            }
-        });
-    </script>
-</html>
+    });
+</script>

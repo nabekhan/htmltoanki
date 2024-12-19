@@ -201,6 +201,7 @@
          border-radius: 5px;
          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
          min-width: 10em;
+         justify-content: center; /* Center content vertically */
     }
      .green-highlight {
          background-color: green !important;
@@ -229,6 +230,7 @@
         justify-content: center; /* Center content vertically */
         align-items: center; /* Center content horizontally */
         gap: 10px; /* Add space between the child divs */
+        flex-wrap: wrap; /* Allow wrapping to a new line if needed */
     }
     .vitals-container .title {
         font-weight: bold;
@@ -279,7 +281,7 @@
     <div class="background ">
             <div class="canvas"><div class="frontimg images">{{Front Image}}</div></div>
             <div class="vitals-container">{{Stats}}</div>
-            <div class="desc" style="margin: 8px 8px;">
+            <div class="desc">
                 <br>{{Description}}
             </div>
         <br>

@@ -251,8 +251,8 @@ def deckcreate(username, password, deck):
 
     # Define a model for the Anki cards
     anki_model = genanki.Model(
-        1607342344,  # Unique model ID
-        "Comprehensive Model",
+        1607345344,  # Unique model ID
+        "MC Calgary",
         fields=[
             {"name": "ID"},
             {"name": "Stats"},
@@ -294,7 +294,7 @@ def deckcreate(username, password, deck):
         ],
         templates=[
             {
-                "name": "Multiple Choice",
+                "name": "MC Calgary",
                 "qfmt": qfmt_content,
                 "afmt": afmt_content,
             },
@@ -305,7 +305,7 @@ def deckcreate(username, password, deck):
 
     # Create the deck
     anki_deck = genanki.Deck(
-        2059400112,
+        2059488112,
         filename
     )
 

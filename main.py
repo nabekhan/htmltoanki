@@ -22,23 +22,39 @@ text_maker.bypass_tables = False  # Preserve table formatting
 # Alphabet
 alphaUpper = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
+
 def processtxt(souphtml):
-    # Use html2text or text_maker to convert HTML to Markdown-like text
-    souptext = text_maker.handle(str(souphtml))
+    # Step 1: Convert HTML to plain text using html2text
+    text_maker = html2text.HTML2Text()
+    text_maker.ignore_links = False  # Remove links if unnecessary
+    text_maker.ignore_images = False  # Remove images if unnecessary
+    text_maker.body_width = 0  # Prevent line wrapping
+    markdown_text = text_maker.handle(str(souphtml))
 
-    # Remove all zero-width spaces
-    souptext = souptext.replace('\u200b', '')  # Removes all instances of \u200b
+    # Step 2: Sanitize the Markdown
+    markdown_text = markdown_text.replace('\u200b', '')  # Remove zero-width spaces
 
-    # Convert the processed Markdown text to HTML
-    souptext = markdown2.markdown(souptext)
+    # Step 3: Convert back to minimal HTML
+    html_output = markdown2.markdown(markdown_text, extras=["break-on-newline"])
 
-    # Replace double newline characters with <br>
-    souptext = souptext.replace('\n\n', '<br>')
+    # Step 4: Simplify further using BeautifulSoup
+    soup = BeautifulSoup(html_output, "html.parser")
 
-    # Replace all remaining newline characters with space
-    souptext = souptext.replace('\n', " ")
+    # Remove <h2> tags specifically
+    for h2 in soup.find_all('h2'):
+        # Replace <h2> with <p> if needed, or just remove it entirely
+        new_tag = soup.new_tag("p")
+        new_tag.string = h2.get_text()  # Preserve text inside <h2>
+        h2.replace_with(new_tag)
 
-    return souptext
+    # Strip attributes from all tags
+    for tag in soup.find_all(True):
+        tag.attrs = {}  # Clear attributes
+
+    # Ensure consistent spacing
+    simplified_html = soup.prettify(formatter="minimal").strip()
+
+    return simplified_html
 
 def find_sublist_with_string(list_of_lists, target_string):
     for sublist in list_of_lists:
@@ -367,5 +383,5 @@ def deckcreate(username, password, deck):
 
 if __name__ == "__main__":
     from gitignore.userdetails import *
-    deck = "https://cards.ucalgary.ca/printdeck/1020?bag_id=81"
+    deck = "https://cards.ucalgary.ca/details/1080?bag_id=97"
     deckcreate(username, password, deck)

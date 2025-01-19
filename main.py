@@ -374,7 +374,7 @@ def deckcreate(username, password, deck):
         anki_deck.add_note(note)
 
     # Save the deck as an Anki package
-    output_file = (filename + ".apkg").replace("::", "__")
+    output_file = (filename + ".apkg").replace("::", "__").replace('/', '_')
     #genanki.Package(anki_deck).write_to_file(f"gitignore/{output_file}")
     genanki.Package(anki_deck).write_to_file(output_file)
     return output_file
@@ -383,5 +383,5 @@ def deckcreate(username, password, deck):
 
 if __name__ == "__main__":
     from gitignore.userdetails import *
-    deck = "https://cards.ucalgary.ca/details/1080?bag_id=97"
+    deck = "https://cards.ucalgary.ca/details/521?bag_id=98"
     deckcreate(username, password, deck)

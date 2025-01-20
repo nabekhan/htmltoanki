@@ -383,5 +383,5 @@ def deckcreate(username, password, deck):
 
 if __name__ == "__main__":
     from gitignore.userdetails import *
-    deck = "https://cards.ucalgary.ca/details/521?bag_id=98"
+    deck = input("Enter URL: ")
     deckcreate(username, password, deck)

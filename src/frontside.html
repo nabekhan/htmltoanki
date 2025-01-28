@@ -1,7 +1,7 @@
+<html>
 <div>
 	<!-- Gear icon for opening the settings -->
-	<div class="gear-icon" style="position:absolute; top:10px; right:10px; font-size: 24px;
-            color: white; z-index:1000;" onclick="toggleSettingsPopup()">⚙</div>
+	<div class="gear-icon" onclick="toggleSettingsPopup()">⚙</div>
 	<!-- Popup for settings -->
 	<div class="settings-popup" id="settings-popup">
 		<span class="close-btn" onclick="toggleSettingsPopup()">✖</span>
@@ -17,62 +17,6 @@
 		<button style="applybt" onclick="applySettings()">Apply</button>
 	</div>
 </div>
-<script>
-// Toggle the visibility of the settings
-function toggleSettingsPopup() {
-	const popup = document.getElementById('settings-popup');
-	popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
-}
-// Save settings to localStorage
-function saveSetting(key, value) {
-	try {
-		localStorage.setItem(key, JSON.stringify(value));
-		console.log(`Saved setting: ${key} = ${value}`);
-	} catch (e) {
-		console.error("Failed to save setting:", e);
-	}
-}
-// Load settings from localStorage
-function loadSetting(key, defaultValue) {
-	try {
-		const savedValue = localStorage.getItem(key);
-		return savedValue !== null ? JSON.parse(savedValue) : defaultValue;
-	} catch (e) {
-		console.error("Failed to load setting. Using default value:", e);
-		return defaultValue;
-	}
-}
-// Apply settings and save them
-function applySettings() {
-	const setting1 = document.getElementById('ToggleMC').checked;
-	const setting2 = document.getElementById('ToggleBlur').checked;
-	saveSetting('ToggleMC', setting1);
-	saveSetting('ToggleBlur', setting2);
-	toggleSettingsPopup(); // Close the popup after applying settings
-	initializeSettings();
-}
-
-function initializeSettings() {
-	const setting1 = loadSetting('ToggleMC', false); // Load saved state
-	const setting2 = loadSetting('ToggleBlur', false); // Load saved state
-	// Update checkbox UI
-	document.getElementById('ToggleMC').checked = setting1;
-	document.getElementById('ToggleBlur').checked = setting2;
-	// Apply behavior based on settings
-	if(setting1) {
-		console.log("Applying Multi-Answer mode from saved settings.");
-		showMultiAns();
-	}
-	if(setting2) {
-		console.log("Removing blur from saved settings.");
-		removeBlur(document.querySelector(".Options"));
-	}
-	console.log(`Settings initialized: ToggleMC=${setting1}, ToggleBlur=${setting2}`);
-}
-// Initialize settings on page load
-waitForElement('#multiple-choice', initializeSettings);
-</script>
-<html>
 <!-- Information Bar -->
 <div class="bar">
 	<div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
@@ -134,6 +78,62 @@ waitForElement('#multiple-choice', initializeSettings);
 </div>
 
 </html>
+<!-- Settings -->
+<script>
+// Toggle the visibility of the settings
+function toggleSettingsPopup() {
+	const popup = document.getElementById('settings-popup');
+	popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+}
+// Save settings to localStorage
+function saveSetting(key, value) {
+	try {
+		localStorage.setItem(key, JSON.stringify(value));
+		console.log(`Saved setting: ${key} = ${value}`);
+	} catch (e) {
+		console.error("Failed to save setting:", e);
+	}
+}
+// Load settings from localStorage
+function loadSetting(key, defaultValue) {
+	try {
+		const savedValue = localStorage.getItem(key);
+		return savedValue !== null ? JSON.parse(savedValue) : defaultValue;
+	} catch (e) {
+		console.error("Failed to load setting. Using default value:", e);
+		return defaultValue;
+	}
+}
+// Apply settings and save them
+function applySettings() {
+	const setting1 = document.getElementById('ToggleMC').checked;
+	const setting2 = document.getElementById('ToggleBlur').checked;
+	saveSetting('ToggleMC', setting1);
+	saveSetting('ToggleBlur', setting2);
+	toggleSettingsPopup(); // Close the popup after applying settings
+	initializeSettings();
+}
+
+function initializeSettings() {
+	const setting1 = loadSetting('ToggleMC', false); // Load saved state
+	const setting2 = loadSetting('ToggleBlur', false); // Load saved state
+	// Update checkbox UI
+	document.getElementById('ToggleMC').checked = setting1;
+	document.getElementById('ToggleBlur').checked = setting2;
+	// Apply behavior based on settings
+	if(setting1) {
+		console.log("Applying Multi-Answer mode from saved settings.");
+		showMultiAns();
+	}
+	if(setting2) {
+		console.log("Removing blur from saved settings.");
+		removeBlur(document.querySelector(".Options"));
+	}
+	console.log(`Settings initialized: ToggleMC=${setting1}, ToggleBlur=${setting2}`);
+}
+// Initialize settings on page load
+waitForElement('#multiple-choice', initializeSettings);
+</script>
 <!-- Persistence JS -->
 <script>
 // v1.1.8 - https://github.com/SimonLammer/anki-persistence/blob/584396fea9dea0921011671a47a0fdda19265e62/script.js

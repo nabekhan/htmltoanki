@@ -1,1 +1,105 @@
-<div class="at-back-indicator" id="at-back-indicator"></div>{{FrontSide}}
+<div class="at-back-indicator" id="at-back-indicator"></div>
+{{FrontSide}}
+<script>
+function revealback() {
+	highlightCorrectOptions();
+	applyShuffleFromPersistence();
+	clearPersistenceOnLoad();
+	scrolltoquestion();
+	showFlippedSection();
+	showMultiAns();
+	removeBlur(document.querySelector(".Options"));
+};
+revealback();
+</script>
+<!-- FLIP SCRIPTS -->
+<!-- Set Order -->
+<script>
+function applyShuffleFromPersistence() {
+	const optionsContainer = document.querySelector('.Options'); // Select the Options container
+	if(!optionsContainer || !Persistence.isAvailable()) return; // Exit if container doesn't exist or persistence is unavailable
+	const items = Array.from(optionsContainer.querySelectorAll('.Option')); // Get all div.Option elements
+	const shuffleOrder = Persistence.getItem('shuffleOrder'); // Retrieve saved shuffle order
+	if(shuffleOrder) {
+		// Reorder items based on the saved shuffle order
+		const shuffledItems = shuffleOrder.map(i => items[i]); // Map indices to elements
+		optionsContainer.innerHTML = ''; // Clear the original container
+		shuffledItems.forEach(item => optionsContainer.appendChild(item)); // Append shuffled divs
+	}
+}
+</script>
+<!-- Select Answers and Highlight Green -->
+<script>
+function highlightCorrectOptions() {
+	setTimeout(function() {
+		console.log("Processing options and answers...");
+		// Retrieve the options container and answers
+		var optionsContainer = document.querySelector(".Options");
+		var answersElement = document.querySelector(".Answers");
+		// Check if both elements exist
+		if(!optionsContainer) {
+			console.error("Options container not found.");
+			return;
+		}
+		if(!answersElement) {
+			console.error("Answers element not found.");
+			return;
+		}
+		// Retrieve the answer string (e.g., "BDE") and trim whitespace
+		var answerString = answersElement.textContent.trim();
+		if(!answerString || answerString.length === 0) {
+			console.error("Answer string is empty.");
+			return;
+		}
+		// Map options (e.g., A, B, C...) to their corresponding elements
+		var optionElements = optionsContainer.querySelectorAll(".Option");
+		optionElements.forEach(function(option) {
+			var optionId = option.id; // e.g., at-field-optionA
+			var optionLetter = optionId.slice(-1); // Get the last character: A, B, C...
+			// Check if the optionLetter is in the answer string
+			if(answerString.includes(optionLetter)) {
+				option.classList.add("green-highlight");
+			}
+		});
+	}, 100);
+}
+</script>
+<!-- Scroll to the question -->
+<script>
+function scrolltoquestion() {
+	(function() {
+		const questionElement = document.getElementById('question');
+		if(questionElement) {
+			questionElement.scrollIntoView({
+				behavior: 'smooth',
+				block: 'start'
+			});
+		}
+	})();
+}
+</script>
+<!-- Show Back -->
+<script>
+// Function to show the flipped section
+function showFlippedSection() {
+	const flippedSection = document.getElementById("flipped");
+	if(flippedSection) {
+		flippedSection.style.display = "block"; // Make it visible
+	}
+}
+</script>
+<!-- Clear Persistence -->
+<script>
+// Clear persistence when the front side loads
+function clearPersistenceOnLoad() {
+	Persistence.removeItem('shuffleOrder'); // Clear the shuffle order for the next card
+}
+</script>
+<!-- Show MC -->
+<script>
+function showMultiAns() {
+	document.getElementById('multiple-choice').style.display = 'block';
+	document.getElementById('hint').style.display = 'none';
+	document.getElementById('multiple-choice').innerHTML = checkAnswers();
+}
+</script>

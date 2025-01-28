@@ -1,0 +1,185 @@
+/* Style for the gear icon */
+ .gear-icon {
+}
+/* Style for the popup */
+ .settings-popup {
+     display: none;
+     position: fixed;
+     top: 20px;
+     left: 50%;
+     transform: translate(-50%);
+     width: 300px;
+     background-color: #333;
+     color: white;
+     border: 1px solid #666;
+     border-radius: 8px;
+     padding: 20px;
+     z-index: 1001;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+/* Close button */
+ .settings-popup .close-btn {
+     position: absolute;
+     top: 10px;
+     right: 10px;
+     font-size: 16px;
+     cursor: pointer;
+     color: white;
+}
+/* Input label styles */
+ .settings-popup label {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     margin-bottom: 15px;
+}
+ .settings-popup button {
+     background-color: #1e1e1e;
+     color: white;
+     padding: 10px 20px;
+}
+ div:empty {
+     display: none;
+}
+ .card {
+     padding: 15px 20px;
+     font: 17px Arial, sans-serif;
+     color: white;
+}
+ .background {
+     border-radius: 9px;
+     padding: 20px;
+     background: #1e1e1e;
+}
+ .bar {
+     margin-bottom: -25px;
+     background: #121212;
+     border-top-right-radius: 9px;
+     border-top-left-radius: 9px;
+     padding-top: 10px;
+     padding-bottom: 34px;
+     z-index: -1;
+     text-align: center;
+     font-size: 14px;
+}
+ .subdeck {
+     color: rgba(255, 255, 255, 0.6);
+     font-size: 14px;
+}
+ .tag {
+     color: rgba(255, 255, 255, 0.87);
+     font-size: 13px;
+     font-style: italic;
+}
+ .images {
+     flex-flow: row wrap;
+     margin: auto;
+     justify-content: center;
+}
+ .images img {
+     max-height: 1000px;
+     width: auto;
+}
+ .canvas {
+     background-color: #444;
+     border-radius: 9px;
+     margin: 5px 0;
+     padding: 10px;
+     text-align: center;
+}
+/* Options */
+ .Option {
+     margin: 5px 0;
+     display: flex;
+     align-items: center;
+     border: 1px solid #ddd;
+     padding: 10px;
+     border-radius: 5px;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+     min-width: 10em;
+     justify-content: center;
+    /* Center content vertically */
+}
+ .green-highlight {
+     background-color: green !important;
+     color: white !important;
+}
+ .desc br {
+     display: none;
+}
+ .Answers {
+     display: none;
+}
+ .Options {
+     filter: blur(5px);
+    /* Initial blur */
+     cursor: pointer;
+    /* Indicate interactivity */
+     transition: filter 0.06s ease;
+    /* Smooth transition */
+}
+ .Options:focus {
+     filter: none;
+    /* Remove blur when focused */
+}
+ .vitals-container {
+     margin-bottom: 5px;
+}
+ .vitals-container>div {
+     background-color: #444;
+    /* Dark card background */
+     border-radius: 10px;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+     padding: 5px;
+     display: flex;
+     justify-content: center;
+    /* Center content vertically */
+     align-items: center;
+    /* Center content horizontally */
+     gap: 15px;
+    /* Add space between the child divs */
+     flex-wrap: wrap;
+    /* Allow wrapping to a new line if needed */
+}
+ .vitals-container .title {
+     font-weight: bold;
+     margin-bottom: 10px;
+}
+ .vitals-container .units {
+     color: #cbd5e1;
+     margin-bottom: 5px;
+}
+ .vitals-container span {
+     font-weight: bold;
+}
+/* Color Coding */
+ .vitals-container .hr span {
+     color: #f87171;
+    /* Red */
+}
+ .vitals-container .o2 span {
+     color: #60a5fa;
+    /* Blue */
+}
+ .vitals-container .rr span {
+     color: #facc15;
+    /* Yellow */
+}
+ .vitals-container .temp span {
+     color: #4ade80;
+    /* Green */
+}
+ .vitals-container .bp span {
+     color: #4ade80;
+    /* Green */
+}
+ .Feedback {
+     margin-bottom: 5px;
+}
+ .Notes {
+     margin-bottom: 5px;
+}
+ .Question {
+     margin-bottom: 20px;
+     text-align: center;
+}

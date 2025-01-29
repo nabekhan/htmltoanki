@@ -80,6 +80,16 @@
 </html>
 <!-- Settings -->
 <script>
+// Wait for element
+function waitForElement(selector, callback) {  // selector can be a class ('.class') or id #id
+	const element = document.querySelector(selector);
+	if (element) {
+		callback();
+	} else {
+		setTimeout(() => waitForElement(selector, callback), 5); // Check again after 50ms
+	}
+}
+
 // Toggle the visibility of the settings
 function toggleSettingsPopup() {
 	const popup = document.getElementById('settings-popup');
@@ -203,6 +213,7 @@ function shuffleList() {
 	if(!optionsContainer) return; // Exit if container doesn't exist
 	const backIndicator = document.getElementById("at-back-indicator");
 	if(backIndicator) return;
+	clearPersistenceOnLoad();
 	const items = Array.from(optionsContainer.querySelectorAll('.Option')); // Get all div.Option elements
 	if(Persistence.isAvailable()) {
 		let shuffleOrder = Persistence.getItem('shuffleOrder'); // Retrieve existing shuffle order
@@ -231,24 +242,19 @@ function removeBlur(element) {
 	element.style.filter = "none"; // Disable blur
 	element.style.cursor = "default"; // Change cursor to indicate no interactivity
 }
-// Add event listeners only once using a guard
-if(!globalThis.blurEventListenerAdded) {
-	// Event listener for mouse click
-	document.addEventListener("click", (event) => {
-		if(event.target.classList.contains("Options")) {
-			removeBlur(event.target);
-		}
-	});
-	// Event listener for the "Q" key
-	document.addEventListener("keydown", (event) => {
-		if(event.key.toLowerCase() === "`") {
-			const optionsElement = document.querySelector(".Options");
-			if(optionsElement) {
-				removeBlur(optionsElement);
-			}
-		}
-	});
-}
+// Add event listeners
+// Event listener for mouse click
+document.addEventListener("click", (event) => {
+	if(event.target.classList.contains("Options")) {
+		removeBlur(event.target);
+	}
+});
+// Event listener for the "`" key
+document.addEventListener("keydown", (event) => {
+	if(event.key.toLowerCase() == "`") {
+		removeBlur(document.querySelector(".Options"));
+	}
+});
 </script>
 <!-- Determine Number of Answers -->
 <script>

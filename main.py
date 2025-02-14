@@ -3,6 +3,7 @@ suggestion: find a way to pull "correct" for each option. then create div class=
 """
 import html2text
 import markdown2
+import csv
 # Import Packages
 from bs4 import BeautifulSoup
 import requests
@@ -383,5 +384,15 @@ def deckcreate(username, password, deck):
 
 if __name__ == "__main__":
     from gitignore.userdetails import *
-    deck = input("Enter URL: ")
-    deckcreate(username, password, deck)
+    deck = ""
+    with open("gitignore/decklist.csv", "r") as f:
+        reader = csv.reader(f)
+        decklist = list(reader)
+
+    while deck != "":
+        if deck != "start":
+            decklist.append(deck)
+        deck = input("Enter URL: ")
+
+    for item in decklist:
+        deckcreate(username, password, item[0])

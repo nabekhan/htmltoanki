@@ -378,3 +378,25 @@ function showMultiAns() {
 	document.getElementById('multiple-choice').innerHTML = checkAnswers();
 }
 </script>
+<!--Highlight-->
+<script>
+document.addEventListener("keydown", function (e) {
+  if (e.key.toLowerCase() === "h") {
+    e.preventDefault();
+
+    let selection = window.getSelection();
+    if (!selection.rangeCount) return;
+
+    let range = selection.getRangeAt(0);
+    let span = document.createElement("span");
+    span.style.backgroundColor = "#3875D7";
+
+    try {
+      range.surroundContents(span);
+    } catch (err) {
+      console.warn("Could not highlight selection:", err);
+    }
+  }
+});
+</script>
+

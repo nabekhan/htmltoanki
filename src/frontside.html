@@ -378,7 +378,7 @@ function showMultiAns() {
 	document.getElementById('multiple-choice').innerHTML = checkAnswers();
 }
 </script>
-<!--Highlight-->
+<!-- Highlight -->
 <script>
 document.addEventListener("keydown", function (e) {
   if (e.key.toLowerCase() === "h") {
@@ -391,12 +391,34 @@ document.addEventListener("keydown", function (e) {
     let span = document.createElement("span");
     span.style.backgroundColor = "#3875D7";
 
-    try {
-      range.surroundContents(span);
-    } catch (err) {
-      console.warn("Could not highlight selection:", err);
+    // Create a document fragment to allow for partial selections
+    let frag = range.extractContents();
+
+    // Check if adjacent nodes are already highlighted
+    let startNode = range.startContainer;
+    let endNode = range.endContainer;
+
+    // Merge with previous highlight if adjacent
+    if (startNode.previousSibling && startNode.previousSibling.nodeName === "SPAN") {
+      span = startNode.previousSibling;
     }
+
+    // Append selection to the span
+    span.appendChild(frag);
+
+    // Merge with next highlight if adjacent
+    if (endNode.nextSibling && endNode.nextSibling.nodeName === "SPAN") {
+      let nextSpan = endNode.nextSibling;
+      while (nextSpan.firstChild) {
+        span.appendChild(nextSpan.firstChild);
+      }
+      nextSpan.remove();
+    }
+
+    range.insertNode(span);
+
+    // Clear selection to avoid confusion
+    selection.removeAllRanges();
   }
 });
 </script>
-

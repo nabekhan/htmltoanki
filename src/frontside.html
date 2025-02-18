@@ -381,7 +381,7 @@ function showMultiAns() {
 <!-- Highlight -->
 <script>
     document.addEventListener('keydown', function(e) {
-      if (e.key.toLowerCase() === 'h') {
+      if (e.key === 'h') {
         e.preventDefault();
         const sel = window.getSelection();
         if (!sel.rangeCount) return;
@@ -399,11 +399,21 @@ function showMultiAns() {
         } catch (err) {
           console.warn('Highlight failed:', err);
         }
-
-        // Optional: clear selection so user sees the highlight
         sel.removeAllRanges();
       }
-    });
+     // Uppercase 'H' => clear all highlights
+      else if (e.key === 'H') {
+        e.preventDefault();
+        const highlightedSpans = document.querySelectorAll('span.text-highlight');
+      highlightedSpans.forEach((span) => {
+        // Move all child nodes (text) out of the span
+        while (span.firstChild) {
+          span.parentNode.insertBefore(span.firstChild, span);
+        }
+        // Remove the now-empty <span>
+        span.remove();
+      });
+}})
 </script>
 
 

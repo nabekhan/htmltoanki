@@ -378,47 +378,93 @@ function showMultiAns() {
 	document.getElementById('multiple-choice').innerHTML = checkAnswers();
 }
 </script>
-<!-- Highlight -->
+
+
+
 <script>
-document.addEventListener("keydown", function (e) {
-  if (e.key.toLowerCase() === "h") {
-    e.preventDefault();
-
-    let selection = window.getSelection();
-    if (!selection.rangeCount) return;
-
-    let range = selection.getRangeAt(0);
-    let span = document.createElement("span");
-    span.style.backgroundColor = "#3875D7";
-
-    // Create a document fragment to allow for partial selections
-    let frag = range.extractContents();
-
-    // Check if adjacent nodes are already highlighted
-    let startNode = range.startContainer;
-    let endNode = range.endContainer;
-
-    // Merge with previous highlight if adjacent
-    if (startNode.previousSibling && startNode.previousSibling.nodeName === "SPAN") {
-      span = startNode.previousSibling;
-    }
-
-    // Append selection to the span
-    span.appendChild(frag);
-
-    // Merge with next highlight if adjacent
-    if (endNode.nextSibling && endNode.nextSibling.nodeName === "SPAN") {
-      let nextSpan = endNode.nextSibling;
-      while (nextSpan.firstChild) {
-        span.appendChild(nextSpan.firstChild);
+    document.addEventListener("keydown", function(e) {
+      if (e.key.toLowerCase() === "h") {
+        e.preventDefault();
+        highlightSelection();
       }
-      nextSpan.remove();
+    });
+
+    /**
+     * Main function to highlight the current user selection
+     * without removing or reordering block elements.
+     */
+    function highlightSelection() {
+      const selection = window.getSelection();
+      if (!selection.rangeCount) return;
+
+      // We only handle the first range for simplicity.
+      // If you want to handle multiple ranges, loop over selection.getRangeAt(i).
+      const range = selection.getRangeAt(0);
+      if (range.collapsed) return;
+
+      highlightRange(range, 'text-highlight');
+
+      // Clear selection (optional, to avoid confusion)
+      selection.removeAllRanges();
     }
 
-    range.insertNode(span);
+    /**
+     * Highlights the given Range by wrapping each text node (or portion of it)
+     * in a <span class="text-highlight">.
+     */
+    function highlightRange(range, className) {
+      const startContainer = range.startContainer;
+      const endContainer = range.endContainer;
+      const startOffset = range.startOffset;
+      const endOffset = range.endOffset;
 
-    // Clear selection to avoid confusion
-    selection.removeAllRanges();
-  }
-});
-</script>
+      // If the start or end is a text node and the selection is mid-node, split it.
+      if (startContainer.nodeType === Node.TEXT_NODE) {
+        // Split the start text node if selection doesn't begin exactly at its start
+        if (startOffset > 0 && startOffset < startContainer.nodeValue.length) {
+          startContainer.splitText(startOffset);
+          // Update the range to start after the newly split node
+          range.setStartAfter(startContainer);
+        }
+      }
+      if (endContainer.nodeType === Node.TEXT_NODE) {
+        // Split the end text node if selection doesn't end exactly at its end
+        if (endOffset > 0 && endOffset < endContainer.nodeValue.length) {
+          endContainer.splitText(endOffset);
+        }
+      }
+
+      // Now we walk all text nodes that intersect the (possibly updated) range
+      // and wrap them in a highlight span.
+      const walker = document.createTreeWalker(
+        range.commonAncestorContainer,
+        NodeFilter.SHOW_TEXT,
+        {
+          acceptNode: function(node) {
+            // We only want text nodes that actually intersect this range
+            return range.intersectsNode(node)
+              ? NodeFilter.FILTER_ACCEPT
+              : NodeFilter.FILTER_REJECT;
+          }
+        }
+      );
+
+      let currentNode;
+      while ((currentNode = walker.nextNode())) {
+        // Wrap in a highlight span if it’s not purely empty / whitespace
+        if (currentNode.nodeValue.trim().length > 0) {
+          wrapNodeInHighlight(currentNode, className);
+        }
+      }
+    }
+
+    /**
+     * Wrap a single text node in a <span class="[className]">.
+     */
+    function wrapNodeInHighlight(textNode, className) {
+      const highlightSpan = document.createElement('span');
+      highlightSpan.className = className;
+      textNode.parentNode.insertBefore(highlightSpan, textNode);
+      highlightSpan.appendChild(textNode);
+    }
+  </script>

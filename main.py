@@ -9,6 +9,9 @@ from bs4 import BeautifulSoup
 import requests
 import logging
 import genanki
+import pypandoc
+import bleach
+
 logging.basicConfig(level=logging.DEBUG)
 
 # Convert HTML to plain text
@@ -56,6 +59,49 @@ def processtxt(souphtml):
     simplified_html = soup.prettify(formatter="minimal").strip()
 
     return simplified_html
+
+def processtomd(souphtml):
+    """
+    1. Clean HTML with bleach (remove non-standard attributes like ccp_infra_*).
+    2. Convert cleaned HTML to Markdown (using Pandoc via pypandoc).
+
+    :param souphtml: BeautifulSoup object or raw HTML string.
+    :return: Markdown string.
+    """
+    # If souphtml is a BeautifulSoup object, convert it to a string
+    if hasattr(souphtml, 'prettify'):
+        html_str = souphtml.prettify()
+    else:
+        html_str = str(souphtml)
+
+    # Define which tags and attributes you want to ALLOW
+    # Everything else will be removed or stripped.
+    allowed_tags = [
+        'p', 'br', 'div', 'span', 'td', 'th', 'tr', 'table', 'thead', 'tbody',
+        'strong', 'em', 'b', 'i', 'u', 'ul', 'ol', 'li',
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'a',
+    ]
+    allowed_attributes = {
+        '*': ['class', 'href', 'width', 'height', 'colspan', 'rowspan'],
+        # for example, keep 'src' and 'alt' on images:
+        'img': ['src', 'alt'],
+    }
+
+    # Clean the HTML, removing anything not in allowed_tags/attributes
+    cleaned_html = bleach.clean(
+        html_str,
+        tags=allowed_tags,
+        attributes=allowed_attributes,
+        strip=True  # remove disallowed tags (rather than escaping them)
+    )
+
+    # Convert to Markdown. Here we use GitHub Flavored Markdown (gfm)
+    markdown_text = pypandoc.convert_text(
+        cleaned_html,
+        to='gfm',
+        format='html'
+    )
+    return pypandoc.convert_text(markdown_text, to='html', format='md')
 
 def find_sublist_with_string(list_of_lists, target_string):
     for sublist in list_of_lists:
@@ -151,7 +197,7 @@ def deckcreate(username, password, deck):
     # Print Name
     details_div = S.find("div", class_="details")
     filename = details_div.find("p").text.strip() +"::"+  details_div.find("h1").text.strip()
-    print(filename)
+    #print(filename)
 
     # Select records
     records_div = S.find("div", class_="records")
@@ -162,12 +208,12 @@ def deckcreate(username, password, deck):
     # Check if any <div class="page"> elements are found
     if page_divs:
         notes = {}
-        print(f"Found {len(page_divs)} 'page' divs.")
+        #print(f"Found {len(page_divs)} 'page' divs.")
         # Iterate and print the content of each
         for i, div in enumerate(page_divs, start=1):
             if i % 2 != 0:
                 # Define Question
-                print(f"Question {int(i / 2 + 0.5)} Content:")
+                #print(f"Question {int(i / 2 + 0.5)} Content:")
                 front = {}
 
                 # print stats
@@ -175,7 +221,7 @@ def deckcreate(username, password, deck):
                 listofstats = []
                 for stat in stats:
                     stat.attrs = {}
-                    print(stat)
+                    #print(stat)
                     listofstats.append(stat)
                 front["Stats"] = listofstats
 
@@ -183,8 +229,7 @@ def deckcreate(username, password, deck):
                 descriptions = div.find_all("div", class_="block group")
                 listofdesc = []
                 for description in descriptions:
-                    description = processtxt(description)
-                    print(description)
+                    description = processtomd(description)
                     listofdesc.append(description)
                 front["Desc"] = listofdesc
 
@@ -193,7 +238,7 @@ def deckcreate(username, password, deck):
                 listofheaders = []
                 for header in headers:
                     header = header.text.strip()
-                    print(header)
+                    #print(header)
                     listofheaders.append(header)
                 front["Question"] = listofheaders
 
@@ -203,7 +248,7 @@ def deckcreate(username, password, deck):
                 listofoptions = []
                 for index, option in enumerate(option_list):
                     option = option.strip("\u200b")
-                    print(option)
+                    #print(option)
                     listofoptions.append([alphaUpper[index], option])
                 front["Options"] = listofoptions
 
@@ -213,19 +258,19 @@ def deckcreate(username, password, deck):
                 for image in images:
                     urlstub = image.get("src")
                     url = "https://cards.ucalgary.ca/" + urlstub[1:]
-                    print(url)
+                    #print(url)
                     listofimages.append(url)
                 front["Images"] = listofimages
             else:
                 back = {}
 
                 # print answers
-                print(f"Question {int(i / 2)} Answer:")
+                #print(f"Question {int(i / 2)} Answer:")
                 answers = div.find_all("div", class_="correct")
                 listofanswers = []
                 for answer in answers:
                     answer = answer.text.strip().strip("\u200b")
-                    print(answer)
+                    #print(answer)
                     findanswerindex = find_sublist_with_string(listofoptions, answer)
                     if findanswerindex:
                         answerletter = findanswerindex[0]
@@ -237,7 +282,7 @@ def deckcreate(username, password, deck):
                 listoffeed = []
                 for feedback in feedbacks:
                     feedback = processtxt(feedback)
-                    print(feedback)
+                    #print(feedback)
                     listoffeed.append(feedback)
                 back["Feedback"] = listoffeed
 
@@ -247,7 +292,7 @@ def deckcreate(username, password, deck):
                 for image in backimages:
                     bkurlstub = image.get("src")
                     bkurl = "https://cards.ucalgary.ca/" + bkurlstub[1:]
-                    print(bkurl)
+                    #print(bkurl)
                     if bkurl in listofimages:
                         continue
                     else:
@@ -255,10 +300,11 @@ def deckcreate(username, password, deck):
                 back["BackImages"] = listofbackimages
 
                 notes[int(i / 2)] = [front, back]
-                print("-" * 50)
-        print(notes)
+                #print("-" * 50)
+        #print(notes)
     else:
-        print("No <div> elements with class 'page' found.")
+        print()
+        #print("No <div> elements with class 'page' found.")
     cards_dict = notes
 
     def process_images(images):
@@ -367,7 +413,7 @@ def deckcreate(username, password, deck):
         sanitized_fields = [process_field(field) for field in passed_variables]
 
 
-        print(f'Output: {sanitized_fields}')
+        #print(f'Output: {sanitized_fields}')
         note = genanki.Note(
             model=anki_model,
             fields=[*sanitized_fields],

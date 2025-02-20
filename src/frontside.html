@@ -380,40 +380,44 @@ function showMultiAns() {
 </script>
 <!-- Highlight -->
 <script>
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'h') {
-        e.preventDefault();
-        const sel = window.getSelection();
-        if (!sel.rangeCount) return;
+document.addEventListener('keydown', function(e) {
+  if (e.key === "h") {
+    e.preventDefault();
 
-        const range = sel.getRangeAt(0);
-        if (range.collapsed) return; // nothing selected
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return;
 
-        // Create a highlight <span>:
-        const highlight = document.createElement('span');
-        highlight.classList.add('text-highlight');
+    let range = sel.getRangeAt(0);
 
-        // Wrap the selection in that <span>
-        try {
-          range.surroundContents(highlight);
-        } catch (err) {
-          console.warn('Highlight failed:', err);
-        }
-        sel.removeAllRanges();
+    // Clone the contents so we can inspect them
+    let clonedContents = range.cloneContents();
+    // If there's a <br> in there, throw an error manually
+    if (clonedContents.querySelector('br')) {
+      console.warn("Selection contains a <br> — refusing to highlight.");
+      return;
+    }
+
+    let span = document.createElement("span");
+    span.classList.add('text-highlight');
+
+    try {
+      range.surroundContents(span);
+    } catch (err) {
+      console.warn("Could not highlight selection:", err);
+    }
+  }
+
+  // Uppercase 'H' => clear all highlights
+  else if (e.key === 'H') {
+    e.preventDefault();
+    const highlightedSpans = document.querySelectorAll('span.text-highlight');
+    highlightedSpans.forEach((span) => {
+      while (span.firstChild) {
+        span.parentNode.insertBefore(span.firstChild, span);
       }
-     // Uppercase 'H' => clear all highlights
-      else if (e.key === 'H') {
-        e.preventDefault();
-        const highlightedSpans = document.querySelectorAll('span.text-highlight');
-      highlightedSpans.forEach((span) => {
-        // Move all child nodes (text) out of the span
-        while (span.firstChild) {
-          span.parentNode.insertBefore(span.firstChild, span);
-        }
-        // Remove the now-empty <span>
-        span.remove();
-      });
-}})
+      span.remove();
+    });
+  }
+});
 </script>
-
 

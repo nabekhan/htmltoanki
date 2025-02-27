@@ -11,6 +11,7 @@ import logging
 import genanki
 import pypandoc
 import bleach
+from collectdeck import get_deck_links
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -258,7 +259,8 @@ def deckcreate(username, password, deck):
                 listofimages = []
                 for image in images:
                     urlstub = image.get("src")
-                    url = "https://cards.ucalgary.ca/" + urlstub[1:]
+                    if not urlstub.startswith("https"):
+                        url = "https://cards.ucalgary.ca/" + urlstub[1:]
                     #print(url)
                     listofimages.append(url)
                 front["Images"] = listofimages
@@ -431,15 +433,21 @@ def deckcreate(username, password, deck):
 
 if __name__ == "__main__":
     from gitignore.userdetails import *
+
+    get_deck_links(username, password, "https://cards.ucalgary.ca/collection/117")
+
     deck = ""
     with open("gitignore/decklist.csv", "r") as f:
         reader = csv.reader(f)
         decklist = list(reader)
+        decklist = decklist[0]
+        print(decklist)
 
     while deck != "":
         if deck != "start":
             decklist.append(deck)
         deck = input("Enter URL: ")
 
+    print(f"Total Decks: {len(decklist)}")
     for item in decklist:
-        deckcreate(username, password, item[0])
+        deckcreate(username, password, item)

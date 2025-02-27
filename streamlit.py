@@ -1,40 +1,27 @@
 import streamlit as st
 from main import deckcreate
 import os
-import requests
-import tarfile
 import pypandoc
+import subprocess
 
-# Define Pandoc path
-PANDOC_DIR = os.path.join(os.getcwd(), "pandoc")
-PANDOC_BIN = os.path.join(PANDOC_DIR, "bin", "pandoc")
+# Path to your custom Pandoc binary
+custom_pandoc_bin = os.path.join(
+    os.path.dirname(__file__),
+    "assets",
+    "pandoc",
+    "bin",
+    "pandoc"
+)
 
-if not os.path.exists(PANDOC_BIN):
-    print("⚠️ Pandoc not found. Downloading standalone Pandoc...")
+# Ensure it's executable (in case Git lost the +x bit)
+subprocess.run(["chmod", "+x", custom_pandoc_bin])
 
-    # Pandoc download URL (adjust based on architecture if needed)
-    PANDOC_URL = "https://github.com/jgm/pandoc/releases/latest/download/pandoc-3.1.11.1-linux-amd64.tar.gz"
-    TAR_FILE = "pandoc.tar.gz"
+# Set the env variable so pypandoc will only use this path
+os.environ.setdefault('PYPANDOC_PANDOC', custom_pandoc_bin)
 
-    # Download Pandoc
-    response = requests.get(PANDOC_URL, stream=True)
-    with open(TAR_FILE, "wb") as f:
-        for chunk in response.iter_content(chunk_size=1024):
-            f.write(chunk)
-
-    # Extract Pandoc
-    os.makedirs(PANDOC_DIR, exist_ok=True)
-    with tarfile.open(TAR_FILE, "r:gz") as tar:
-        tar.extractall(PANDOC_DIR)
-
-    # Remove archive after extraction
-    os.remove(TAR_FILE)
-
-# Set PANDOC_PATH for pypandoc
-pypandoc.PANDOC_PATH = PANDOC_BIN
-
-print(f"✅ Pandoc installed at {pypandoc.PANDOC_PATH}")
-
+# Quick version check
+version = pypandoc.get_pandoc_version()
+print(f"Using custom Pandoc at {custom_pandoc_bin}, version {version}")
 
 
 

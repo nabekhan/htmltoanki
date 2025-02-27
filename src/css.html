@@ -99,7 +99,7 @@
      margin: 5px 0;
      display: flex;
      align-items: center;
-     border: 1px solid #ddd;
+     border: 2px solid #ddd;
      padding: 10px;
      border-radius: 5px;
      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -109,7 +109,6 @@
 }
  .green-highlight {
      background-color: green !important;
-     color: white !important;
 }
  .Answers {
      display: none;
@@ -188,6 +187,15 @@
      text-align: center;
 }
  .text-highlight {
-      background-color: #3875D7;
-      white-space: pre-wrap; /* preserves existing spaces and wraps lines */
+     background-color: #3875D7;
+     white-space: pre-wrap; /* preserves existing spaces and wraps lines */
+}
+ .Notes table, .Notes th, .Notes td {
+    border: 1px solid white;
+    border-collapse: collapse;
+}
+.option-selected {
+  border: 2px solid #FFE4C4;
+  border-radius: 5px;
+  color: #FFE4C4;
 }

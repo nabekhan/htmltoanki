@@ -4,5 +4,7 @@ genanki
 streamlit
 html2text
 markdown2
-pypandoc
 bleach
+pypandoc
+os
+subprocess

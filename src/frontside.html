@@ -1,82 +1,81 @@
 <html>
-<div>
-	<!-- Gear icon for opening the settings -->
-	<div class="gear-icon" onclick="toggleSettingsPopup()">⚙</div>
-	<!-- Popup for settings -->
-	<div class="settings-popup" id="settings-popup">
-		<span class="close-btn" onclick="toggleSettingsPopup()">✖</span>
-		<h3>Settings</h3>
-		<label>
-			<span>Enable Multi-Answer</span>
-			<input type="checkbox" id="ToggleMC">
-		</label>
-		<label>
-			<span>Disable Blur</span>
-			<input type="checkbox" id="ToggleBlur">
-		</label>
-		<button style="applybt" onclick="applySettings()">Apply</button>
-	</div>
-</div>
-<!-- Information Bar -->
-<div class="bar">
-	<div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
-	<div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
-	<div id="hint" onclick="
-                    document.getElementById('multiple-choice').style.display = 'block';
-                    document.getElementById('hint').style.display = 'none';
-                    document.getElementById('multiple-choice').innerHTML = checkAnswers();
-                    " style="cursor: pointer; font-size: 13px;">
-		<u style="font-size: 13px;">Number of Answers</u>
-	</div>
-	<div id="multiple-choice" style="display: none; font-size: 13px;">&nbsp;</div>
-</div>
-<div class="background ">
-	<div class="canvas">
-		<div class="frontimg images">{{Front Image}}</div>
-	</div>
-	<div class="vitals-container">{{Stats}}</div>
-	<div class="desc">{{Description}}</div><br>
-	<div class="Question" id="question" style="font-weight: bold">{{Question}}</div>
-	<div tabindex="0" onclick="removeBlur(this)" class="Options">
-		<div class="Option" id="at-field-optionA">{{optionA}}</div>
-		<div class="Option" id="at-field-optionB">{{optionB}}</div>
-		<div class="Option" id="at-field-optionC">{{optionC}}</div>
-		<div class="Option" id="at-field-optionD">{{optionD}}</div>
-		<div class="Option" id="at-field-optionE">{{optionE}}</div>
-		<div class="Option" id="at-field-optionF">{{optionF}}</div>
-		<div class="Option" id="at-field-optionG">{{optionG}}</div>
-		<div class="Option" id="at-field-optionH">{{optionH}}</div>
-		<div class="Option" id="at-field-optionI">{{optionI}}</div>
-		<div class="Option" id="at-field-optionJ">{{optionJ}}</div>
-		<div class="Option" id="at-field-optionK">{{optionK}}</div>
-		<div class="Option" id="at-field-optionL">{{optionL}}</div>
-		<div class="Option" id="at-field-optionM">{{optionM}}</div>
-		<div class="Option" id="at-field-optionN">{{optionN}}</div>
-		<div class="Option" id="at-field-optionO">{{optionO}}</div>
-		<div class="Option" id="at-field-optionP">{{optionP}}</div>
-		<div class="Option" id="at-field-optionQ">{{optionQ}}</div>
-		<div class="Option" id="at-field-optionR">{{optionR}}</div>
-		<div class="Option" id="at-field-optionS">{{optionS}}</div>
-		<div class="Option" id="at-field-optionT">{{optionT}}</div>
-		<div class="Option" id="at-field-optionU">{{optionU}}</div>
-		<div class="Option" id="at-field-optionV">{{optionV}}</div>
-		<div class="Option" id="at-field-optionW">{{optionW}}</div>
-		<div class="Option" id="at-field-optionX">{{optionX}}</div>
-		<div class="Option" id="at-field-optionY">{{optionY}}</div>
-		<div class="Option" id="at-field-optionZ">{{optionZ}}</div>
-	</div>
-	<div class="flipped" id="flipped" style="display: none;">
-		<br>
-		<div class="Answers">{{Answers}}</div>
-		<div class="Feedback">{{Feedback}}</div>
-		<div class="Notes">{{Notes}}</div>
-		<div class="canvas">
-			<div class="backimg images">{{Back Image}}</div>
-			<div style="text-align: center;">{{URL}}</div>
+	<div>
+		<!-- Gear icon for opening the settings -->
+		<div class="gear-icon" onclick="toggleSettingsPopup()">⚙</div>
+		<!-- Popup for settings -->
+		<div class="settings-popup" id="settings-popup">
+			<span class="close-btn" onclick="toggleSettingsPopup()">✖</span>
+			<h3>Settings</h3>
+			<label>
+				<span>Enable Multi-Answer</span>
+				<input type="checkbox" id="ToggleMC">
+			</label>
+			<label>
+				<span>Disable Blur</span>
+				<input type="checkbox" id="ToggleBlur">
+			</label>
+			<button style="applybt" onclick="applySettings()">Apply</button>
 		</div>
 	</div>
-</div>
-
+	<!-- Information Bar -->
+	<div class="bar">
+		<div class="subdeck">{{#Subdeck}}{{Subdeck}}{{/Subdeck}}</div>
+		<div class="tag">{{#Tags}}{{Tags}}{{/Tags}}</div>
+		<div id="hint" onclick="
+						document.getElementById('multiple-choice').style.display = 'block';
+						document.getElementById('hint').style.display = 'none';
+						document.getElementById('multiple-choice').innerHTML = checkAnswers();
+						" style="cursor: pointer; font-size: 13px;">
+			<u style="font-size: 13px;">Number of Answers</u>
+		</div>
+		<div id="multiple-choice" style="display: none; font-size: 13px;">&nbsp;</div>
+	</div>
+	<div class="background ">
+		<div class="canvas">
+			<div class="frontimg images">{{Front Image}}</div>
+		</div>
+		<div class="vitals-container">{{Stats}}</div>
+		<div class="desc">{{Description}}</div><br>
+		<div class="Question" id="question" style="font-weight: bold">{{Question}}</div>
+		<div tabindex="0" onclick="removeBlur(this)" class="Options">
+			<div class="Option" id="at-field-optionA">{{optionA}}</div>
+			<div class="Option" id="at-field-optionB">{{optionB}}</div>
+			<div class="Option" id="at-field-optionC">{{optionC}}</div>
+			<div class="Option" id="at-field-optionD">{{optionD}}</div>
+			<div class="Option" id="at-field-optionE">{{optionE}}</div>
+			<div class="Option" id="at-field-optionF">{{optionF}}</div>
+			<div class="Option" id="at-field-optionG">{{optionG}}</div>
+			<div class="Option" id="at-field-optionH">{{optionH}}</div>
+			<div class="Option" id="at-field-optionI">{{optionI}}</div>
+			<div class="Option" id="at-field-optionJ">{{optionJ}}</div>
+			<div class="Option" id="at-field-optionK">{{optionK}}</div>
+			<div class="Option" id="at-field-optionL">{{optionL}}</div>
+			<div class="Option" id="at-field-optionM">{{optionM}}</div>
+			<div class="Option" id="at-field-optionN">{{optionN}}</div>
+			<div class="Option" id="at-field-optionO">{{optionO}}</div>
+			<div class="Option" id="at-field-optionP">{{optionP}}</div>
+			<div class="Option" id="at-field-optionQ">{{optionQ}}</div>
+			<div class="Option" id="at-field-optionR">{{optionR}}</div>
+			<div class="Option" id="at-field-optionS">{{optionS}}</div>
+			<div class="Option" id="at-field-optionT">{{optionT}}</div>
+			<div class="Option" id="at-field-optionU">{{optionU}}</div>
+			<div class="Option" id="at-field-optionV">{{optionV}}</div>
+			<div class="Option" id="at-field-optionW">{{optionW}}</div>
+			<div class="Option" id="at-field-optionX">{{optionX}}</div>
+			<div class="Option" id="at-field-optionY">{{optionY}}</div>
+			<div class="Option" id="at-field-optionZ">{{optionZ}}</div>
+		</div>
+		<div class="flipped" id="flipped" style="display: none;">
+			<br>
+			<div class="Answers">{{Answers}}</div>
+			<div class="Feedback">{{Feedback}}</div>
+			<div class="Notes">{{Notes}}</div>
+			<div class="canvas">
+				<div class="backimg images">{{Back Image}}</div>
+				<div style="text-align: center;">{{URL}}</div>
+			</div>
+		</div>
+	</div>
 </html>
 <!-- Settings -->
 <script>
@@ -244,9 +243,39 @@ function removeBlur(element) {
 }
 // Add event listeners
 // Event listener for mouse click
-document.addEventListener("click", (event) => {
-	if(event.target.classList.contains("Options")) {
-		removeBlur(event.target);
+document.addEventListener("click", function(event) {
+	const optionsContainer = document.querySelector(".Options");
+
+	if (!optionsContainer) return;
+
+	const isBlurred = getComputedStyle(optionsContainer).filter !== "none";
+
+	// Case 1: Clicked the entire container → remove blur
+	if (event.target.classList.contains("Options")) {
+		removeBlur(optionsContainer);
+		return;
+	}
+
+	// Case 2: Clicked an option
+	if (event.target.classList.contains("Option")) {
+		// Still blurred? Only remove blur
+		if (isBlurred) {
+			removeBlur(optionsContainer);
+			return;
+		}
+
+		// Not blurred? Toggle selection
+		event.target.classList.toggle("option-selected");
+
+		// Save selected indices
+		const options = Array.from(document.querySelectorAll(".Option"));
+		const selectedIndices = options
+			.map((el, i) => el.classList.contains("option-selected") ? i : null)
+			.filter(i => i !== null);
+
+		if (Persistence.isAvailable()) {
+			Persistence.setItem("selectedOptions", selectedIndices);
+		}
 	}
 });
 // Event listener for the "`" key
@@ -367,7 +396,8 @@ function showFlippedSection() {
 <script>
 // Clear persistence when the front side loads
 function clearPersistenceOnLoad() {
-	Persistence.removeItem('shuffleOrder'); // Clear the shuffle order for the next card
+	Persistence.removeItem('shuffleOrder');     // Clear the shuffle order
+	Persistence.removeItem('selectedOptions');  // Clear selected options
 }
 </script>
 <!-- Show MC -->
@@ -421,4 +451,18 @@ document.addEventListener('keydown', function(e) {
   }
 });
 </script>
+<!-- Selected Options -->
+<script>
+function restoreSelectedOptions() {
+  if (!Persistence.isAvailable()) return;
+  const selectedIndices = Persistence.getItem("selectedOptions");
+  if (!selectedIndices || !Array.isArray(selectedIndices)) return;
 
+  const options = document.querySelectorAll(".Option");
+  selectedIndices.forEach(i => {
+    if (options[i]) {
+      options[i].classList.add("option-selected");
+    }
+  });
+}
+</script>

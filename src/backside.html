@@ -6,11 +6,12 @@
 function revealback() {
 	highlightCorrectOptions();
 	applyShuffleFromPersistence();
-	clearPersistenceOnLoad();
 	scrolltoquestion();
 	showFlippedSection();
 	showMultiAns();
 	removeBlur(document.querySelector(".Options"));
-};
+	waitForElement('.Option', restoreSelectedOptions);
+	clearPersistenceOnLoad();
+}
 revealback();
 </script>

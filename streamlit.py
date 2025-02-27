@@ -2,9 +2,22 @@ import streamlit as st
 from main import deckcreate
 import pypandoc
 import os
+import subprocess
 
-# Set Pandoc path explicitly (needed on Streamlit Cloud)
-pypandoc.PANDOC_PATH = os.path.join(os.getcwd(), "pandoc")
+# Set Pandoc path explicitly
+PANDOC_PATH = os.path.join(os.getcwd(), "pandoc")
+
+if not os.path.exists(PANDOC_PATH):
+    print("⚠️ Pandoc not found. Downloading standalone Pandoc...")
+    url = "https://github.com/jgm/pandoc/releases/latest/download/pandoc-3.1.11.1-linux-amd64.tar.gz"
+    subprocess.run(["wget", url, "-O", "pandoc.tar.gz"], check=True)
+    subprocess.run(["tar", "-xzf", "pandoc.tar.gz", "--strip-components=1", "-C", PANDOC_PATH], check=True)
+
+pypandoc.PANDOC_PATH = os.path.join(PANDOC_PATH, "bin", "pandoc")
+
+print(f"✅ Pandoc installed at {pypandoc.PANDOC_PATH}")
+
+
 
 # Set page configuration
 st.set_page_config(page_title="Anki Deck Generator", page_icon="assets/favicon.webp", layout="centered")

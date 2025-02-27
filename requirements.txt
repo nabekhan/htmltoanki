@@ -4,3 +4,4 @@ genanki
 streamlit
 html2text
 markdown2
+pypandoc

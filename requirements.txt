@@ -6,3 +6,4 @@ html2text
 markdown2
 pypandoc
 bleach
+pandoc-bin

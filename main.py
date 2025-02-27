@@ -12,6 +12,7 @@ import genanki
 import pypandoc
 import bleach
 
+
 logging.basicConfig(level=logging.DEBUG)
 
 # Convert HTML to plain text

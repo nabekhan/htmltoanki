@@ -1,5 +1,10 @@
 import streamlit as st
 from main import deckcreate
+import pypandoc
+import os
+
+# Set Pandoc path explicitly (needed on Streamlit Cloud)
+pypandoc.PANDOC_PATH = os.path.join(os.getcwd(), "pandoc")
 
 # Set page configuration
 st.set_page_config(page_title="Anki Deck Generator", page_icon="assets/favicon.webp", layout="centered")

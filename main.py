@@ -1,16 +1,15 @@
 """
 suggestion: find a way to pull "correct" for each option. then create div class=correct in anki card and back highlights those cards
 """
-import html2text
-import markdown2
 import csv
 # Import Packages
 from bs4 import BeautifulSoup
 import requests
 import logging
 import genanki
-import pypandoc
 import bleach
+import html2text
+import markdown2
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -63,20 +62,20 @@ def processtxt(souphtml):
 
 def processtomd(souphtml):
     """
-    1. Clean HTML with bleach (remove non-standard attributes like ccp_infra_*).
-    2. Convert cleaned HTML to Markdown (using Pandoc via pypandoc).
+    1. Clean HTML with bleach (remove non-standard tags/attributes).
+    2. Convert cleaned HTML to Markdown (using html2text).
+    3. Convert Markdown back to HTML (using markdown2).
 
     :param souphtml: BeautifulSoup object or raw HTML string.
-    :return: Markdown string.
+    :return: HTML string generated from the sanitized Markdown.
     """
-    # If souphtml is a BeautifulSoup object, convert it to a string
+    # 1. Convert BeautifulSoup -> string if needed
     if hasattr(souphtml, 'prettify'):
         html_str = souphtml.prettify()
     else:
         html_str = str(souphtml)
 
-    # Define which tags and attributes you want to ALLOW
-    # Everything else will be removed or stripped.
+    # 2. Clean the HTML
     allowed_tags = [
         'p', 'br', 'div', 'span', 'td', 'th', 'tr', 'table', 'thead', 'tbody',
         'strong', 'em', 'b', 'i', 'u', 'ul', 'ol', 'li',
@@ -84,25 +83,25 @@ def processtomd(souphtml):
     ]
     allowed_attributes = {
         '*': ['class', 'href', 'width', 'height', 'colspan', 'rowspan'],
-        # for example, keep 'src' and 'alt' on images:
         'img': ['src', 'alt'],
     }
 
-    # Clean the HTML, removing anything not in allowed_tags/attributes
     cleaned_html = bleach.clean(
         html_str,
         tags=allowed_tags,
         attributes=allowed_attributes,
-        strip=True  # remove disallowed tags (rather than escaping them)
+        strip=True
     )
 
-    # Convert to Markdown. Here we use GitHub Flavored Markdown (gfm)
-    markdown_text = pypandoc.convert_text(
-        cleaned_html,
-        to='gfm',
-        format='html'
-    )
-    return pypandoc.convert_text(markdown_text, to='html', format='md')
+    # 3. HTML → Markdown (with html2text)
+    #    If you prefer, you could use "from markdownify import markdownify" here.
+    markdown_text = html2text.html2text(cleaned_html)
+
+    # 4. (Optional) Convert Markdown → HTML to finalize
+    #    "extras" can enable GFM-like features (tables, fenced code blocks, etc.)
+    final_html = markdown2.markdown(markdown_text, extras=["tables", "fenced-code-blocks"])
+
+    return final_html
 
 def find_sublist_with_string(list_of_lists, target_string):
     for sublist in list_of_lists:

@@ -1,42 +1,5 @@
 import streamlit as st
 from main import deckcreate
-import os
-import requests
-import tarfile
-import pypandoc
-
-# Define Pandoc path
-PANDOC_DIR = os.path.join(os.getcwd(), "pandoc")
-PANDOC_BIN = os.path.join(PANDOC_DIR, "bin", "pandoc")
-
-if not os.path.exists(PANDOC_BIN):
-    print("⚠️ Pandoc not found. Downloading standalone Pandoc...")
-
-    # Pandoc download URL (adjust based on architecture if needed)
-    PANDOC_URL = "https://github.com/jgm/pandoc/releases/latest/download/pandoc-3.1.11.1-linux-amd64.tar.gz"
-    TAR_FILE = "pandoc.tar.gz"
-
-    # Download Pandoc
-    response = requests.get(PANDOC_URL, stream=True)
-    with open(TAR_FILE, "wb") as f:
-        for chunk in response.iter_content(chunk_size=1024):
-            f.write(chunk)
-
-    # Extract Pandoc
-    os.makedirs(PANDOC_DIR, exist_ok=True)
-    with tarfile.open(TAR_FILE, "r:gz") as tar:
-        tar.extractall(PANDOC_DIR)
-
-    # Remove archive after extraction
-    os.remove(TAR_FILE)
-
-# Set PANDOC_PATH for pypandoc
-pypandoc.PANDOC_PATH = PANDOC_BIN
-
-print(f"✅ Pandoc installed at {pypandoc.PANDOC_PATH}")
-
-
-
 
 # Set page configuration
 st.set_page_config(page_title="Anki Deck Generator", page_icon="assets/favicon.webp", layout="centered")

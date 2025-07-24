@@ -518,7 +518,7 @@ if __name__ == "__main__":
     if all_failed:
         with open(failed_items_file, "w", newline="") as f:
             writer = csv.writer(f)
-            for item in sorted(all_failed):  # optional: sort for consistency
+            for item in sorted(all_failed):
                 writer.writerow([item])
 
     print("Failed items:", failed_items)

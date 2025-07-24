@@ -13,8 +13,7 @@ import pypandoc
 import bleach
 from collectdeck import get_deck_links
 
-
-logging.basicConfig(level=logging.DEBUG)
+#logging.basicConfig(level=logging.DEBUG)
 
 # Convert HTML to plain text
 text_maker = html2text.HTML2Text()
@@ -425,16 +424,17 @@ def deckcreate(username, password, deck):
 
     # Save the deck as an Anki package
     output_file = (filename + ".apkg").replace("::", "__").replace('/', '_')
+    output_file = ("decks/"+output_file)
     #genanki.Package(anki_deck).write_to_file(f"gitignore/{output_file}")
     genanki.Package(anki_deck).write_to_file(output_file)
-    return output_file
     print(f"Anki deck created: {output_file}")
+    return output_file
 
 
 if __name__ == "__main__":
     from gitignore.userdetails import *
 
-    get_deck_links(username, password, "https://cards.ucalgary.ca/collection/117")
+    #get_deck_links(username, password, "https://cards.ucalgary.ca/collection/125")
 
     deck = ""
     with open("gitignore/decklist.csv", "r") as f:
@@ -449,5 +449,15 @@ if __name__ == "__main__":
         deck = input("Enter URL: ")
 
     print(f"Total Decks: {len(decklist)}")
+
+    failed_items = []
+
     for item in decklist:
-        deckcreate(username, password, item)
+        print(f"Trying: {item}")
+        try:
+            deckcreate(username, password, item)
+        except Exception as e:
+            print(f"Failed: {item} - {e}")
+            failed_items.append(item)
+    print("Failed items:", failed_items)
+

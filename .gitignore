@@ -8,3 +8,5 @@
 /.idea/vcs.xml
 # Exclude all .apkg files
 *.apkg
+/decks/
+/assets/

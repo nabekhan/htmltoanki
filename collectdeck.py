@@ -6,7 +6,7 @@ import os
 
 
 def get_deck_links(username, password, collectionurl):
-    output_path = os.path.join("gitignore", "decklist.csv")
+    output_path = os.path.join("gitignore", "urllist.csv")
 
     # Set up headless browser
     options = Options()
@@ -37,7 +37,7 @@ def get_deck_links(username, password, collectionurl):
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(",".join(full_urls))
 
-        print(f"✅ {len(full_urls)} full URLs saved (with query params) to {output_path}")
+        # print(f"✅ {len(full_urls)} full URLs saved (with query params) to {output_path}")
 
     finally:
         driver.quit()

@@ -13,6 +13,9 @@ import pypandoc
 import bleach
 import os
 from collectdeck import get_deck_links
+from tqdm import tqdm
+import re
+from prints import *
 
 #logging.basicConfig(level=logging.DEBUG)
 
@@ -181,7 +184,7 @@ def deckcreate(username, password, deck):
                 # Process the HTML content with BeautifulSoup
                 S = BeautifulSoup(target_response.text, 'html.parser')
             else:
-                logging.error("Failed to load the target deck page. Check the URL or network connectivity.")
+                # logging.error(f" Failed to load. Check your network connectivity or if print is enabled for the deck.")
                 raise Exception("Deck page did not load successfully.")
         else:
             logging.error("Login might have failed. Collection page does not have expected content.")
@@ -435,18 +438,40 @@ def deckcreate(username, password, deck):
 if __name__ == "__main__":
     from gitignore.userdetails import *
 
-    get_deck_links(username, password, "https://cards.ucalgary.ca/collection/126")
+    # Enter deck URL
+    pattern = r"^https://cards\.ucalgary\.ca/collection/\d+$"
+    deckurl = input("Enter collection URL to process decks. Click enter to skip: ").strip()
+    if deckurl == "":
+        print("Skipping...")
+    elif re.match(pattern, deckurl):
+        print("Valid collection URL. Processing...")
+        # proceed with processing
+    else:
+        raise ValueError("Invalid URL format. Please use: https://cards.ucalgary.ca/collection/<number> (ex: https://cards.ucalgary.ca/collection/126)")
 
-    deck = ""
-    # Step 1: Read decklist.csv
-    decks = "gitignore/decklist.csv"
-    with open(decks, "r") as f:
-        reader = csv.reader(f)
-        decklist = list(reader)[0]
 
-    # Step 2: Read failed_items.csv if it exists
+    processfailed = input("Process previously failed decks? (Y/N): ").strip().lower()
+    processfailed = processfailed == "y"
+    if processfailed:
+        print("Processing failed decks...")
+    else:
+        print("Skipping...")
+
+    print ("Forming deck list...")
+    decklist = []
+
+    if deckurl:
+        get_deck_links(username, password, deckurl)
+        # Read decklist.csv
+        decks = "gitignore/urllist.csv"
+        with open(decks, "r") as f:
+            reader = list(csv.reader(f))  # convert to list once
+            urllist = [row[0] for row in reader if row]  # skip empty rows
+            decklist = reader[0] if reader else []  # protect against empty file
+
+    # read failed_items.csv if it exists
     failed_items_file = "gitignore/failed_items.csv"
-    if os.path.exists(failed_items_file):
+    if os.path.exists(failed_items_file) and processfailed:
         with open(failed_items_file, "r") as f:
             reader = csv.reader(f)
             failed_list = [row[0] for row in reader if row]  # skip empty rows
@@ -455,37 +480,47 @@ if __name__ == "__main__":
     # Remove duplicates
     decklist = list(set(decklist))
 
-    while deck != "":
-        if deck != "start":
-            decklist.append(deck)
-        deck = input("Enter URL: ")
+    print(f"Total decks to be processed: {len(decklist)}")
 
-    print(f"Total Decks: {len(decklist)}")
-
-    # Step 4: clear csvs
-    with open(failed_items_file, "w") as f:
-        pass  # truncate the file
-
-    with open(decks, "w") as f:
-        pass  # truncate the file
-
-    # Step 5: Process decks and log failures
+    # process decks and log failures
     failed_items = []
-
-    for item in decklist:
+    blockPrint()
+    for item in tqdm(decklist, desc="Processing Decks"):
         print(f"Trying: {item}")
         try:
             deckcreate(username, password, item)
         except Exception as e:
             print(f"Failed: {item} - {e}")
             failed_items.append(item)
+    enablePrint()
 
-    # Step 6: Save failed items to CSV
-    if failed_items:
+    if deckurl:
+        with open(decks, "w") as f:
+            pass  # truncate the file
+
+    # clear CSVs
+    if processfailed:
+        with open(failed_items_file, "w") as f:
+            pass  # truncate the file
+
+    # save failed items to CSV
+    # Load existing items from file (if it exists)
+    existing_items = set()
+    if os.path.exists(failed_items_file):
+        with open(failed_items_file, "r") as f:
+            reader = csv.reader(f)
+            existing_items = {row[0] for row in reader if row}
+
+    # Merge with current failed items and remove duplicates
+    all_failed = existing_items.union(failed_items)
+
+    # Save back to file (overwrite with deduplicated list)
+    if all_failed:
         with open(failed_items_file, "w", newline="") as f:
             writer = csv.writer(f)
-            for item in failed_items:
+            for item in sorted(all_failed):  # optional: sort for consistency
                 writer.writerow([item])
 
     print("Failed items:", failed_items)
+    print("Please check if failed decks are printable before retrying!")
 

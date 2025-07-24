@@ -1,1 +1,1 @@
-https://cardstoankiconverter.streamlit.app/
+Please add your login details manually.

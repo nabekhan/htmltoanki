@@ -11,6 +11,7 @@ import logging
 import genanki
 import pypandoc
 import bleach
+import os
 from collectdeck import get_deck_links
 
 #logging.basicConfig(level=logging.DEBUG)
@@ -434,14 +435,25 @@ def deckcreate(username, password, deck):
 if __name__ == "__main__":
     from gitignore.userdetails import *
 
-    #get_deck_links(username, password, "https://cards.ucalgary.ca/collection/125")
+    get_deck_links(username, password, "https://cards.ucalgary.ca/collection/126")
 
     deck = ""
-    with open("gitignore/decklist.csv", "r") as f:
+    # Step 1: Read decklist.csv
+    decks = "gitignore/decklist.csv"
+    with open(decks, "r") as f:
         reader = csv.reader(f)
-        decklist = list(reader)
-        decklist = decklist[0]
-        print(decklist)
+        decklist = list(reader)[0]
+
+    # Step 2: Read failed_items.csv if it exists
+    failed_items_file = "gitignore/failed_items.csv"
+    if os.path.exists(failed_items_file):
+        with open(failed_items_file, "r") as f:
+            reader = csv.reader(f)
+            failed_list = [row[0] for row in reader if row]  # skip empty rows
+            decklist.extend(failed_list)
+
+    # Remove duplicates
+    decklist = list(set(decklist))
 
     while deck != "":
         if deck != "start":
@@ -450,6 +462,14 @@ if __name__ == "__main__":
 
     print(f"Total Decks: {len(decklist)}")
 
+    # Step 4: clear csvs
+    with open(failed_items_file, "w") as f:
+        pass  # truncate the file
+
+    with open(decks, "w") as f:
+        pass  # truncate the file
+
+    # Step 5: Process decks and log failures
     failed_items = []
 
     for item in decklist:
@@ -459,5 +479,13 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"Failed: {item} - {e}")
             failed_items.append(item)
+
+    # Step 6: Save failed items to CSV
+    if failed_items:
+        with open(failed_items_file, "w", newline="") as f:
+            writer = csv.writer(f)
+            for item in failed_items:
+                writer.writerow([item])
+
     print("Failed items:", failed_items)
 

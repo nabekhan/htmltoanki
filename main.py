@@ -11,7 +11,6 @@ import logging
 import genanki
 import pypandoc
 import bleach
-import os
 from collectdeck import get_deck_links
 from tqdm import tqdm
 import re

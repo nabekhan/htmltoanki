@@ -1,1 +1,1 @@
-Please add your login details manually.
+Please add your login details manually in gitignore/userdetails_unfilled.py.

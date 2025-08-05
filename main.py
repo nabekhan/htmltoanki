@@ -433,7 +433,7 @@ def deckcreate(username, password, deck):
 if __name__ == "__main__":
     # Create required directories if they don't exist
     os.makedirs("gitignore", exist_ok=True)
-    os.makedirs("gitignore/decks", exist_ok=True)
+    os.makedirs("decks", exist_ok=True)
 
     from gitignore.userdetails import *
 

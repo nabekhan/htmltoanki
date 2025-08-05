@@ -1,10 +1,6 @@
-"""
-suggestion: find a way to pull "correct" for each option. then create div class=correct in anki card and back highlights those cards
-"""
 import html2text
 import markdown2
 import csv
-# Import Packages
 from bs4 import BeautifulSoup
 import requests
 import logging
@@ -435,6 +431,10 @@ def deckcreate(username, password, deck):
 
 
 if __name__ == "__main__":
+    # Create required directories if they don't exist
+    os.makedirs("gitignore", exist_ok=True)
+    os.makedirs("gitignore/decks", exist_ok=True)
+
     from gitignore.userdetails import *
 
     # Enter deck URL
@@ -489,7 +489,7 @@ if __name__ == "__main__":
         print(f"Trying: {item}")
         try:
             deckcreate(username, password, item)
-            successful_items.append[item]
+            successful_items.append(item)
         except Exception as e:
             print(f"Failed: {item} - {e}")
             failed_items.append(item)

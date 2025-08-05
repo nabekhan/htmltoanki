@@ -1,12 +1,5 @@
 # Project exclude paths
 /gitignore/
-/.idea/.gitignore
-/.idea/htmltoanki.iml
-/.idea/misc.xml
-/.idea/modules.xml
-/.idea/inspectionProfiles/profiles_settings.xml
-/.idea/vcs.xml
 # Exclude all .apkg files
 *.apkg
 /decks/
-/assets/

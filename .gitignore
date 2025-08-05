@@ -1,5 +1,8 @@
 # Project exclude paths
-/gitignore/
+/decks/
 # Exclude all .apkg files
 *.apkg
-/decks/
+# Exclude files
+/gitignore/userdetails.py
+/gitignore/urllist.csv
+/gitignore/failed_items.csv

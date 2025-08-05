@@ -4,6 +4,6 @@
 *.apkg
 # Exclude files
 /gitignore/userdetails.py
-/gitignore/userdetails_unfilled.py
+#/gitignore/userdetails_unfilled.py
 /gitignore/urllist.csv
 /gitignore/failed_items.csv

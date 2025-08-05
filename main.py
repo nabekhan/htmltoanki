@@ -482,12 +482,14 @@ if __name__ == "__main__":
     print(f"Total decks to be processed: {len(decklist)}")
 
     # process decks and log failures
+    successful_items = []
     failed_items = []
     blockPrint()
     for item in tqdm(decklist, desc="Processing Decks"):
         print(f"Trying: {item}")
         try:
             deckcreate(username, password, item)
+            successful_items.append[item]
         except Exception as e:
             print(f"Failed: {item} - {e}")
             failed_items.append(item)
@@ -520,6 +522,10 @@ if __name__ == "__main__":
             for item in sorted(all_failed):
                 writer.writerow([item])
 
-    print("Failed items:", failed_items)
-    print("Please check if failed decks are printable before retrying!")
+    print("Successful items:", successful_items)
+    if failed_items:
+        print("Failed items:", failed_items)
+        print("Please check if failed decks are printable before retrying!")
+    else:
+        print("All items successful!")
 

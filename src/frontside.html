@@ -243,41 +243,44 @@ function removeBlur(element) {
 }
 // Add event listeners
 // Event listener for mouse click
-document.addEventListener("click", function(event) {
-	const optionsContainer = document.querySelector(".Options");
+function initializeOptionClickHandler() {
+  if (window._optionClickHandlerInitialized) return; // Guard: already initialized
 
-	if (!optionsContainer) return;
+  document.addEventListener("click", function(event) {
+    const optionsContainer = document.querySelector(".Options");
+    if (!optionsContainer) return;
 
-	const isBlurred = getComputedStyle(optionsContainer).filter !== "none";
+    const isBlurred = getComputedStyle(optionsContainer).filter !== "none";
 
-	// Case 1: Clicked the entire container → remove blur
-	if (event.target.classList.contains("Options")) {
-		removeBlur(optionsContainer);
-		return;
-	}
+    // Case 1: Clicked the whole Options container
+    if (event.target.classList.contains("Options")) {
+      removeBlur(optionsContainer);
+      return;
+    }
 
-	// Case 2: Clicked an option
-	if (event.target.classList.contains("Option")) {
-		// Still blurred? Only remove blur
-		if (isBlurred) {
-			removeBlur(optionsContainer);
-			return;
-		}
+    // Case 2: Clicked an Option
+    if (event.target.classList.contains("Option")) {
+      if (isBlurred) {
+        removeBlur(optionsContainer);
+        return;
+      }
 
-		// Not blurred? Toggle selection
-		event.target.classList.toggle("option-selected");
+      event.target.classList.toggle("option-selected");
 
-		// Save selected indices
-		const options = Array.from(document.querySelectorAll(".Option"));
-		const selectedIndices = options
-			.map((el, i) => el.classList.contains("option-selected") ? i : null)
-			.filter(i => i !== null);
+      const options = Array.from(document.querySelectorAll(".Option"));
+      const selectedIndices = options
+        .map((el, i) => el.classList.contains("option-selected") ? i : null)
+        .filter(i => i !== null);
 
-		if (Persistence.isAvailable()) {
-			Persistence.setItem("selectedOptions", selectedIndices);
-		}
-	}
-});
+      if (Persistence.isAvailable()) {
+        Persistence.setItem("selectedOptions", selectedIndices);
+      }
+    }
+  });
+
+  window._optionClickHandlerInitialized = true; // Mark as initialized
+};
+waitForElement('.Option', initializeOptionClickHandler);
 // Event listener for the "`" key
 document.addEventListener("keydown", (event) => {
 	if(event.key.toLowerCase() == "`") {

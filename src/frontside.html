@@ -250,9 +250,7 @@ function initializeOptionClickHandler() {
     const optionsContainer = document.querySelector(".Options");
     if (!optionsContainer) return;
 
-    const computedFilter = getComputedStyle(optionsContainer).getPropertyValue("filter");
-	const isBlurred = computedFilter.includes("blur");
-
+    const isBlurred = getComputedStyle(optionsContainer).filter !== "none";
 
     // Case 1: Clicked the whole Options container
     if (event.target.classList.contains("Options")) {

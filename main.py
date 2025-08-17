@@ -443,9 +443,9 @@ def clear_decks_folder():
                     os.remove(item_path)
                 elif os.path.isdir(item_path):
                     shutil.rmtree(item_path)
-            print("Decks/ has been cleared.")
+            print("decks have been cleared.")
         else:
-            print("Folder Decks/ does not exist.")
+            print("Folder decks does not exist.")
     else:
         print("Decks were not deleted.")
 

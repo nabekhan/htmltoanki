@@ -11,6 +11,8 @@ from collectdeck import get_deck_links
 from tqdm import tqdm
 import re
 from prints import *
+import shutil
+
 
 #logging.basicConfig(level=logging.DEBUG)
 
@@ -430,6 +432,23 @@ def deckcreate(username, password, deck):
     return output_file
 
 
+def clear_decks_folder():
+    user_input = input("Do you want to clear old decks? (Y/N): ").strip().lower()
+    if user_input == "y":
+        folder = "decks"
+        if os.path.exists(folder):
+            for item in os.listdir(folder):
+                item_path = os.path.join(folder, item)
+                if os.path.isfile(item_path) or os.path.islink(item_path):
+                    os.remove(item_path)
+                elif os.path.isdir(item_path):
+                    shutil.rmtree(item_path)
+            print("Decks/ has been cleared.")
+        else:
+            print("Folder Decks/ does not exist.")
+    else:
+        print("Decks were not deleted.")
+
 if __name__ == "__main__":
     # Create required directories if they don't exist
     os.makedirs("gitignore", exist_ok=True)
@@ -455,6 +474,8 @@ if __name__ == "__main__":
         print("Processing failed decks...")
     else:
         print("Skipping...")
+
+    clear_decks_folder()
 
     print ("Forming deck list...")
     decklist = []

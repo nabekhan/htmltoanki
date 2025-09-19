@@ -12,6 +12,7 @@ from tqdm import tqdm
 import re
 from prints import *
 import shutil
+from urllib.parse import quote
 
 
 #logging.basicConfig(level=logging.DEBUG)
@@ -546,7 +547,31 @@ if __name__ == "__main__":
     print("Successful items:", successful_items)
     if failed_items:
         print("Failed items:", failed_items)
-        print("Please check if failed decks are printable before retrying!")
+        print("\nPlease check if failed decks are printable before retrying!")
+
+        # Quickly email UME
+        if failed_items:
+            subject = "Request to make deck printable"
+            lines = [
+                "Hello,",
+                "",
+                "Could you please make the following deck(s) printable:",
+                *[f"– {item}" for item in failed_items],
+                "",
+                "Cheers,",
+            ]
+            body = "\n".join(lines)
+
+            mailto_link = (
+                f"mailto:cards@ucalgary.ca"
+                f"?subject={quote(subject)}"
+                f"&body={quote(body)}"
+            )
+
+            print("Quickly email UME to make decks printable:")
+            print(mailto_link)
+
+
     else:
         print("All items successful!")
 

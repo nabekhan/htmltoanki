@@ -1,3 +1,45 @@
+:root {
+     --text-main: black;
+     --bg-main: white;
+     --bg-bar: #121212;
+     --bg-canvas: #f5f5f7;
+     --popup-bg: #f9f9f9;
+     --popup-border: #ccc;
+     --btn-bg: #e0e0e0;
+     --text-subdeck: rgba(255, 255, 255, 0.6);
+     --text-tag: rgba(255, 255, 255, 0.87);
+     --units-color: #475569;
+     --vital-hr: #dc2626;
+     --vital-o2: #2563eb;
+     --vital-rr: #ca8a04;
+     --vital-temp: #16a34a;
+     --table-border: black;
+     --opt-selected: #b45309;
+     --option-border: #ccc;
+     --highlight-green: #86efac;
+}
+
+.nightMode {
+     --text-main: white;
+     --bg-main: #1e1e1e;
+     --bg-bar: #121212;
+     --bg-canvas: #444;
+     --popup-bg: #333;
+     --popup-border: #666;
+     --btn-bg: #1e1e1e;
+     --text-subdeck: rgba(255, 255, 255, 0.6);
+     --text-tag: rgba(255, 255, 255, 0.87);
+     --units-color: #cbd5e1;
+     --vital-hr: #f87171;
+     --vital-o2: #60a5fa;
+     --vital-rr: #facc15;
+     --vital-temp: #4ade80;
+     --table-border: white;
+     --opt-selected: #FFE4C4;
+     --option-border: #ddd;
+     --highlight-green: green;
+}
+
 /* Style for the gear icon */
  .gear-icon {
     position: absolute !important;
@@ -5,7 +47,7 @@
     right: 10px;
     font-size: 24px;
     cursor: pointer;
-    color: white;
+    color: var(--text-main);
     z-index: 1000;
 }
 /* Style for the popup */
@@ -16,9 +58,9 @@
      left: 50%;
      transform: translate(-50%);
      width: 300px;
-     background-color: #333;
-     color: white;
-     border: 1px solid #666;
+     background-color: var(--popup-bg);
+     color: var(--text-main);
+     border: 1px solid var(--popup-border);
      border-radius: 8px;
      padding: 20px;
      z-index: 1001;
@@ -31,7 +73,7 @@
      right: 10px;
      font-size: 16px;
      cursor: pointer;
-     color: white;
+     color: var(--text-main);
 }
 /* Input label styles */
  .settings-popup label {
@@ -41,8 +83,8 @@
      margin-bottom: 15px;
 }
  .settings-popup button {
-     background-color: #1e1e1e;
-     color: white;
+     background-color: var(--btn-bg);
+     color: var(--text-main);
      padding: 10px 20px;
 }
  div:empty {
@@ -51,16 +93,16 @@
  .card {
      padding: 15px 20px;
      font: 17px Arial, sans-serif;
-     color: white;
+     color: var(--text-main);
 }
  .background {
      border-radius: 9px;
      padding: 20px;
-     background: #1e1e1e;
+     background: var(--bg-main);
 }
  .bar {
      margin-bottom: -25px;
-     background: #121212;
+     background: var(--bg-bar);
      border-top-right-radius: 9px;
      border-top-left-radius: 9px;
      padding-top: 10px;
@@ -68,13 +110,14 @@
      z-index: -1;
      text-align: center;
      font-size: 14px;
+     color: white;
 }
  .subdeck {
-     color: rgba(255, 255, 255, 0.6);
+     color: var(--text-subdeck);
      font-size: 14px;
 }
  .tag {
-     color: rgba(255, 255, 255, 0.87);
+     color: var(--text-tag);
      font-size: 13px;
      font-style: italic;
 }
@@ -88,7 +131,7 @@
      width: auto;
 }
  .canvas {
-     background-color: #444;
+     background-color: var(--bg-canvas);
      border-radius: 9px;
      margin: 5px 0;
      padding: 10px;
@@ -99,16 +142,15 @@
      margin: 5px 0;
      display: flex;
      align-items: center;
-     border: 2px solid #ddd;
+     border: 2px solid var(--option-border);
      padding: 10px;
      border-radius: 5px;
-     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
      min-width: 10em;
      justify-content: center;
     /* Center content vertically */
 }
- .green-highlight {
-     background-color: green !important;
+.green-highlight {
+     background-color: var(--highlight-green) !important;
 }
  .Answers {
      display: none;
@@ -129,10 +171,9 @@
      margin-bottom: 5px;
 }
  .vitals-container>div {
-     background-color: #444;
+     background-color: var(--bg-canvas);
     /* Dark card background */
      border-radius: 10px;
-     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
      padding: 5px;
      display: flex;
      justify-content: center;
@@ -149,7 +190,7 @@
      margin-bottom: 10px;
 }
  .vitals-container .units {
-     color: #cbd5e1;
+     color: var(--units-color);
      margin-bottom: 5px;
 }
  .vitals-container span {
@@ -157,24 +198,19 @@
 }
 /* Color Coding */
  .vitals-container .hr span {
-     color: #f87171;
-    /* Red */
+     color: var(--vital-hr);
 }
  .vitals-container .o2 span {
-     color: #60a5fa;
-    /* Blue */
+     color: var(--vital-o2);
 }
  .vitals-container .rr span {
-     color: #facc15;
-    /* Yellow */
+     color: var(--vital-rr);
 }
  .vitals-container .temp span {
-     color: #4ade80;
-    /* Green */
+     color: var(--vital-temp);
 }
  .vitals-container .bp span {
-     color: #4ade80;
-    /* Green */
+     color: var(--vital-temp);
 }
  .Feedback {
      margin-bottom: 5px;
@@ -191,11 +227,11 @@
      white-space: pre-wrap; /* preserves existing spaces and wraps lines */
 }
  .Notes table, .Notes th, .Notes td {
-    border: 1px solid white;
+    border: 1px solid var(--table-border);
     border-collapse: collapse;
 }
 .option-selected {
-  border: 2px solid #FFE4C4;
+  border: 2px solid var(--opt-selected);
   border-radius: 5px;
-  color: #FFE4C4;
+  color: var(--opt-selected);
 }
